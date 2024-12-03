@@ -237,28 +237,162 @@ namespace API.DAO
             };
         }
 
-        public ResponseMessage UpdateAccountStatus(String accountEmail)
+        public ResponseMessage GetAllStaff()
+        {
+            var listAccount = db.Account.Where(x => !x.Role.Equals("Admin") && !x.Role.Equals("User")).ToList();
+            if (listAccount.Any())
+            {
+                return new ResponseMessage
+                {
+                    Success = true,
+                    Message = "Success",
+                    Data = map.Map<List<AccountResponse>>(listAccount),
+                    StatusCode = (int)HttpStatusCode.OK,
+                };
+            }
+
+            return new ResponseMessage
+            {
+                Success = false,
+                Message = "Not Found",
+                Data = map.Map<List<AccountResponse>>(listAccount),
+                StatusCode = (int)HttpStatusCode.NotFound,
+            };
+        }
+
+        public ResponseMessage AddStaff(AddStaffDTO addStaffDTO)
+        {
+            if (addStaffDTO == null)
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Bad Request",
+                    Data = addStaffDTO,
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(addStaffDTO.AccountEmail) || string.IsNullOrWhiteSpace(addStaffDTO.Password))
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Account email and password are required.",
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+
+            var existingAccount = db.Account.FirstOrDefault(x => x.AccountEmail == addStaffDTO.AccountEmail);
+            if (existingAccount != null)
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Email already exists",
+                    Data = existingAccount.AccountEmail,
+                    StatusCode = (int)HttpStatusCode.Conflict
+                };
+            }
+
+            var cart = new Cart
+            {
+                TotalPrice = 0
+            };
+            db.Cart.Add(cart);
+
+            var imageUrl = Ultils.SaveImage(addStaffDTO.Avatar, env);
+
+            var newAccount = new Account
+            {
+                Avatar = imageUrl,
+                AccountName = addStaffDTO.AccountName,
+                AccountEmail = addStaffDTO.AccountEmail,
+                Password = addStaffDTO.Password,
+                AccountAddress = addStaffDTO.AccountAddress,
+                BirthDay = addStaffDTO.Birthday,
+                Phone = addStaffDTO.Phone,
+                Gender = addStaffDTO.Gender,
+                Role = addStaffDTO.Role,
+                Status = addStaffDTO.Status,
+                CreatedAt = DateTime.Now,
+                Cart = cart,
+                CartID = cart.CartID
+            };
+
+            db.Account.Add(newAccount);
+            db.SaveChanges();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Success",
+                Data = map.Map<AccountResponse>(newAccount),
+                StatusCode = (int)HttpStatusCode.OK
+            };
+        }
+
+        public ResponseMessage UpdateAccountStatus(string accountEmail)
         {
             var getAccount = db.Account.FirstOrDefault(x => x.AccountEmail.Equals(accountEmail));
-            if (getAccount != null && getAccount.Status.Equals("Active"))
+
+            if (getAccount == null)
             {
-                getAccount.Status = "Blocked";
-                db.Account.Update(getAccount);
-
-            }
-            else if (getAccount.Status.Equals("Blocked"))
-            {
-                getAccount.Status = "Active";
-                db.Account.Update(getAccount);
-
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Data not found",
+                    Data = Array.Empty<int>(),
+                    StatusCode = (int)HttpStatusCode.NotFound
+                };
             }
 
+            getAccount.Status = getAccount.Status == "Active" ? "Blocked" : "Active";
+            db.Account.Update(getAccount);
             db.SaveChanges();
+
             return new ResponseMessage
             {
                 Success = true,
                 Message = "Success",
                 Data = map.Map<AccountResponse>(getAccount),
+                StatusCode = (int)HttpStatusCode.OK
+            };
+        }
+
+        public ResponseMessage UpdateStaffInformation(UpdateStaffDTO updateStaffDTO)
+        {
+            var account = db.Account.FirstOrDefault(x => x.AccountID == updateStaffDTO.AccountID);
+
+            if (account == null || account.Role is "Admin" or "User")
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Data not found",
+                    Data = Array.Empty<int>(),
+                    StatusCode = (int)HttpStatusCode.NotFound
+                };
+            }
+
+            account.Avatar = updateStaffDTO.Avatar != null
+                ? Ultils.SaveImage(updateStaffDTO.Avatar, env)
+                : account.Avatar;
+            account.AccountEmail = updateStaffDTO.AccountEmail;
+            account.AccountName = updateStaffDTO.AccountName;
+            account.Gender = updateStaffDTO.Gender;
+            account.BirthDay = updateStaffDTO.Birthday; 
+            account.Phone = updateStaffDTO.Phone;
+            account.AccountAddress = updateStaffDTO.AccountAddress;
+
+            db.Account.Update(account);
+            db.SaveChanges();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Success",
+                Data = map.Map<AccountResponse>(account),
                 StatusCode = (int)HttpStatusCode.OK
             };
         }
