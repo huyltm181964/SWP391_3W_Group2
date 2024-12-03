@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Images\0f83b085-7769-4e37-951f-7d625dc27cb4_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <Compile Remove="Images\4090fb3c-ac53-4a90-b826-e0ceaa2424ae_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <Content Remove="Images\0f83b085-7769-4e37-951f-7d625dc27cb4_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <Content Remove="Images\4090fb3c-ac53-4a90-b826-e0ceaa2424ae_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <EmbeddedResource Remove="Images\0f83b085-7769-4e37-951f-7d625dc27cb4_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <EmbeddedResource Remove="Images\4090fb3c-ac53-4a90-b826-e0ceaa2424ae_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <None Remove="Images\0f83b085-7769-4e37-951f-7d625dc27cb4_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+    <None Remove="Images\4090fb3c-ac53-4a90-b826-e0ceaa2424ae_DALL·E 2024-01-28 11.54.18 - An epic representation of Tang San from Douluo Dalu %28Soul Land%29 unleashing his ultimate power. The scene is charged with a breathtaking display of ene.png\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MimeKit" Version="4.8.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+</Project>
