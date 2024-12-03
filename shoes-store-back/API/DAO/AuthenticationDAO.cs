@@ -275,32 +275,35 @@ namespace API.DAO
 
             if (string.IsNullOrWhiteSpace(addStaffDTO.AccountEmail) || string.IsNullOrWhiteSpace(addStaffDTO.Password))
             {
-                return null;
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Account email and password are required.",
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
             }
 
-            var checkAlreadyEmail = db.Account
-                                      .FirstOrDefault(x => x.AccountEmail.Equals(addStaffDTO.AccountEmail));
-            if (checkAlreadyEmail != null)
+            var existingAccount = db.Account.FirstOrDefault(x => x.AccountEmail == addStaffDTO.AccountEmail);
+            if (existingAccount != null)
             {
                 return new ResponseMessage
                 {
                     Success = false,
-                    Message = "Email Already Exist",
-                    Data = checkAlreadyEmail.AccountEmail,
+                    Message = "Email already exists",
+                    Data = existingAccount.AccountEmail,
                     StatusCode = (int)HttpStatusCode.Conflict
                 };
             }
 
-            Cart createCart = new Cart
+            var cart = new Cart
             {
-                TotalPrice = 0,
-
+                TotalPrice = 0
             };
-            db.Cart.Add(createCart);
+            db.Cart.Add(cart);
 
             var imageUrl = Ultils.SaveImage(addStaffDTO.Avatar, env);
 
-            Account addStaff = new Account
+            var newAccount = new Account
             {
                 Avatar = imageUrl,
                 AccountName = addStaffDTO.AccountName,
@@ -313,18 +316,19 @@ namespace API.DAO
                 Role = addStaffDTO.Role,
                 Status = addStaffDTO.Status,
                 CreatedAt = DateTime.Now,
-                Cart = createCart,
-                CartID = createCart.CartID
-
+                Cart = cart,
+                CartID = cart.CartID
             };
 
-            db.Account.Add(addStaff);
+            db.Account.Add(newAccount);
             db.SaveChanges();
+
             return new ResponseMessage
             {
                 Success = true,
                 Message = "Success",
-                StatusCode = (int)HttpStatusCode.OK,
+                Data = map.Map<AccountResponse>(newAccount),
+                StatusCode = (int)HttpStatusCode.OK
             };
         }
 
@@ -358,35 +362,37 @@ namespace API.DAO
 
         public ResponseMessage UpdateStaffInformation(UpdateStaffDTO updateStaffDTO)
         {
-            var getAccount = db.Account.FirstOrDefault(x => x.AccountID.Equals(updateStaffDTO.AccountID));
+            var account = db.Account.FirstOrDefault(x => x.AccountID == updateStaffDTO.AccountID);
 
-            if (getAccount == null ||
-                (getAccount.Role.Equals("Admin") || getAccount.Role.Equals("User")))
+            if (account == null || account.Role is "Admin" or "User")
             {
                 return new ResponseMessage
                 {
                     Success = false,
                     Message = "Data not found",
-                    Data = new int[0],
+                    Data = Array.Empty<int>(),
                     StatusCode = (int)HttpStatusCode.NotFound
                 };
             }
 
-            getAccount.Avatar = updateStaffDTO.Avatar != null ? Ultils.SaveImage(updateStaffDTO.Avatar, env) : getAccount.Avatar;
-            getAccount.AccountEmail = updateStaffDTO.AccountEmail;
-            getAccount.AccountName = updateStaffDTO.AccountName;
-            getAccount.Gender = updateStaffDTO.Gender;
-            getAccount.BirthDay = getAccount.BirthDay;
-            getAccount.Phone = updateStaffDTO.Phone;
-            getAccount.AccountAddress = updateStaffDTO.AccountAddress; 
+            account.Avatar = updateStaffDTO.Avatar != null
+                ? Ultils.SaveImage(updateStaffDTO.Avatar, env)
+                : account.Avatar;
+            account.AccountEmail = updateStaffDTO.AccountEmail;
+            account.AccountName = updateStaffDTO.AccountName;
+            account.Gender = updateStaffDTO.Gender;
+            account.BirthDay = updateStaffDTO.Birthday; 
+            account.Phone = updateStaffDTO.Phone;
+            account.AccountAddress = updateStaffDTO.AccountAddress;
 
-            db.Account.Update(getAccount);
+            db.Account.Update(account);
             db.SaveChanges();
+
             return new ResponseMessage
             {
                 Success = true,
                 Message = "Success",
-                Data = map.Map<AccountResponse>(getAccount),
+                Data = map.Map<AccountResponse>(account),
                 StatusCode = (int)HttpStatusCode.OK
             };
         }
