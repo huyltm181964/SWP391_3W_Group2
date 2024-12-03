@@ -81,7 +81,6 @@ const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
 	const handleAdd = () => {
 		if (validate()) {
 			const formData = new FormData()
-			console.log('idValue' + idValue.id)
 			formData.append('ProductID', idValue.id)
 			formData.append('VariantImage', imageFile)
 			formData.append('VariantSize', values.size)

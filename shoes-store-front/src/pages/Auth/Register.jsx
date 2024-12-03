@@ -41,7 +41,7 @@ function Register() {
 
 		const otp = await AuthService.SEND_MAIL(formBody.accountEmail)
 		const requestData = {
-			URL: AuthRequest.REGISTER,
+			URL: AuthRequest.ACTIVE_ACCOUNT,
 			formBody: formBody.accountEmail,
 			accountEmail: formBody.accountEmail,
 			otp: otp,

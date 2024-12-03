@@ -34,7 +34,7 @@ namespace API.DAO
                 return new ResponseMessage
                 {
                     Success = false,
-                    Message = "You haven't bought this product before",
+                    Message = "You need to buy this product before commenting",
                     Data = null,
                     StatusCode = 400
                 };
@@ -53,8 +53,8 @@ namespace API.DAO
             return new ResponseMessage
             {
                 Success = true,
-                Message = "Success",
-                Data = m.Map<CommentResponseDTO>(createComment),
+                Message = "Comment successfully",
+                Data = null,
                 StatusCode = 200
             };
         }
@@ -109,7 +109,7 @@ namespace API.DAO
                 return new ResponseMessage
                 {
                     Success = true,
-                    Message = "Success",
+                    Message = "Update comment successfully",
                     Data = getComment,
                     StatusCode = 200
                 };

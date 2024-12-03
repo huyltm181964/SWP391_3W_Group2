@@ -25,25 +25,25 @@ const ProductDetail = () => {
 		<section style={{ padding: '2% 5%' }}>
 			<ProductDetailInformation product={product} />
 
-			<div class='flex items-center gap-2 mt-5 border-b-gray-500 border-b-2'>
-				<h2 class='text-2xl font-semibold text-gray-900 dark:text-white'>Reviews</h2>
+			<div className='flex items-center gap-2 mt-5 border-b-gray-500 border-b-2'>
+				<h2 className='text-2xl font-semibold text-gray-900 dark:text-white'>Reviews</h2>
 			</div>
 
-			<div class='my-5 gap-8 sm:flex sm:items-start'>
-				<div class='shrink-0 space-y-4'>
+			<div className='my-5 gap-8 sm:flex sm:items-start'>
+				<div className='shrink-0 space-y-4'>
 					<button
 						type='button'
 						onClick={() => setOpenReviewDialog(!openReviewDialog)}
-						class='mb-2 me-2 rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
+						className='mb-2 me-2 rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
 					>
 						Write a review
 					</button>
 				</div>
 			</div>
 
-			<div class='mt-6 divide-y divide-gray-700 dark:divide-gray-200'>
+			<div className='mt-6 divide-y divide-gray-700 dark:divide-gray-200'>
 				{product?.comments?.map((comment) => (
-					<UserReview comment={comment} />
+					<UserReview key={comment} comment={comment} />
 				))}
 			</div>
 			{openReviewDialog && (

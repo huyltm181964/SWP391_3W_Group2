@@ -45,7 +45,7 @@ namespace API.DAO
                 {
                     Success = true,
                     Message = "Success",
-                    Data = m.Map<ProductResponseDTO>(getProduct),
+                    Data = null,
                     StatusCode = (int)HttpStatusCode.OK
                 };
             }
@@ -53,7 +53,7 @@ namespace API.DAO
             {
                 Success = false,
                 Message = "Product Not Found",
-                Data = m.Map<ProductResponseDTO>(getProduct),
+                Data = null,
                 StatusCode = (int)HttpStatusCode.NotFound
             };
 
@@ -68,7 +68,7 @@ namespace API.DAO
                 {
                     Success = true,
                     Message = "Success",
-                    Data = m.Map<List<ProductResponseDTO>>(getProduct),
+                    Data = getProduct,
                     StatusCode = (int)HttpStatusCode.OK,
                 };
             }
@@ -110,7 +110,7 @@ namespace API.DAO
             {
                 Success = true,
                 Message = "Success",
-                Data = m.Map<ProductResponseDTO>(addProduct),
+                Data = null,
                 StatusCode = (int)HttpStatusCode.OK,
             };
         }
@@ -141,7 +141,7 @@ namespace API.DAO
             {
                 Success = true,
                 Message = "Success",
-                Data = m.Map<ProductResponseDTO>(getProduct),
+                Data = null,
                 StatusCode = (int)HttpStatusCode.OK
             };
         }

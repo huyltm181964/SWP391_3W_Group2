@@ -38,7 +38,7 @@ namespace API.DAO
                 {
                     Success = true,
                     Message = "Success",
-                    Data = m.Map<CartItemResponse>(checkItemAlready),
+                    Data = null,
                     StatusCode = (int)HttpStatusCode.OK
                 };
             }
@@ -62,7 +62,7 @@ namespace API.DAO
             {
                 Success = true,
                 Message = "Success",
-                Data = m.Map<CartItemResponse>(variant),
+                Data = null,
                 StatusCode = (int)HttpStatusCode.OK
             };
         }

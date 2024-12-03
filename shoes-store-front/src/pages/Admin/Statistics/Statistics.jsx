@@ -70,7 +70,7 @@ const AnalyticCard = ({ title, data, isCurrency = false }) => {
 				</span>
 			</div>
 			<p className={`text-xs mt-1 ${isLoss ? 'text-red-300' : 'text-green-700'}`}>
-				Increase {isCurrency ? `$${extra}` : extra} this month
+				{isLoss ? 'Loss' : 'Gain'} {isCurrency ? `$${Math.abs(extra)}` : Math.abs(extra)} this month
 			</p>
 		</div>
 	)
