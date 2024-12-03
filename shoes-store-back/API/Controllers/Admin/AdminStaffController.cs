@@ -31,10 +31,17 @@ namespace API.Controllers.Admin
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("update-staff")]
-        public IActionResult UpdateStaff([FromForm] UpdateStaffDTO updateStaffDTO)
+        [HttpPost("update-staff-information")]
+        public IActionResult UpdateStaffInformation([FromForm] UpdateStaffDTO updateStaffDTO)
         {
             var response = dao.UpdateStaffInformation(updateStaffDTO);
+            return StatusCode(response.StatusCode, response);
+        }
+     
+        [HttpPost("update-staff-status")]
+        public IActionResult UpdateAccontStatus([FromBody] String accountEmail)
+        {
+            var response = dao.UpdateAccountStatus(accountEmail);
             return StatusCode(response.StatusCode, response);
         }
     }
