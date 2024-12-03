@@ -237,6 +237,97 @@ namespace API.DAO
             };
         }
 
+        public ResponseMessage GetAllStaff()
+        {
+            var listAccount = db.Account.Where(x => !x.Role.Equals("Admin") && !x.Role.Equals("User")).ToList();
+            if (listAccount.Any())
+            {
+                return new ResponseMessage
+                {
+                    Success = true,
+                    Message = "Success",
+                    Data = map.Map<List<AccountResponse>>(listAccount),
+                    StatusCode = (int)HttpStatusCode.OK,
+                };
+            }
+
+            return new ResponseMessage
+            {
+                Success = false,
+                Message = "Not Found",
+                Data = map.Map<List<AccountResponse>>(listAccount),
+                StatusCode = (int)HttpStatusCode.NotFound,
+            };
+        }
+
+        public ResponseMessage AddStaff(AddStaffDTO addStaffDTO)
+        {
+            if (addStaffDTO == null)
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Bad Request",
+                    Data = addStaffDTO,
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(addStaffDTO.AccountEmail) || string.IsNullOrWhiteSpace(addStaffDTO.Password))
+            {
+                return null;
+            }
+            var checkAlreadyEmail = db.Account
+                                      .FirstOrDefault(x => x.AccountEmail.Equals(addStaffDTO.AccountEmail));
+            if (checkAlreadyEmail != null)
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Email Already Exist",
+                    Data = checkAlreadyEmail.AccountEmail,
+                    StatusCode = (int)HttpStatusCode.Conflict
+                };
+            }
+
+            Cart createCart = new Cart
+            {
+                TotalPrice = 0,
+
+            };
+            db.Cart.Add(createCart);
+            var imageUrl = Ultils.SaveImage(addStaffDTO.Avatar, env);
+
+            Account addStaff = new Account
+            {
+                Avatar = imageUrl,
+                AccountName = addStaffDTO.AccountName,
+                AccountEmail = addStaffDTO.AccountEmail,
+                Password = addStaffDTO.Password,
+                AccountAddress = addStaffDTO.AccountAddress,
+                BirthDay = addStaffDTO.Birthday,
+                Phone = addStaffDTO.Phone,
+                Gender = addStaffDTO.Gender,
+                Role = addStaffDTO.Role,
+                Status = addStaffDTO.Status,
+                CreatedAt = DateTime.Now,
+                Cart = createCart,
+                CartID = createCart.CartID
+
+            };
+            db.Account.Add(addStaff);
+            db.SaveChanges();
+
+
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Success",
+                StatusCode = (int)HttpStatusCode.OK,
+            };
+        }
+
         public ResponseMessage UpdateAccountStatus(String accountEmail)
         {
             var getAccount = db.Account.FirstOrDefault(x => x.AccountEmail.Equals(accountEmail));
