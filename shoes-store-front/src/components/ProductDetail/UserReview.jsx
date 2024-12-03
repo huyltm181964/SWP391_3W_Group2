@@ -1,20 +1,23 @@
 import { Rating } from '@material-tailwind/react'
 import React from 'react'
+import { formatDateTimeWithLetterMonth } from 'src/utils/DateUtil'
 
 const UserReview = ({ comment }) => {
 	return (
-		<div class='gap-3 pt-6 pb-3 sm:flex sm:items-start'>
-			<div class='shrink-0 sm:w-48 md:w-72'>
+		<div className='gap-5 pt-6 pb-3 sm:flex sm:items-start'>
+			<div className='shrink-0'>
 				<div>
-					<p class='text-base font-semibold text-gray-900 dark:text-white'>
+					<p className='text-base font-semibold text-gray-900 dark:text-white'>
 						{comment?.account?.accountName}
 					</p>
-					<p class='text-sm font-normal text-gray-500 dark:text-gray-400'>{comment?.createdDate}</p>
+					<p className='text-sm font-normal text-gray-500 dark:text-gray-400'>
+						{formatDateTimeWithLetterMonth(comment?.createdDate)}
+					</p>
 				</div>
 			</div>
-
-			<div class='mt-4 min-w-0 flex-1 space-y-4 sm:mt-0'>
-				<p class='text-base font-normal text-gray-700 dark:text-gray-400'>{comment?.content}</p>
+			{comment ? <Rating value={comment?.rate} readonly /> : <p>Loading...</p>}
+			<div className='mt-4 min-w-0 flex-1 space-y-4 sm:mt-0'>
+				<p className='text-base font-normal text-gray-700 dark:text-gray-400'>{comment?.content}</p>
 			</div>
 		</div>
 	)

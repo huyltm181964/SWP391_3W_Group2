@@ -14,20 +14,23 @@ import { enqueueSnackbar } from 'notistack'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { CommentService } from 'src/services/CommentService'
 
 const ReviewDialog = ({ open, handleClose, product }) => {
 	const isLoggedIn = !!localStorage.getItem('token')
 
 	const [comment, setComment] = useState({})
+	const [rate, setRate] = useState(undefined)
 	const [content, setContent] = useState('')
 
 	useEffect(() => {
 		const fetch = async () => {
 			const response = await CommentService.GET_COMMENT(product.productID)
 			if (response.success) {
+				setRate(response.data?.rate || 0)
+				setContent(response.data?.content)
 				setComment(response.data)
-				setContent(response.data.content)
 			}
 		}
 
@@ -37,32 +40,39 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 	}, [product])
 
 	const handleDelete = async () => {
-		const res = await CommentService.DELETE_COMMENT(comment?.commentID)
+		const res = await CommentService.DELETE_COMMENT(product?.productID)
 		if (res.success) {
 			enqueueSnackbar('Delete successfully', { variant: 'success' })
+			window.location.href = '/product/' + product.productID
 			handleClose()
 		}
 	}
 
 	const handleSubmit = async () => {
-		if (comment && comment?.commentID !== 0) {
-			const formBody = {
-				commentID: comment.commentID,
-				content,
-			}
+		let response
 
-			await CommentService.UPDATE_COMMENT(formBody)
-		} else {
-			const formBody = {
-				userID: 0,
-				productID: product.productID,
-				content,
-			}
-
-			await CommentService.ADD_COMMENT(formBody)
+		if (rate <= 0) {
+			enqueueSnackbar('Please pick an rate to add the comment for the product', {
+				variant: 'error',
+			})
+			return
+		}
+		const formBody = {
+			productID: product.productID,
+			rate,
+			content,
 		}
 
-		enqueueSnackbar('Comment successfully', { variant: 'success' })
+		if (comment) {
+			response = await CommentService.UPDATE_COMMENT(formBody)
+		} else {
+			response = await CommentService.ADD_COMMENT(formBody)
+		}
+
+		if (response.success) {
+			enqueueSnackbar(response.message, { variant: 'success' })
+		}
+		window.location.href = '/product/' + product.productID
 		handleClose()
 	}
 
@@ -86,6 +96,11 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 			{isLoggedIn ? (
 				<>
 					<DialogBody>
+						{rate !== undefined ? (
+							<Rating value={rate} onChange={(value) => setRate(value)} />
+						) : (
+							<p>Loading...</p>
+						)}
 						<Textarea
 							value={content}
 							onChange={(e) => setContent(e.target.value)}
@@ -93,7 +108,7 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 						/>
 					</DialogBody>
 					<DialogFooter className='space-x-2'>
-						{comment && comment.commentID !== 0 && (
+						{comment && (
 							<Button variant='gradient' color='red' onClick={handleDelete}>
 								Delete
 							</Button>

@@ -33,12 +33,11 @@ namespace API.DAO
             var getProduct = db.Product.FirstOrDefault(x => x.ProductID == createVariant.ProductID);
             if (getProduct == null)
             {
-
                 return new ResponseMessage
                 {
                     Success = false,
                     Message = "Product not found",
-                    Data = getProduct,
+                    Data = null,
                     StatusCode = 404
                 };
             }
@@ -64,32 +63,18 @@ namespace API.DAO
             {
                 Product = getProduct,
                 VariantColor = createVariant.VariantColor!,
-                VariantQuantity = createVariant.VariantQuantity,
                 VariantSize = createVariant.VariantSize!,
                 VariantImg = image
             };
-            Import createAt = new Import
-            {
-                ImportDate = DateTime.Now,
-                ProductVariant = addVariant,
-                Quantity = addVariant.VariantQuantity,
-            };
-
-            if (getProduct.ProductStatus == "Out of stock")
-            {
-                getProduct.ProductStatus = "Still in stock";
-                db.Product.Update(getProduct);
-            }
 
             db.ProductVariant.Add(addVariant);
-            db.Import.Add(createAt);
 
             db.SaveChanges();
             return new ResponseMessage
             {
                 Success = true,
                 Message = "Sucess",
-                Data = m.Map<VariantResponseDTO>(addVariant),
+                Data = null,
                 StatusCode = 200
             };
         }
@@ -141,7 +126,7 @@ namespace API.DAO
             {
                 Success = true,
                 Message = "Sucess",
-                Data = m.Map<VariantResponseDTO>(getVariant),
+                Data = null,
                 StatusCode = 200
             };
         }
@@ -181,7 +166,7 @@ namespace API.DAO
             {
                 Success = true,
                 Message = "Sucess",
-                Data = m.Map<VariantResponseDTO>(getVariant),
+                Data = null,
                 StatusCode = 200
             };
         }
@@ -219,61 +204,5 @@ namespace API.DAO
                 StatusCode = 404
             };
         }
-        public ResponseMessage FilterVariant(string key)
-        {
-            var filter = db.ProductVariant.Include(p => p.Product).Where(v => v.VariantSize.Equals(key) || v.VariantColor.Equals(key)).ToList();
-            if (filter.Any())
-            {
-                return new ResponseMessage
-                {
-                    Success = true,
-                    Message = "Success",
-                    Data = m.Map<List<VariantResponseDTO>>(filter),
-                    StatusCode = 200
-                };
-            }
-
-            return new ResponseMessage
-            {
-                Success = true,
-                Message = "Success",
-                Data = m.Map<List<VariantResponseDTO>>(filter)
-            };
-        }
-        /*
-         * Function Tutorial Generic
-         */
-        public ResponseMessage GetByID<T>(int id, params Expression<Func<T, object>>[] includeExpressions) where T : class
-        {
-            IQueryable<T> query = db.Set<T>();
-            foreach (var item in includeExpressions)
-            {
-                query = query.Include(item);
-            }
-
-            var entity = query.FirstOrDefault(e => EF.Property<int>(e, "id") == id);
-            if (entity != null)
-            {
-
-                return new ResponseMessage
-                {
-                    Success = true,
-                    Message = "Success",
-                    Data = entity,
-                    StatusCode = (int)HttpStatusCode.OK
-                };
-
-            }
-            return new ResponseMessage
-            {
-                Success = false,
-                Message = "Data Not Found",
-                Data = entity,
-                StatusCode = (int)HttpStatusCode.NotFound
-            };
-
-
-        }
-
     }
 }

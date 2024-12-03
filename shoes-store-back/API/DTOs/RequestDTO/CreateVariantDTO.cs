@@ -6,6 +6,5 @@
         public IFormFile? VariantImage { get; set; }
         public String? VariantSize {  get; set; }
         public String? VariantColor {  get; set; }
-        public int VariantQuantity { get; set; } = 1;
     }
 }
