@@ -145,7 +145,7 @@ function OrderManagement() {
 										<td className='p-4 break-words whitespace-normal'>{row.accountID}</td>
 										<td className='p-4 text-right'>{row.orderAddress}</td>
 										<td className='p-4 text-right'>{row.totalPrice}</td>
-										<td className='p-4 text-right'>{row.orderDate}</td>
+										<td className='p-4 text-right'>{row.orderDate.split('T')[0]}</td>
 										<td className='p-4 text-right'>{row.orderStatus}</td>
 										<td className='p-4 text-right'>
 											<div className='flex justify-end gap-4'>

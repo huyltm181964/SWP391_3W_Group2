@@ -8,6 +8,7 @@ import {
 	Typography,
 	IconButton,
 	Avatar,
+	Radio,
 } from '@material-tailwind/react'
 import { XMarkIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { useState, useRef } from 'react'
@@ -135,59 +136,96 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 						{errors.image && <Typography color='red'>{errors.image}</Typography>}
 					</div>
 				</div>
+				<div className='flex gap-10'>
+					<div className='w-full'>
+						<Input
+							label='Account Name'
+							name='accountName'
+							value={values.accountName}
+							onChange={handleValueChange}
+							required
+						/>
+					</div>
+
+					<div className='w-full '>
+						<label>Gender</label>
+						<div className='flex gap-4'>
+							<label className='flex '>
+								<input
+									type='radio'
+									name='gender'
+									value='male'
+									checked={values.gender === 'male'}
+									onChange={handleValueChange}
+								/>
+								<span className='ml-2'>Male</span>
+							</label>
+
+							<label className='flex '>
+								<input
+									type='radio'
+									name='gender'
+									value='female'
+									checked={values.gender === 'female'}
+									onChange={handleValueChange}
+								/>
+								<span className='ml-2'>Female</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
 				<div>
 					<Input
-						label='AccountName'
-						name='accountName'
-						value={values.accountName}
+						label='AccountEmail'
+						name='accountEmail'
+						value={values.accountEmail}
 						onChange={handleValueChange}
-						className='focus:ring focus:ring-gray-300'
 						required
-						error={!!errors.accountName}
 					/>
-					{errors.accountName && <Typography color='red'>{errors.accountName}</Typography>}
 				</div>
 				<div>
 					<Input
-						label='Price'
-						name='price'
-						type='number'
-						value={values.price}
+						label='Password'
+						name='password'
+						value={values.password}
 						onChange={handleValueChange}
 						required
-						error={!!errors.price}
 					/>
-					{errors.price && <Typography color='red'>{errors.price}</Typography>}
 				</div>
-				<div>
-					<select
-						className='w-full border border-gray-300 rounded-md px-3 py-2'
-						name='category'
-						value={values.category}
-						onChange={handleValueChange}
-						required
-					>
-						<option value=''>Select Category</option>
-						{categoriesList.map((category, index) => (
-							<option key={index} value={category}>
-								{category}
-							</option>
-						))}
-					</select>
-					{errors.category && <Typography color='red'>{errors.category}</Typography>}
+				<div className='flex gap-4'>
+					<div className='flex-1'>
+						<Input
+							label='Phone Number'
+							name='phone'
+							value={values.phone}
+							onChange={handleValueChange}
+							required
+						/>
+					</div>
+
+					<div className='flex-1'>
+						<Input
+							label='Birthday'
+							name='birthday'
+							type='date'
+							value={values.birthday}
+							onChange={handleValueChange}
+							required
+						/>
+					</div>
 				</div>
+
 				<div>
 					<Input
-						label='Description'
-						name='description'
-						value={values.description}
+						label='AccountAddress'
+						name='accountAddress'
+						value={values.accountAddress}
 						onChange={handleValueChange}
 						textarea
 						rows={3}
 						required
-						error={!!errors.description}
 					/>
-					{errors.description && <Typography color='red'>{errors.description}</Typography>}
 				</div>
 			</DialogBody>
 			<DialogFooter className='space-x-4'>

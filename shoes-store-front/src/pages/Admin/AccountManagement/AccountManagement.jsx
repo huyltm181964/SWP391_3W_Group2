@@ -3,14 +3,18 @@ import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { AccountManagementService } from 'src/services/AccountManagementService'
 import { GetImage } from 'src/utils/GetImage'
+import StaffManagement from '../StaffManagement/StaffManagement'
+import { StaffManagementService } from 'src/services/StaffManagementService'
 
 const TABLE_HEAD = [
+	{ head: 'Id', customeStyle: '!text-left w-[5%]', key: 'accountID' },
 	{ head: 'Avatar', customeStyle: '!text-left w-[9%]', key: 'avatar' },
-	{ head: 'AccountEmail', customeStyle: '!text-left w-[17%]', key: 'accountEmail' },
-	{ head: 'AccountName', customeStyle: 'text-left w-[17%]', key: 'accountName' },
+	{ head: 'AccountEmail', customeStyle: '!text-left w-[13%]', key: 'accountEmail' },
+	{ head: 'AccountName', customeStyle: 'text-left w-[13%]', key: 'accountName' },
 	{ head: 'Gender', customeStyle: 'text-center w-[8%]', key: 'gender' },
+	{ head: 'Birthday', customeStyle: 'text-center w-[10%]', key: 'birthDay' },
 	{ head: 'Phone', customeStyle: 'text-center w-[10%]', key: 'phone' },
-	{ head: 'Address', customeStyle: 'text-left w-[20%]', key: 'address' },
+	{ head: 'Address', customeStyle: 'text-left w-[13%]', key: 'address' },
 	{ head: 'Status', customeStyle: '!text-left w-[9%]', key: 'status' },
 	{ head: 'Actions', customeStyle: 'text-center w-[10%]', key: 'actions' },
 ]
@@ -20,14 +24,14 @@ function AccountManagement() {
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
-	const [tableRows, setTableRows] = useState([]);
+	const [tableRows, setTableRows] = useState([])
 
 	useEffect(() => {
 		async function fetchAccounts() {
 			const data = await AccountManagementService.GET_ALL()
 			if (data) {
 				setTableRows(data)
-				console.log(tableRows)
+				console.log(data)
 			}
 		}
 		fetchAccounts()
@@ -90,9 +94,9 @@ function AccountManagement() {
 	}
 
 	const handleUpdateStatus = async (email) => {
-		const data = await AccountManagementService.UPDATE_STATUS(email)
+		const data = await StaffManagementService.UPDATE_STAFF_STATUS(email)
 		if (data) {
-			const updatedData = await AccountManagementService.GET_ALL()
+			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
 			setTableRows(updatedData)
 		}
 	}
@@ -133,6 +137,7 @@ function AccountManagement() {
 							{paginatedRows.map((row) => {
 								return (
 									<tr>
+										<td className='p-4'>{row.accountID}</td>
 										<td className='p-4'>
 											<img
 												src={GetImage(row.avatar)}
@@ -140,9 +145,13 @@ function AccountManagement() {
 												className='w-10 h-10 rounded-full'
 											/>
 										</td>
-										<td className='p-4'>{row.accountEmail}</td>
-										<td className='p-4'>{row.accountName}</td>
+										<td className='p-4 break-words whitespace-normal'>{row.accountEmail}</td>
+										<td className='p-4 break-words whitespace-normal'>{row.accountName}</td>
 										<td className='p-4 text-center'>{row.gender || 'N/A'}</td>
+										<td className='p-4 text-center '>
+											{row.birthDay ? row.birthDay.split('T')[0] : 'N/A'}
+										</td>
+
 										<td className='p-4 text-center'>{row.phone || 'N/A'}</td>
 										<td className='p-4 break-words whitespace-normal'>
 											{row.accountAddress || 'N/A'}

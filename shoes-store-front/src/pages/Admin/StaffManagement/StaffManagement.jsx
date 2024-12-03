@@ -162,9 +162,13 @@ function StaffManagement() {
 												className='w-10 h-10 rounded-full'
 											/>
 										</td>
-										<td className='p-4'>{row.accountEmail}</td>
-										<td className='p-4'>{row.accountName}</td>
+										<td className='p-4 break-words whitespace-normal'>{row.accountEmail}</td>
+										<td className='p-4 break-words whitespace-normal'>{row.accountName}</td>
 										<td className='p-4 text-center'>{row.gender || 'N/A'}</td>
+										<td className='p-4 text-center '>
+											{row.birthDay ? row.birthDay.split('T')[0] : 'N/A'}
+										</td>
+
 										<td className='p-4 text-center'>{row.phone || 'N/A'}</td>
 										<td className='p-4 break-words whitespace-normal'>
 											{row.accountAddress || 'N/A'}
