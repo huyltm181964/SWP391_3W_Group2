@@ -13,23 +13,29 @@ import { XMarkIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { useState, useRef } from 'react'
 import { categoriesList } from 'src/utils/EnumList'
 
-const AddProduct = ({ open, handleClose, handleAddProduct }) => {
+const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 	const fileRef = useRef(null)
 	const [imagePresentation, setImagePresentation] = useState('')
 	const [imageFile, setImageFile] = useState(null)
 	const [values, setValues] = useState({
 		image: '',
-		name: '',
-		price: '',
-		description: '',
-		category: '',
+		accountName: '',
+		accountEmail: '',
+		password: '',
+		gender: '',
+		birthday: '',
+		phone: '',
+		accountAddress: '',
 	})
 	const [errors, setErrors] = useState({
-		name: '',
-		price: '',
-		description: '',
-		category: '',
 		image: '',
+		accountName: '',
+		accountEmail: '',
+		password: '',
+		gender: '',
+		Birthday: '',
+		phone: '',
+		accountAddress: '',
 	})
 
 	const handleValueChange = (e) => {
@@ -65,7 +71,6 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 		const newErrors = {}
 		if (!values.name) newErrors.name = 'Name is required.'
 		if (!values.price) newErrors.price = 'Price is required.'
-		else if (values.price <= 0) newErrors.price = 'Price must be greater than zero.'
 		if (!values.description) newErrors.description = 'Description is required.'
 		if (!values.category) newErrors.category = 'Category is required.'
 		if (!imageFile) newErrors.image = 'Image is required.'
@@ -77,12 +82,15 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 	const handleAdd = () => {
 		if (validate()) {
 			const formData = new FormData()
-			formData.append('ProductImg', imageFile)
-			formData.append('ProductName', values.name)
-			formData.append('ProductDescription', values.description)
-			formData.append('ProductPrice', parseFloat(values.price))
-			formData.append('ProductCategory', values.category)
-			handleAddProduct(formData)
+			formData.append('Avatar', imageFile)
+			formData.append('AccountName', values.accountName)
+			formData.append('AccountEmail', values.accountEmail)
+			formData.append('Password', values.password)
+			formData.append('Gender', values.gender)
+			formData.append('Birthday', values.birthday)
+			formData.append('Phone', values.phone)
+			formData.append('AccountAddress', values.accountAddress)
+			handleAddStaff(formData)
 			handleClose()
 		}
 	}
@@ -91,7 +99,7 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 		<Dialog open={open} handler={handleClose} size='lg' className='rounded-md'>
 			<DialogHeader className='flex justify-between items-center'>
 				<Typography variant='h5' className='font-semibold'>
-					Add Product
+					Add Staff
 				</Typography>
 				<IconButton size='sm' onClick={handleClose}>
 					<XMarkIcon className='h-5 w-5 text-gray-700' />
@@ -129,15 +137,15 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 				</div>
 				<div>
 					<Input
-						label='Name'
-						name='name'
-						value={values.name}
+						label='AccountName'
+						name='accountName'
+						value={values.accountName}
 						onChange={handleValueChange}
 						className='focus:ring focus:ring-gray-300'
 						required
-						error={!!errors.name}
+						error={!!errors.accountName}
 					/>
-					{errors.name && <Typography color='red'>{errors.name}</Typography>}
+					{errors.accountName && <Typography color='red'>{errors.accountName}</Typography>}
 				</div>
 				<div>
 					<Input
@@ -194,4 +202,4 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 	)
 }
 
-export default AddProduct
+export default AddStaff
