@@ -26,7 +26,6 @@ function OrderManagement() {
 			const data = await OrderManagementService.GET_ALL()
 			if (data) {
 				setTableRows(data)
-				console.log(data)
 			}
 		}
 		fetchOrders()
