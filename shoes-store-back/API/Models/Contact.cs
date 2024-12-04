@@ -14,7 +14,7 @@ namespace API.Models
         [MaxLength(500)]
         public String Answer { get; set; }
         public DateTime AnswerDate { get; set; }
-        public bool IsRejected { get; set; }
+        public bool IsRejected { get; set; } = false;
 
         public int AccountID { get; set; }
         public virtual Account? Account { get; set; }

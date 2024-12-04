@@ -1,0 +1,156 @@
+﻿SET IDENTITY_INSERT [dbo].[Product] ON 
+
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (1, N'qw3', CAST(425.00 AS Decimal(18, 2)), N'/images/743709d0-8245-4147-9182-e5d31f02d1f3_3gpu4dwg.png', N'Bitis', N'435', N'Out of business')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (2, N'Nike Air Force 1 ''071', CAST(1101.00 AS Decimal(18, 2)), N'/images/cf18c5f9-c3bc-4e4c-894b-b3aef6b5eb2f_1c110df3d36eb132b04586b732663f81.jpg', N'Bitis', N'The radiance lives on in the Nike Air Force 1 ''07, the basketball original that puts a fresh spin on what you know best: durably stitched overlays, clean finishes and the perfect amount of flash to make you shine.', N'Out of business')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (3, N'Nike Air Force 1 High By You', CAST(200.00 AS Decimal(18, 2)), N'/images/9f4fde1d-b242-4445-aaba-03af64613fd4_0b9e8ef41806499cfb599b9974d725e1.jpg', N'Nike', N'These AF-1s are all about the details. Customise your label, laces and dubrae, and don''t forget to leave your mark with personal text on the backtab. Between 8 colour choices and additional translucent and gum rubber options for the sole, this design is destined to be one of a kind—just like you.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (4, N'Nike Air Jordan 1 Elevated High', CAST(120.00 AS Decimal(18, 2)), N'/images/af437406-af24-488a-a2da-cf6ed3124b12_0a1061ffd74ee7507e42c98c72c1e7cf.jpg', N'Nike', N'Classic Jordan style reaches new heights in this lifted AJ-1. The platform stance and high-top collar make a statement, while crisp leather and flashy finishes make these kicks the winning assist your outfit needs. For added flex, the puffy, stitched-on Wings "logo" delivers big (and just wait until you feel the ultra-comfortable Air cushioning underfoot). Go ahead, elevate your game.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (5, N'Air Jordan 1 High', CAST(210.00 AS Decimal(18, 2)), N'/images/4d9dd049-f3a5-47c8-95d1-aaefbdb0cbd4_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'Nike', N'Inspired by the original that debuted in 1985, the Air Jordan 1 Low offers a clean, classic look that''s familiar yet always fresh. With an iconic design that pairs perfectly with any ''fit, these kicks ensure you''ll always be on point.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (6, N'Air Jordan 1 Mid SE', CAST(350.00 AS Decimal(18, 2)), N'/images/2b5ea57b-1db6-4f2a-a542-0eb1a35cb87d_79f575164c85cf1d5cc711f92404bb56.jpg', N'Nike', N'New colours and fresh textures update this all-time favourite without losing its classic look and familiar feel. Made from premium materials and pumped full of comfortable Nike Air cushioning, it features subtle details that make it a staple sneaker with a modern expression.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (7, N'Jordan Stay Loyal 3', CAST(300.00 AS Decimal(18, 2)), N'/images/3811d442-2e06-4f60-89ab-f95093608f40_ad4016b9bb27cc6a4d2df66406e53f03.jpg', N'Nike', N'You gotta know where you''ve been to know where you''re going. We took that to heart when creating the Stay Loyal 3, a modern shoe built on the Air Jordan legacy. Inside and out, they''re made for versatility, with minimalist looks, cloud-like cushioning and design elements that echo the AJ4. In other words, style with proven lasting power.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (8, N'Gucci Ripple sneakers', CAST(1320.00 AS Decimal(18, 2)), N'/images/59f35b87-281b-4732-b18a-b0f9145ec88e_1d5ee67ea7b8a8d1a8b97ffa6057146a.jpg', N'Gucci', N'We''ve partnered with Good On You — an independent agency that rates how brands perform in relation to their impact on the planet, people and animals, with a multi-criteria rating simplified to a five points scale. In order to be awarded our conscious label, larger brands need to score a minimum of four out of five (''Good''), while smaller brands must score at least three out of five (''It''s A Start'').', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (9, N'Gucci Ace sneaker with Web', CAST(930.00 AS Decimal(18, 2)), N'/images/b5d8159b-2304-4f47-89b2-2c104e28f62c_67412f58877fb1b5fcf8cf9c8bb3113f.jpg', N'Gucci', N'Since its debut, the Ace sneaker has become a mainstay of the House''s narrative. A new version of the characteristic low-top silhouette is presented in the latest collection, featuring unique details.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (10, N'Gucci Re-Web sneaker', CAST(1150.00 AS Decimal(18, 2)), N'/images/5899bc7e-9958-46ca-9497-45344e3d678f_cf144b12cbcb8a087c2e506c76023390.jpg', N'Gucci', N'The first sneakers envisioned by Sabato De Sarno for the House, the Re-Web sees Gucci’s heritage stripes as a bold statement detail on a contemporary silhouette. Defined by iconic details, this pair of sneakers is crafted from beige and white GG Supreme canvas and completed with green and red Web tongue.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (11, N'Gucci Run lace-up sneakers', CAST(1160.00 AS Decimal(18, 2)), N'/images/5eecc22b-0b44-4626-b262-50cb37a5d201_d7811c0136d54e78a9f06401beed6460.jpg', N'Gucci', N'Crafted from suede and enriched with a bi-colour rubber sole, these Gucci Run sneakers are inspired by the sporting world. The panelled design is finished with an Interlocking G logo for a subtle branding detail.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (12, N'Gucci Screener panelled sneakers', CAST(1240.00 AS Decimal(18, 2)), N'/images/76621e80-5c90-4d0e-a379-201622a90846_e51139c0ca1eabf5a2ada000382572f1.jpg', N'Gucci', N'Inspired by ''70s sneaker silhouettes, this lace-up design from Gucci features the brand''s vintage logo at the tongue, alongside a Double G plaque at the front, reiterating the heritage feel.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (13, N'Gucci GG lace-up combat', CAST(1265.00 AS Decimal(18, 2)), N'/images/bbf1903e-a1f1-451a-9674-daaf51f98510_ed3ddc553fd90e99d814bdc5e779c70a.jpg', N'Gucci', N'GG lace-up combat boots  sand beige/light brown/black canvas leather all-over logo print contrasting trim round toe front lace-up fastening side zip fastening branded insole chunky rubber sole', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (14, N'Adidas Originals by Alexander Wang ', CAST(123.00 AS Decimal(18, 2)), N'/images/efaeed45-908c-48f2-bf55-0e753840afc9_4c840d7ecf75f33b747a9a3301af8735.jpg', N'Adidas', N'POSITIVELY CONSCIOUS: adidas Group scores 4 out of 5 with independent ethical brand rating agency Good On You. It uses eco-friendly materials in many products – 100% of its cotton is from sustainable sources and it''s committed to using 100% recycled polyester by 2024. It traces and audits almost all of its supply chain to ensure good labour standards, and has committed to reducing carbon and water stress across its whole supplier base.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (15, N'Adidas Men''s ZX 750 Trainers GW5529', CAST(63.00 AS Decimal(18, 2)), N'/images/9365682c-5170-4c6f-94b4-57419f4eccc7_795ec6740903cea07ade0e5edeeb5fe7 (1).jpg', N'Adidas', N'Running shoe', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (16, N'Adidas Originals ZX 750 "Dark Petrol"', CAST(85.00 AS Decimal(18, 2)), N'/images/f11f10e5-c1a1-44aa-b5df-82584319f784_7e7aaff8f8cdcde32a44d9e14daa0a8a.jpg', N'Adidas', N'Ever since its resurgence in 2013, the adidas Originals ZX 750 has staked its claim as a retro runner that’s not planning on going back', N'Out of stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (17, N'Adidas SPEZIAL FW18', CAST(165.00 AS Decimal(18, 2)), N'/images/1241945e-d91f-45a3-9b5c-7a55d2dc827d_11ddc97197beb5a4afad7983fec48554.jpg', N'Adidas', N'For FW18, adidas SPEZIAL is paying homage to the 30th anniversary of Acid House, a sub-genre of house music developed around the mid-1980s. The collection then hones in on the cultural phenomenon of warehouse parties and how that first generation of ravers remain influential to this day.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (18, N'Adidas Samba Nylon Wales Bonner Fox Brown', CAST(310.00 AS Decimal(18, 2)), N'/images/08206b7a-9d89-4aca-8918-8f5f394b7959_bec881d4fb1793170834e0b183c018e6.jpg', N'Adidas', N'The latest collaboration between Adidas and the celebrated British designer, Wales Bonner, has given birth to an exquisite pair of sneakers. These shoes artfully merge the finest quality leather and suede materials, setting a new standard in footwear craftsmanship. However, it''s not just the materials that make these sneakers exceptional; it''s the meticulous attention to detail that truly sets them apart. ', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (19, N'Biti''s Hunter Street HSM008600DEN', CAST(35.00 AS Decimal(18, 2)), N'/images/978a7f42-9284-4162-be25-f34318c2ff32_bitis1.jpg', N'Bitis', N'LiteFoam 3.0 sole unit:   - Modern design. Light as air.   - High quality rubber eraser to limit slipping   Premium upper airmesh:   - Flexible and flexible   Design color:   - Simple, convenient for any style.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (20, N'Biti’s Hunter Core LiteFoam 3.0 - Original Edition 2K24', CAST(35.00 AS Decimal(18, 2)), N'/images/3206a56e-b288-416c-84d5-78a276e67d1b_bitis2.jpg', N'Bitis', N'LiteFoam 3.0 sole unit:   - Modern design. Light as air.   - High quality rubber eraser to limit slipping   Premium upper airmesh:   - Flexible and flexible   Design color:   - Simple, convenient for any style.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (21, N'Biti’s Hunter Core LiteFoam 3.0 - Original Edition 2K24 - Orange', CAST(35.00 AS Decimal(18, 2)), N'/images/b3d35c6a-e5c3-4e4b-a1ec-ded065428411_bitis3.jpg', N'Bitis', N'LiteFoam 3.0 sole unit:   - Modern design. Light as air.   - High quality rubber eraser to limit slipping   Premium upper airmesh:   - Flexible and flexible   Design color:   - Simple, convenient for any style.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (22, N'Biti''s Hunter X LiteDash - Original Edition 2K24 HSW007506KEL', CAST(35.00 AS Decimal(18, 2)), N'/images/9abca0ea-88b7-449a-b90a-8e4bba47b5fd_bitis4.jpg', N'Bitis', N'LiteFoam 3.0 sole unit:   - Modern design. Light as air.   - High quality rubber eraser to limit slipping   Premium upper airmesh:   - Flexible and flexible   Design color:   - Simple, convenient for any style.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (23, N'Biti''s Hunter X LiteDash - Original Edition 2K24 HSW007506LDL', CAST(35.00 AS Decimal(18, 2)), N'/images/043e50f7-496a-49ce-9430-e06dcee354bc_bitis7.jpg', N'Bitis', N'LiteFoam 3.0 sole unit:   - Modern design. Light as air.   - High quality rubber eraser to limit slipping   Premium upper airmesh:   - Flexible and flexible   Design color:   - Simple, convenient for any style.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (24, N'Biti''s Hunter X LiteDash - Original Edition 2K24 HSW007506VMJ', CAST(35.00 AS Decimal(18, 2)), N'/images/fef2defc-7f68-4c65-9330-fa9a34f93f43_bitis6.jpg', N'Bitis', N'LiteFoam 3.0 sole unit:   - Modern design. Light as air.   - High quality rubber eraser to limit slipping   Premium upper airmesh:   - Flexible and flexible   Design color:   - Simple, convenient for any style.', N'Still in stock')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (25, N'Adidas Team Court 2 Trainer', CAST(120.00 AS Decimal(18, 2)), N'/images/cd3582b0-d74c-431a-97d5-28c677f0d1c7_team court 2 trainers.jpg', N'Adidas', N'Shoe for trainner', N'Out of business')
+INSERT [dbo].[Product] ([ProductID], [ProductName], [ProductPrice], [ProductImg], [ProductCategory], [ProductDescription], [ProductStatus]) VALUES (26, N'Adidas', CAST(5.00 AS Decimal(18, 2)), N'/images/38217440-b15e-4908-bfa9-f5f9a84245b4_team court 2 trainers.jpg', N'Adidas', N'Dess', N'Out of stock')
+SET IDENTITY_INSERT [dbo].[Product] OFF
+GO
+
+SET IDENTITY_INSERT [dbo].[ProductVariant] ON
+INSERT INTO [dbo].[ProductVariant] 
+    ([VariantID], [ProductID], [VariantImg], [VariantSize], [VariantColor], [VariantQuantity], [IsStopSelling])
+VALUES
+(1, 2, N'/images/fafdd0ef-4fc1-4274-89a6-b1f36620becb_1c110df3d36eb132b04586b732663f81.jpg', N'37', N'White', 6, 0),
+(2, 2, N'/images/d74e0444-f26c-4561-836a-7c0bd87550b3_1c110df3d36eb132b04586b732663f81.jpg', N'38', N'White', 5, 0),
+(3, 2, N'/images/24d0afdf-4018-460c-9eb4-3c82b31afc28_1c110df3d36eb132b04586b732663f81.jpg', N'39', N'White', 5, 0),
+(4, 2, N'/images/0393fb7f-a5e6-4a89-92bb-79628901dd69_1c110df3d36eb132b04586b732663f81.jpg', N'40', N'White', 6, 0),
+(5, 2, N'/images/ec5e236b-cf13-4be4-9443-b2e814dfa3bf_1c110df3d36eb132b04586b732663f81.jpg', N'41', N'White', 6, 0),
+(6, 2, N'/images/bad66db0-8742-4fe5-bec2-d8ad94c38053_1c110df3d36eb132b04586b732663f81.jpg', N'42', N'White', 6, 0),
+(7, 2, N'/images/93fa19b6-6249-471e-bc0f-59e35c1e22a2_1c110df3d36eb132b04586b732663f81.jpg', N'43', N'White', 4, 0),
+(8, 2, N'/images/5a1a23f1-7092-47a8-b8be-0657245ecb80_1c110df3d36eb132b04586b732663f81.jpg', N'44', N'White', 6, 0),
+(9, 2, N'/images/cc780bc4-d3ba-4812-950d-2accbc434905_1c110df3d36eb132b04586b732663f81.jpg', N'45', N'White', 6, 0),
+(10, 2, N'/images/7512de28-f3fa-4dcd-bec4-c62636ac77ce_1c110df3d36eb132b04586b732663f81.jpg', N'46', N'White', 5, 0),
+(11, 3, N'/images/5ec0d6e5-dce4-4657-9dcf-4cf47058dcba_0b9e8ef41806499cfb599b9974d725e1.jpg', N'36', N'White-Green Pastel', 5, 0),
+(12, 3, N'/images/7b5f5146-a22a-4103-a885-378f0b0fdb8f_0b9e8ef41806499cfb599b9974d725e1.jpg', N'37', N'White-Green Pastel', 6, 0),
+(13, 3, N'/images/7cf5ebdd-e2e1-45e3-9b8b-cd90a9f805b1_0b9e8ef41806499cfb599b9974d725e1.jpg', N'38', N'White-Green Pastel', 11, 0),
+(14, 3, N'/images/5777b0aa-f398-46a0-b007-4916842badbc_0b9e8ef41806499cfb599b9974d725e1.jpg', N'39', N'White-Green Pastel', 6, 0),
+(15, 3, N'/images/434c9a53-1501-49ea-91c8-2dd14354a108_0b9e8ef41806499cfb599b9974d725e1.jpg', N'40', N'White-Green Pastel', 6, 0),
+(16, 3, N'/images/bddd7e52-1fd4-4bb3-9a7d-671ea0a1421e_0b9e8ef41806499cfb599b9974d725e1.jpg', N'41', N'White-Green Pastel', 1, 0),
+(17, 4, N'/images/1a11eb37-cf65-4eef-83c9-8f05a6a27bfc_0a1061ffd74ee7507e42c98c72c1e7cf.jpg', N'38', N'Black', 7, 0),
+(18, 4, N'/images/3f945968-bd61-4701-85a1-f1ce41baa901_0a1061ffd74ee7507e42c98c72c1e7cf.jpg', N'39', N'Black', 7, 0),
+(19, 4, N'/images/8137daeb-f18a-4a5e-b294-97ab602f8ff4_0a1061ffd74ee7507e42c98c72c1e7cf.jpg', N'40', N'Black', 7, 0),
+(20, 4, N'/images/c1160768-991e-4bb2-aee9-440a182abd82_0a1061ffd74ee7507e42c98c72c1e7cf.jpg', N'41', N'Black', 3, 0),
+(21, 4, N'/images/b261c049-7887-47b2-8319-48cea73e6ef1_0a1061ffd74ee7507e42c98c72c1e7cf.jpg', N'42', N'Black', 6, 0),
+(22, 5, N'/images/90f1a4ee-d810-40f3-87d3-b3a6d77a17e0_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'38', N'Red', 7, 0),
+(23, 5, N'/images/8b9449ce-634f-4d41-b9d4-c8656e51e071_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'39', N'Red', 7, 0),
+(24, 5, N'/images/bb34a6ed-ca44-461f-9f87-7a7a33cd2a04_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'40', N'Red', 6, 0),
+(25, 5, N'/images/d6b18126-f344-468c-8047-4dcaf8e40424_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'41', N'Red', 7, 0),
+(26, 5, N'/images/b9b7bdf0-0518-48f1-960f-a64a2fd3bf9a_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'42', N'Red', 8, 0),
+(27, 5, N'/images/af1090cf-ae88-48be-9ae2-2564c75a7a88_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'43', N'Red', 7, 0),
+(28, 5, N'/images/5d2cd566-59be-470e-ba71-d91b70a97794_61bebfcd1c106a4b800f3c08217c4ad7.jpg', N'44', N'Red', 51, 0)      ,
+(29, 6, N'/images/0f31af2d-ce0d-4b91-9d2c-cfdd9497ceac_79f575164c85cf1d5cc711f92404bb56.jpg', N'38', N'Gray', 7, 0)      ,
+(30, 6, N'/images/8e5cd329-2492-47ea-a39d-1327e2bbc288_79f575164c85cf1d5cc711f92404bb56.jpg', N'39', N'Gray', 4, 0)      ,
+(31, 6, N'/images/4d9d1b9c-e06f-422f-8c77-398a8971dbe7_79f575164c85cf1d5cc711f92404bb56.jpg', N'40', N'Gray', 6, 0)      ,
+(32, 6, N'/images/93dfc4bf-8fec-4659-b231-b8909ca67f50_79f575164c85cf1d5cc711f92404bb56.jpg', N'41', N'Gray', 8, 0)      ,
+(33, 6, N'/images/a9d362d9-b758-4fbf-9953-8c51770e0c4b_79f575164c85cf1d5cc711f92404bb56.jpg', N'42', N'Gray', 6, 0)      ,
+(34, 6, N'/images/e520e293-9b7f-4e39-908c-43f7376910c8_79f575164c85cf1d5cc711f92404bb56.jpg', N'43', N'Gray', 6, 0)      ,
+(35, 6, N'/images/e2004852-976c-4c8a-99bc-870d64c25f2c_79f575164c85cf1d5cc711f92404bb56.jpg', N'44', N'Gray', 61, 0)     ,
+(36, 7, N'/images/9d6afb72-d65e-4633-ae77-198bd1d022d0_ad4016b9bb27cc6a4d2df66406e53f03.jpg', N'39', N'Gray', 5, 0)      ,
+(37, 7, N'/images/efa72fd3-516c-445a-8551-727803973900_ad4016b9bb27cc6a4d2df66406e53f03.jpg', N'40', N'Gray', 1, 0)      ,
+(38, 7, N'/images/bdc8546d-062a-4f13-9fc0-bb34ab21b524_ad4016b9bb27cc6a4d2df66406e53f03.jpg', N'41', N'Gray', 1, 0)      ,
+(39, 7, N'/images/72c71683-3440-445f-a2cc-e60329b2facc_ad4016b9bb27cc6a4d2df66406e53f03.jpg', N'43', N'Gray', 3, 0)      ,
+(40, 7, N'/images/7e1e014a-65b7-4d6c-9cbf-2621cd27b2a6_ad4016b9bb27cc6a4d2df66406e53f03.jpg', N'44', N'Gray', 3, 0)      ,
+(41, 8, N'/images/c19b4dc7-d071-4092-8ae1-5d0ef8455b7e_1d5ee67ea7b8a8d1a8b97ffa6057146a.jpg', N'38', N'Basic', 7, 0)     ,
+(42, 8, N'/images/e8441545-c4ae-49e9-8fe4-470e7e496b53_1d5ee67ea7b8a8d1a8b97ffa6057146a.jpg', N'39', N'Basic', 7, 0)     ,
+(43, 8, N'/images/6823465c-5e15-407d-9282-98df0aea01ef_1d5ee67ea7b8a8d1a8b97ffa6057146a.jpg', N'40', N'Basic', 8, 0)     ,
+(44, 8, N'/images/3821bc75-c395-4a80-a20b-e184f76b3c31_1d5ee67ea7b8a8d1a8b97ffa6057146a.jpg', N'44', N'Basic', 1, 0)     ,
+(45, 8, N'/images/152ba9bd-6a97-4f35-8518-c3256ebbcf64_1d5ee67ea7b8a8d1a8b97ffa6057146a.jpg', N'46', N'Basic', 1, 0)     ,
+(46, 9, N'/images/46162b1c-4047-4373-81de-dc3f5c7bf746_67412f58877fb1b5fcf8cf9c8bb3113f.jpg', N'39', N'Basic', 0, 0)     ,
+(47, 9, N'/images/88364f50-d94e-472e-b2c6-b90317ebcead_67412f58877fb1b5fcf8cf9c8bb3113f.jpg', N'40', N'Basic', 1, 0)     ,
+(48, 9, N'/images/dd0c5017-582d-41c5-a8fe-ec7d4e5b57af_67412f58877fb1b5fcf8cf9c8bb3113f.jpg', N'41', N'Basic', 1, 0)     ,
+(49, 9, N'/images/154e2a31-b3e7-4e8e-ba12-2670172271ca_67412f58877fb1b5fcf8cf9c8bb3113f.jpg', N'44', N'Basic', 1, 0)     ,
+(50, 10, N'/images/ff0736ec-82ee-4bb1-ad9f-01ebcb49aa32_cf144b12cbcb8a087c2e506c76023390.jpg', N'39', N'White', 1, 0)    ,
+(51, 10, N'/images/9ffc068a-c95d-4f3f-b6bd-851f7884078f_cf144b12cbcb8a087c2e506c76023390.jpg', N'41', N'White', 1, 0)    ,
+(52, 10, N'/images/f7889f25-e688-4925-a0bb-0c9112e0d768_cf144b12cbcb8a087c2e506c76023390.jpg', N'42', N'White', 0, 0)    ,
+(53, 10, N'/images/57728726-615c-4f9b-ae6b-cea2fa362a39_cf144b12cbcb8a087c2e506c76023390.jpg', N'43', N'White', 1, 0)    ,
+(54, 10, N'/images/3af3c179-0c88-466a-803c-4ea0d0aef52d_cf144b12cbcb8a087c2e506c76023390.jpg', N'44', N'White', 1, 0)    ,
+(55, 11, N'/images/ab29cc42-4db8-471d-b714-3cad49135240_d7811c0136d54e78a9f06401beed6460.jpg', N'39', N'Basic', 1, 0)    ,
+(56, 11, N'/images/447cf25a-b5c6-475e-8eb4-b5da8067ce97_d7811c0136d54e78a9f06401beed6460.jpg', N'40', N'Basic', 1, 0)    ,
+(57, 11, N'/images/e3d870c1-e199-46d6-bfe8-ef3aaf24412c_d7811c0136d54e78a9f06401beed6460.jpg', N'41', N'Basic', 1, 0)    ,
+(58, 11, N'/images/f2c6cbba-449d-4875-9f55-37f422e29740_d7811c0136d54e78a9f06401beed6460.jpg', N'43', N'Basic', 1, 0)    ,
+(59, 12, N'/images/579ea3fe-10b3-4de1-9712-34e8a5022f20_e51139c0ca1eabf5a2ada000382572f1.jpg', N'37', N'Brown', 1, 0)    ,
+(60, 12, N'/images/b6177171-c9a4-4ddf-9c40-9459669d8d43_e51139c0ca1eabf5a2ada000382572f1.jpg', N'38', N'Brown', 1, 0)    ,
+(61, 12, N'/images/33b4d33c-d2a4-4d09-9747-fa9642a51c0a_e51139c0ca1eabf5a2ada000382572f1.jpg', N'39', N'Brown', 0, 0)    ,
+(62, 12, N'/images/6cdeba04-1cff-4c60-9d57-67f4855087c4_e51139c0ca1eabf5a2ada000382572f1.jpg', N'40', N'Brown', 1, 0)    ,
+(63, 12, N'/images/de46ebf1-603f-4100-a155-b6d79da94442_e51139c0ca1eabf5a2ada000382572f1.jpg', N'41', N'Brown', 1, 0)    ,
+(64, 13, N'/images/41391095-343a-4d18-a1b4-83caf322fc0c_ed3ddc553fd90e99d814bdc5e779c70a.jpg', N'39', N'Basic', 1, 0)    ,
+(65, 13, N'/images/fb252cb0-6fea-45a0-b6d2-207f9cb5bd9f_ed3ddc553fd90e99d814bdc5e779c70a.jpg', N'40', N'Basic', 1, 0)    ,
+(66, 13, N'/images/8ebb419c-335d-4e31-b40b-d0effa99df49_ed3ddc553fd90e99d814bdc5e779c70a.jpg', N'41', N'Basic', 1, 0)    ,
+(67, 13, N'/images/806654e8-04a5-49fa-8d9f-45b1c66c06c2_ed3ddc553fd90e99d814bdc5e779c70a.jpg', N'42', N'Basic', 1, 0)    ,
+(68, 14, N'/images/1835e695-23bd-4480-bbbd-2f1da192f30d_4c840d7ecf75f33b747a9a3301af8735.jpg', N'39', N'Dark Blue', 7, 0),
+(69, 14, N'/images/4e16a465-e8d2-453a-be6c-74f483ba5b13_4c840d7ecf75f33b747a9a3301af8735.jpg', N'40', N'Dark Blue', 8, 0),
+(70, 14, N'/images/b86304d9-d9f0-4eed-a655-ef5815377d61_4c840d7ecf75f33b747a9a3301af8735.jpg', N'41', N'Dark Blue', 4, 0),
+(71, 14, N'/images/0eceff0d-019c-42f3-8406-5243915939d3_4c840d7ecf75f33b747a9a3301af8735.jpg', N'42', N'Dark Blue', 3, 0),
+(72, 14, N'/images/1a826090-8d0b-48b8-905e-0eb66f68084b_4c840d7ecf75f33b747a9a3301af8735.jpg', N'43', N'Dark Blue', 4, 0),
+(73, 15, N'/images/2a83d3d7-2719-4193-81c4-628bad107382_7e7aaff8f8cdcde32a44d9e14daa0a8a.jpg', N'39', N'Blue', 6, 0)     ,
+(74, 15, N'/images/460f703e-d3c9-4933-9ae7-509e31a38a62_7e7aaff8f8cdcde32a44d9e14daa0a8a.jpg', N'40', N'Blue', 5, 0)     ,
+(75, 15, N'/images/bc6f626a-28dd-434d-9692-ef61e5c17364_7e7aaff8f8cdcde32a44d9e14daa0a8a.jpg', N'41', N'Blue', 5, 0)     ,
+(76, 15, N'/images/bd05bb92-a7f2-4849-9b7f-12880c3b6f86_7e7aaff8f8cdcde32a44d9e14daa0a8a.jpg', N'42', N'Blue', 5, 0)     ,
+(77, 17, N'/images/f625d293-85a8-4efe-bf07-df866c8b96f7_11ddc97197beb5a4afad7983fec48554.jpg', N'39', N'Brown', 1, 0)    ,
+(78, 17, N'/images/ecfc3bae-f814-43ea-acf0-7ee2971bb357_11ddc97197beb5a4afad7983fec48554.jpg', N'40', N'Brown', 3, 0)    ,
+(79, 17, N'/images/b26bd04b-2d07-4ab0-a39e-ff539423a478_11ddc97197beb5a4afad7983fec48554.jpg', N'42', N'Brown', 3, 0)    ,
+(80, 17, N'/images/60754440-191d-43b6-ab5f-ec1f42c716ad_11ddc97197beb5a4afad7983fec48554.jpg', N'43', N'Brown', 4, 0)    ,
+(81, 18, N'/images/9746d021-0b07-4110-8190-3c297f494366_bec881d4fb1793170834e0b183c018e6.jpg', N'39', N'Rose', 1, 0)     ,
+(83, 18, N'/images/c14feec3-3dca-42b3-9607-e5933876c4a5_bec881d4fb1793170834e0b183c018e6.jpg', N'40', N'Rose', 1, 0)     ,
+(84, 18, N'/images/3c9a442a-b805-49b7-9c88-14286b27419c_bec881d4fb1793170834e0b183c018e6.jpg', N'41', N'Rose', 1, 0)     ,
+(85, 18, N'/images/cfda22a4-1df8-4863-b6d7-31efc818e02f_bec881d4fb1793170834e0b183c018e6.jpg', N'42', N'Rose', 1, 0)     ,
+(86, 19, N'/images/ac563506-d0a1-48b9-9a1e-9aad5d9fba1f_bitis1.jpg', N'39', N'Black', 0, 0)                              ,
+(87, 19, N'/images/910b25a0-e218-472a-9b5f-cc82d41ae653_bitis1.jpg', N'40', N'Black', 1, 0)                              ,
+(88, 19, N'/images/21d2b113-02c0-4bc6-a68a-7dc98451194a_bitis1.jpg', N'41', N'Black', 1, 0)                              ,
+(89, 19, N'/images/ab96f09b-02f3-431a-b586-92fcc63c2f53_bitis1.jpg', N'42', N'Black', 1, 0)                              ,
+(90, 19, N'/images/d019f129-21b2-40dd-865c-7716f0540cdd_bitis1.jpg', N'43', N'Black', 1, 0)                              ,
+(91, 20, N'/images/e62b9e75-a6c0-4e0b-a1ff-dee922d66244_bitis2.jpg', N'39', N'Black', 1, 0)                              ,
+(92, 20, N'/images/58099b51-9f08-4a56-b3f1-c824e040e924_bitis2.jpg', N'40', N'Black', 1, 0)                              ,
+(93, 20, N'/images/c26da007-9b40-4216-ac70-7ae871b5afbf_bitis2.jpg', N'41', N'Black', 1, 0)                              ,
+(94, 20, N'/images/0e4df156-2151-439f-ad71-e5cdf5c35106_bitis2.jpg', N'42', N'Black', 1, 0)                              ,
+(95, 20, N'/images/8a2d0d22-bc1d-4e94-a762-ab625454bbb0_bitis2.jpg', N'43', N'Black', 1, 0)                              ,
+(96, 20, N'/images/1f35622c-1cdc-45dc-900b-73dcfb63f914_bitis2.jpg', N'44', N'Black', 1, 0)                              ,
+(97, 21, N'/images/531cd516-00aa-49a9-9a71-40bcd80ac275_bitis3.jpg', N'39', N'Grey-Orange', 1, 0)                        ,
+(98, 21, N'/images/9d64c0cb-08a1-409b-8b19-c7fd36f94890_bitis3.jpg', N'40', N'Grey-Orange', 1, 0)                        ,
+(99, 21, N'/images/59538d49-26b2-41b4-9a17-a5b37e120d12_bitis3.jpg', N'41', N'Grey-Orange', 1, 0)                        ,
+(100, 21, N'/images/d3c042f9-0d9f-4fd3-b299-86073c80f8ce_bitis3.jpg', N'42', N'Grey-Orange', 1, 0)                       ,
+(101, 21, N'/images/7dcce181-b17c-424a-94a4-f18b4a2378bb_bitis3.jpg', N'43', N'Grey-Orange', 1, 0)                       ,
+(102, 22, N'/images/374bf87a-cc57-4de0-b358-0fbc42852aaa_bitis4.jpg', N'39', N'Black', 1, 0)                             ,
+(103, 22, N'/images/1e0030e7-d327-421e-9ceb-2f3543e5354a_bitis4.jpg', N'40', N'Black', 1, 0)                             ,
+(104, 22, N'/images/71fe3918-8038-4174-ae12-a8a6de372665_bitis4.jpg', N'41', N'Black', 1, 0)                             ,
+(105, 22, N'/images/169aa03d-7e1e-4a5d-b254-33d63c349768_bitis4.jpg', N'42', N'Black', 1, 0)                             ,
+(106, 22, N'/images/9c3dc735-e348-4605-8941-7486145504e1_bitis4.jpg', N'43', N'Black', 1, 0)                             ,
+(107, 22, N'/images/c3d75b70-a7d1-443d-a120-e23bb65580be_bitis4.jpg', N'44', N'Black', 1, 0)                             ,
+(108, 23, N'/images/58e2450e-b6d1-4a23-99ff-9cd8a8544f9b_bitis7.jpg', N'38', N'White', 1, 0)                             ,
+(109, 23, N'/images/3cad0fd1-e260-423f-abd0-9d4b7bc0118e_bitis7.jpg', N'39', N'White', 1, 0)                             ,
+(110, 23, N'/images/6e778feb-8630-4349-83d5-2595c1cc2b5a_bitis7.jpg', N'40', N'White', 1, 0)                             ,
+(111, 23, N'/images/8cb3ee8d-1623-4875-aad9-3ba759b49e38_bitis7.jpg', N'41', N'White', 1, 0)                             ,
+(112, 23, N'/images/8e458fd1-ff6b-41c3-8ef0-1e52ba103efb_bitis7.jpg', N'43', N'White', 1, 0)                             ,
+(113, 23, N'/images/e9edc20c-dc75-42ca-b602-023a3846fa32_bitis7.jpg', N'44', N'White', 1, 0)                             ,
+(114, 24, N'/images/36f56382-e9eb-4d15-97bf-013acda16cd4_bitis6.jpg', N'38', N'Black-Oragne', 1, 0)                      ,
+(115, 24, N'/images/095ec406-ef17-47b4-b215-2b5856341854_bitis6.jpg', N'39', N'Black-Orange', 1, 0)                      ,
+(116, 24, N'/images/e76f194b-08de-4050-9587-218cdd838534_bitis6.jpg', N'40', N'Black-Orange', 1, 0)                      ,
+(117, 24, N'/images/555cb9fc-f91a-46b2-9f4b-e28b9e4f7d82_bitis6.jpg', N'41', N'Black-Orange', 1, 0)                      ,
+(118, 24, N'/images/bb60ae2e-f0c0-403d-8344-73d4edc1f91d_bitis6.jpg', N'42', N'Black-Orange', 1, 0)                      ,
+(119, 24, N'/images/fe2c52c9-362c-46cf-9560-5adf9bc5c5ab_bitis6.jpg', N'44', N'Black-Orange', 1, 0)                      ,
+(120, 25, N'/images/acb4ccdc-ccaf-4a0c-9a2c-675c950e088a_team court 2 trainers.jpg', N'39', N'White', 4, 0)
+SET IDENTITY_INSERT [dbo].[ProductVariant] OFF
+GO

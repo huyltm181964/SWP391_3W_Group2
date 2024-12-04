@@ -12,7 +12,7 @@ namespace API.Models
         [MaxLength(20)]
         public String VariantColor { get; set; }
         public int VariantQuantity { get; set; }
-        public bool IsSelling { get; set; }
+        public bool IsStopSelling { get; set; } = false;
 
         public int ProductID { get; set; }
         public virtual Product? Product { get; set; }
