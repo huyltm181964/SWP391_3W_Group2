@@ -216,7 +216,7 @@ namespace API.DAO
         }
         public ResponseMessage GetAllAccount()
         {
-            var listAccount = db.Account.Where(x => !x.Role.Equals("Admin")).ToList();
+            var listAccount = db.Account.Where(x => !x.Role.Equals("Admin") && !x.Role.Equals("Staff")).ToList();
             if (listAccount.Any())
             {
                 return new ResponseMessage

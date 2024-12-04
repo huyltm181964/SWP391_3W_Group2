@@ -2,10 +2,11 @@ import { Button, Card, CardBody, IconButton, Typography } from '@material-tailwi
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { AccountManagementService } from 'src/services/AccountManagementService'
-import { GetImage } from 'src/utils/GetImage'
-import StaffManagement from '../StaffManagement/StaffManagement'
 import { StaffManagementService } from 'src/services/StaffManagementService'
-import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { GetImage } from 'src/utils/GetImage'
+import AddStaff from './AddStaff'
+import { CheckCircleIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import UpdateStaff from './UpdateStaff'
 
 const TABLE_HEAD = [
 	{ head: 'Id', customeStyle: '!text-left w-[5%]', key: 'accountID' },
@@ -19,17 +20,19 @@ const TABLE_HEAD = [
 	{ head: 'Status', customeStyle: '!text-left w-[9%]', key: 'status' },
 	{ head: 'Actions', customeStyle: 'text-center w-[10%]', key: 'actions' },
 ]
-
-function AccountManagement() {
+function StaffManagement() {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [tableRows, setTableRows] = useState([])
+	const [openAddPage, setOpenAddPage] = useState(false)
+	const [openUpdatePage, setOpenUpdatePage] = useState(false)
+	const [selectedStaff, setSelectedStaff] = useState(null)
 
 	useEffect(() => {
 		async function fetchAccounts() {
-			const data = await AccountManagementService.GET_ALL()
+			const data = await StaffManagementService.GET_ALL_STAFFS()
 			if (data) {
 				setTableRows(data)
 				console.log(data)
@@ -95,10 +98,34 @@ function AccountManagement() {
 	}
 
 	const handleUpdateStatus = async (email) => {
-		const data = await AccountManagementService.UPDATE_STATUS(email)
+		const data = await StaffManagementService.UPDATE_STAFF_STATUS(email)
 		if (data) {
-			const updatedData = await AccountManagementService.GET_ALL()
+			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
 			setTableRows(updatedData)
+		}
+	}
+
+	const handleAddStaff = async (formData) => {
+		const data = await StaffManagementService.ADD_STAFF(formData)
+		if (data) {
+			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
+			setTableRows(updatedData)
+			setOpenAddPage(false)
+		}
+	}
+
+	const handleOpenUpdate = (staff) => {
+		setSelectedStaff(staff)
+		setOpenUpdatePage(true)
+	}
+
+	const handleUpdateStaff = async (formData) => {
+		const data = await StaffManagementService.UPDATE_STAFF_INFO(formData)
+		if (data) {
+			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
+			setTableRows(updatedData)
+			setSelectedStaff(null)
+			setOpenUpdatePage(false)
 		}
 	}
 
@@ -109,8 +136,16 @@ function AccountManagement() {
 					<div className='rounded-none flex flex-wrap gap-4 justify-between mb-4'>
 						<div>
 							<Typography variant='h3' color='blue-gray'>
-								Account Management
+								Staff Management
 							</Typography>
+							<Button onClick={() => setOpenAddPage(true)}>Add Product</Button>
+							{openAddPage && (
+								<AddStaff
+									open={openAddPage}
+									handleClose={() => setOpenAddPage(false)}
+									handleAddStaff={handleAddStaff}
+								/>
+							)}
 						</div>
 					</div>
 
@@ -160,31 +195,40 @@ function AccountManagement() {
 										<td className='p-4'>{row.status}</td>
 										<td className='p-4 text-center'>
 											<div>
-												<Confirmation
-													title='Are you sure?'
-													description={`Do you really want to ${
-														row.status === 'Blocked' ? 'activate' : 'block'
-													} this account?`}
-													handleConfirm={() => handleUpdateStatus(row.accountEmail)}
-												>
-													{(handleOpen) => (
-														<IconButton
-															onClick={handleOpen}
-															color={row.status === 'Blocked' ? 'success' : 'error'}
-															variant='text'
-															size='sm'
-														>
-															{row.status === 'Blocked' ? (
-																<CheckCircleIcon
-																	title='activate'
-																	className='h-5 w-5 text-gray-900'
-																/>
-															) : (
-																<XMarkIcon title='block' className='h-5 w-5 text-gray-900' />
-															)}
-														</IconButton>
-													)}
-												</Confirmation>
+												<div className='flex justify-end gap-4'>
+													<IconButton
+														variant='text'
+														size='sm'
+														onClick={() => handleOpenUpdate(row)}
+													>
+														<PencilIcon title='update' className='h-5 w-5 text-gray-900' />
+													</IconButton>
+													<Confirmation
+														title='Are you sure?'
+														description={`Do you really want to ${
+															row.status === 'Blocked' ? 'activate' : 'block'
+														} this account?`}
+														handleConfirm={() => handleUpdateStatus(row.accountEmail)}
+													>
+														{(handleOpen) => (
+															<IconButton
+																onClick={handleOpen}
+																color={row.status === 'Blocked' ? 'success' : 'error'}
+																variant='text'
+																size='sm'
+															>
+																{row.status === 'Blocked' ? (
+																	<CheckCircleIcon
+																		title='activate'
+																		className='h-5 w-5 text-gray-900'
+																	/>
+																) : (
+																	<XMarkIcon title='block' className='h-5 w-5 text-gray-900' />
+																)}
+															</IconButton>
+														)}
+													</Confirmation>
+												</div>
 											</div>
 										</td>
 									</tr>
@@ -192,6 +236,15 @@ function AccountManagement() {
 							})}
 						</tbody>
 					</table>
+
+					{openUpdatePage && selectedStaff && (
+						<UpdateStaff
+							open={openUpdatePage}
+							handleClose={() => setOpenUpdatePage(false)}
+							existingStaff={selectedStaff}
+							handleUpdateStaff={handleUpdateStaff}
+						/>
+					)}
 
 					<div className='flex justify-between items-center mt-4'>
 						<Button
@@ -235,4 +288,4 @@ function AccountManagement() {
 	)
 }
 
-export default AccountManagement
+export default StaffManagement

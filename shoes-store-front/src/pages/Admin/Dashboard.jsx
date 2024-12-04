@@ -5,6 +5,7 @@ import {
 	ShoppingCartIcon,
 	TicketIcon,
 	UserCircleIcon,
+	UserGroupIcon,
 } from '@heroicons/react/24/solid'
 import { Avatar, Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react'
 import Statistics from './Statistics/Statistics'
@@ -16,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { AuthService } from 'src/services/AuthService'
 import { AccountService } from 'src/services/AccountService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
+import StaffManagement from './StaffManagement/StaffManagement'
 
 const Dashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<Statistics />)
@@ -114,6 +116,16 @@ const Dashboard = () => {
 							<UserCircleIcon className='h-5 w-5' />
 						</ListItemPrefix>
 						Account
+					</ListItem>
+					<ListItem
+						className={LIST_ITEM_STYLES}
+						selected={selectedPageKey === 'Staff'}
+						onClick={() => handleSelectPage(<StaffManagement />, 'Staff')}
+					>
+						<ListItemPrefix>
+							<UserGroupIcon className='h-5 w-5' />
+						</ListItemPrefix>
+						Staff Management
 					</ListItem>
 				</List>
 				<hr className='my-2 border-gray-800' />

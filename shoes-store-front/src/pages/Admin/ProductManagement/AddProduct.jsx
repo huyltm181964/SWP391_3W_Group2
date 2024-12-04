@@ -35,7 +35,7 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 	const handleValueChange = (e) => {
 		const { name, value } = e.target
 		setValues((prev) => ({ ...prev, [name]: value }))
-		setErrors((prev) => ({ ...prev, [name]: '' })) // Clear error when user starts typing
+		setErrors((prev) => ({ ...prev, [name]: '' }))
 	}
 
 	const handleImageChange = (e) => {
@@ -51,7 +51,7 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 			}))
 			setImageFile(file)
 			setImagePresentation(reader.result)
-			setErrors((prev) => ({ ...prev, image: '' })) // Clear error when image is uploaded
+			setErrors((prev) => ({ ...prev, image: '' }))
 		}
 	}
 

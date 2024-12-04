@@ -4,6 +4,7 @@ namespace API.DTOs.ResponseDTO
 {
     public class AccountResponse
     {
+        public int AccountID { get; set; }
         public String AccountEmail { get; set; }
         public String? AccountName { get; set; }
         public String? Avatar { get; set; }
