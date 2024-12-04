@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
@@ -33,8 +32,10 @@ namespace API.Models
         public int CartID { get; set; }
         public virtual Cart? Cart { get; set; }
 
-        public virtual ICollection<Notification> Notifications { get; set; } = [];
+        public virtual ICollection<BlacklistComment> BlacklistComments { get; set; } = [];
         public virtual ICollection<Comment> Comments { get; set; } = [];
+        public virtual ICollection<Contact> Contacts { get; set; } = [];
+        public virtual ICollection<Notification> Notifications { get; set; } = [];
         public virtual ICollection<Order> Orders { get; set; } = [];
     }
 }
