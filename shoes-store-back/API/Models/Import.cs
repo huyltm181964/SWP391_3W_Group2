@@ -8,6 +8,7 @@ namespace API.Models
         [Key]
         public int ImportID { get; set; }
         public DateTime ImportDate { get; set; }
+        [MaxLength(255)]
         public String ImportLocation { get; set; }
         public int Quantity { get; set; }
         public Decimal ImportPrice { get; set; }

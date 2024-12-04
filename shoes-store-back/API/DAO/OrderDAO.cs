@@ -30,7 +30,8 @@ namespace API.DAO
                 Account = getAccount,
                 OrderAddress = checkoutDTO.OrderAddress,
                 OrderDate = DateTime.Now,
-                OrderStatus = "Ordered",
+                OrderStatus = "Unpaid",
+                PaymentDate = DateTime.Now,
                 TotalPrice = 0
             };
             db.Order.Add(addOrder);
@@ -41,7 +42,11 @@ namespace API.DAO
                 var getCartItem = db.CartItem
                                     .Include(v => v.Variant)
                                     .FirstOrDefault(x => x.VariantID == variantID && x.CartID == getAccount.CartID)!;
-                var getVariant = db.ProductVariant.Include(x => x.Product).FirstOrDefault(x => x.VariantID == variantID)!;
+
+                var getVariant = db.ProductVariant
+                    .Include(x => x.Product)
+                    .FirstOrDefault(x => x.VariantID == variantID)!;
+
                 if (getVariant.VariantQuantity >= getCartItem.Quantity)
                 {
                     OrderDetail addDetail = new OrderDetail
@@ -56,9 +61,6 @@ namespace API.DAO
                     db.OrderDetail.Add(addDetail);
                     totalPrice += getCartItem.TotalItemPrice;
                     db.CartItem.Remove(getCartItem);
-
-                    getVariant.VariantQuantity = getVariant.VariantQuantity - getCartItem.Quantity;
-                    db.ProductVariant.Update(getVariant);
                 }
                 else
                 {
@@ -76,7 +78,6 @@ namespace API.DAO
             }
             addOrder.TotalPrice = (decimal)totalPrice;
 
-            CheckProductQuantity(checkoutDTO.VariantID);
             cartDao.TotalPriceCart(getAccount.AccountID);
 
             db.SaveChanges();
@@ -105,10 +106,11 @@ namespace API.DAO
             };
         }
 
-        public ResponseMessage GetAllOrder()
+        public ResponseMessage GetOrderedOrder()
         {
             var listOder = db.Order
                              .Include(x => x.Account)
+                             .Where(x => x.OrderStatus == "Ordered")
                              .ToList();
             return new ResponseMessage
             {
@@ -119,34 +121,24 @@ namespace API.DAO
             };
         }
 
-        private void CheckProductQuantity(List<int> variantID)
-        {
-            foreach (int item in variantID)
-            {
-                var checkProduct = db.ProductVariant.Include(x => x.Product).ThenInclude(x => x.ProductVariants).FirstOrDefault(x => x.VariantID == item);
-                if (checkProduct != null && checkProduct.Product.ProductVariants.Sum(x => x.VariantQuantity) == 0)
-                {
-                    checkProduct.Product.ProductStatus = "Out of stock";
-                }
-                else
-                {
-                    checkProduct.Product.ProductStatus = "Still in stock";
-                }
-                db.ProductVariant.Update(checkProduct);
-            }
-        }
-
-        public ResponseMessage UpdateOrderStatus(int orderID)
+        public ResponseMessage UpdateOrderStatus(int orderID, string orderStatus)
         {
             var getOrder = db.Order
              .Include(x => x.Account)
              .FirstOrDefault(o => o.OrderID == orderID);
-            if (getOrder != null && getOrder.OrderStatus.Equals("Ordered"))
+            if (getOrder == null)
             {
-                getOrder.OrderStatus = "Completed";
-                db.Order.Update(getOrder);
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Data = null,
+                    Message = $"Order #{orderID} not found",
+                    StatusCode = 404
+                };
             }
 
+            getOrder.OrderStatus = orderStatus;
+            db.Order.Update(getOrder);
             db.SaveChanges();
             return new ResponseMessage
             {
@@ -170,7 +162,7 @@ namespace API.DAO
                     Success = false,
                     Data = null,
                     Message = $"Order #{orderID} not found",
-                    StatusCode = 400
+                    StatusCode = 404
                 };
             }
 

@@ -2,10 +2,20 @@ import { Accordion, AccordionBody, AccordionHeader } from '@material-tailwind/re
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatDateWithLetterMonth, getDateFromDateTime } from 'src/utils/DateUtil'
+import { orderStatus } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
 
-const OrderCard = ({ open, setOpen, order, handleCancel }) => {
+const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 	const navigate = useNavigate()
+
+	const statusColors = {
+		unpaid: 'red',
+		ordered: 'royalblue',
+		delivery: 'orange',
+		deliveried: 'purple',
+		completed: 'green',
+	}
+
 	return (
 		<Accordion open={open} className='bg-white'>
 			<AccordionHeader className='pointer-events-none'>
@@ -21,7 +31,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel }) => {
 							Order Status :{' '}
 							<span
 								style={{
-									color: order?.orderStatus?.toLowerCase() === 'completed' ? 'green' : 'royalblue',
+									color: statusColors[order?.orderStatus?.toLowerCase()] || 'royalblue',
 									fontWeight: 'bold',
 								}}
 							>
@@ -30,22 +40,31 @@ const OrderCard = ({ open, setOpen, order, handleCancel }) => {
 						</p>
 					</div>
 					<div class='flex items-center gap-3 max-md:mt-5'>
-						{order?.orderStatus.toLowerCase() === 'ordered' && (
+						{order?.orderStatus === orderStatus.UNPAID && (
 							<button
 								onClick={() => navigate('/account/payment/' + order?.orderID)}
 								type='button'
 								class='pointer-events-auto cursor-pointer text-black px-7 py-3 shadow-sm shadow-transparent font-semibold transition-all duration-500 hover:underline'
 							>
-								Get Payment URL
+								Get Payment
 							</button>
 						)}
-						{order?.orderStatus.toLowerCase() === 'ordered' && (
+						{order?.orderStatus === orderStatus.UNPAID && (
 							<button
 								onClick={() => handleCancel(order?.orderID)}
 								type='button'
 								class='rounded-full pointer-events-auto cursor-pointer px-7 py-3 bg-red-700 shadow-sm shadow-transparent text-white font-semibold text-sm transition-all duration-500 hover:shadow-red-400 hover:bg-red-900'
 							>
 								Cancel order
+							</button>
+						)}
+						{order?.orderStatus === orderStatus.DELIVERIED && (
+							<button
+								onClick={() => handleConfirm(order?.orderID)}
+								type='button'
+								class='rounded-full pointer-events-auto cursor-pointer px-7 py-3 bg-green-800 shadow-sm shadow-transparent text-white font-semibold text-sm transition-all duration-500 hover:shadow-green-400 hover:bg-green-900'
+							>
+								Confirm ordered
 							</button>
 						)}
 						<button

@@ -12,6 +12,7 @@ namespace API.Models
         public DateTime OrderDate { get; set; }
         [MaxLength(100)]
         public String OrderStatus { get; set; }
+        public DateTime PaymentDate { get; set; }
 
         public int AccountID { get; set; }
         public virtual Account Account { get; set; }

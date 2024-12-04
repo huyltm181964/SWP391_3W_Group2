@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models
 {
@@ -11,6 +12,7 @@ namespace API.Models
         public int ProductID { get; set; }
         public virtual Product? Product { get; set; }
 
+        [MaxLength(500)]
         public String Reason { get; set; }
     }
 }

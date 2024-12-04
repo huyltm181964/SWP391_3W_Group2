@@ -14,4 +14,6 @@ export const OrderService = {
 		await axiosFormBody
 			.get(OrderRequest.GET_PAYMENT_URL + '/' + orderID)
 			.then((response) => response),
+	CONFIRM_ORDER: async (orderID) =>
+		await axiosFormBody.post(OrderRequest.CONFIRM_ORDER, orderID).then((response) => response),
 }

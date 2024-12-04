@@ -27,6 +27,14 @@ const HistoryOrder = () => {
 		}
 	}
 
+	const handleConfirmOrder = async (orderID) => {
+		const res = await OrderService.CONFIRM_ORDER(orderID)
+		if (res?.success) {
+			enqueueSnackbar('Thanks for confirming', { variant: 'success' })
+			setIsEvent(!isEvent)
+		}
+	}
+
 	const handleOpen = (value) => setOpen(open === value ? 0 : value)
 
 	return (
@@ -36,6 +44,7 @@ const HistoryOrder = () => {
 					<OrderCard
 						open={open === order?.orderID}
 						handleCancel={handleCancel}
+						handleConfirm={handleConfirmOrder}
 						setOpen={handleOpen}
 						order={order}
 					/>

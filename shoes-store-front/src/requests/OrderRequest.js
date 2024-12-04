@@ -3,4 +3,5 @@ export const OrderRequest = {
 	GET_HISTORY_ORDER: '/order/get-order',
 	CANCEL_ORDER: '/order/cancel-order',
 	GET_PAYMENT_URL: '/order/payment-url',
+	CONFIRM_ORDER: '/order/confirm',
 }
