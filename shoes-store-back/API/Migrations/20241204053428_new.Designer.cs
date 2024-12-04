@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ShoesDbContext))]
-    [Migration("20241202123146_shoes")]
-    partial class shoes
+    [Migration("20241204053428_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,25 @@ namespace API.Migrations
                     b.ToTable("Account");
                 });
 
+            modelBuilder.Entity("API.Models.BlacklistComment", b =>
+                {
+                    b.Property<int>("AccountID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AccountID", "ProductID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("BlacklistComment");
+                });
+
             modelBuilder.Entity("API.Models.Cart", b =>
                 {
                     b.Property<int>("CartID")
@@ -141,6 +160,9 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsReported")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(18,2)");
 
@@ -149,6 +171,48 @@ namespace API.Migrations
                     b.HasIndex("ProductID");
 
                     b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("API.Models.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("AnswerDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountID");
+
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("API.Models.Export", b =>
@@ -346,6 +410,9 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VariantID"));
 
+                    b.Property<bool>("IsStopSelling")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
 
@@ -384,6 +451,25 @@ namespace API.Migrations
                     b.Navigation("Cart");
                 });
 
+            modelBuilder.Entity("API.Models.BlacklistComment", b =>
+                {
+                    b.HasOne("API.Models.Account", "Account")
+                        .WithMany("BlacklistComments")
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("API.Models.CartItem", b =>
                 {
                     b.HasOne("API.Models.Cart", "Cart")
@@ -420,6 +506,17 @@ namespace API.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("API.Models.Contact", b =>
+                {
+                    b.HasOne("API.Models.Account", "Account")
+                        .WithMany("Contacts")
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("API.Models.Export", b =>
@@ -498,7 +595,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Account", b =>
                 {
+                    b.Navigation("BlacklistComments");
+
                     b.Navigation("Comments");
+
+                    b.Navigation("Contacts");
 
                     b.Navigation("Notifications");
 

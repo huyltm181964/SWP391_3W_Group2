@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class shoes : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,6 +82,7 @@ namespace API.Migrations
                     VariantSize = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     VariantColor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     VariantQuantity = table.Column<int>(type: "int", nullable: false),
+                    IsStopSelling = table.Column<bool>(type: "bit", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -96,14 +97,40 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlacklistComment",
+                columns: table => new
+                {
+                    AccountID = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlacklistComment", x => new { x.AccountID, x.ProductID });
+                    table.ForeignKey(
+                        name: "FK_BlacklistComment_Account_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BlacklistComment_Product_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Product",
+                        principalColumn: "ProductID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comment",
                 columns: table => new
                 {
-                    ProductID = table.Column<int>(type: "int", nullable: false),
                     AccountID = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false),
                     Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsReported = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,6 +146,31 @@ namespace API.Migrations
                         column: x => x.ProductID,
                         principalTable: "Product",
                         principalColumn: "ProductID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    AnswerDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRejected = table.Column<bool>(type: "bit", nullable: false),
+                    AccountID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contact_Account_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -150,11 +202,11 @@ namespace API.Migrations
                 {
                     OrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountID = table.Column<int>(type: "int", nullable: false),
                     OrderAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    OrderStatus = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AccountID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,6 +323,11 @@ namespace API.Migrations
                 column: "CartID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BlacklistComment_ProductID",
+                table: "BlacklistComment",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CartItem_VariantID",
                 table: "CartItem",
                 column: "VariantID");
@@ -279,6 +336,11 @@ namespace API.Migrations
                 name: "IX_Comment_ProductID",
                 table: "Comment",
                 column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contact_AccountID",
+                table: "Contact",
+                column: "AccountID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Export_VariantID",
@@ -315,10 +377,16 @@ namespace API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BlacklistComment");
+
+            migrationBuilder.DropTable(
                 name: "CartItem");
 
             migrationBuilder.DropTable(
                 name: "Comment");
+
+            migrationBuilder.DropTable(
+                name: "Contact");
 
             migrationBuilder.DropTable(
                 name: "Export");

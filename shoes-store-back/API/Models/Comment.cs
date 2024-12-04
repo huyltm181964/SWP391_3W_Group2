@@ -16,6 +16,6 @@ namespace API.Models
         [MaxLength(255)]
         public String Content { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool IsReported { get; set; }
+        public bool IsReported { get; set; } = false;
     }
 }

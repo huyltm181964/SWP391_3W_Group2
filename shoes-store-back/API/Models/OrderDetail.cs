@@ -13,6 +13,6 @@ namespace API.Models
 
         public int Quantity { get; set; }
         public Decimal UnitPrice { get; set; }
-        public bool IsExported { get; set; }
+        public bool IsExported { get; set; } = false;
     }
 }
