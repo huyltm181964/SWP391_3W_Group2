@@ -1,4 +1,5 @@
 ﻿using API.DAO;
+using API.DTOs.RequestDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Ocsp;
@@ -19,17 +20,15 @@ namespace API.Controllers.Admin
         [HttpGet("get-all"), Authorize]
         public IActionResult GetAllOrder()
         {
-            //var response = dao.GetAllOrder();
-            //return StatusCode(response.StatusCode, response);
-            return null;
+            var response = dao.GetOrderedOrder();
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost("update-order"), Authorize]
-        public IActionResult UpdateOrderStatus([FromBody] int orderID)
+        public IActionResult UpdateOrderStatus([FromForm] UpdateOrderDTO updateOrderDTO)
         {
-            //var response = dao.UpdateOrderStatus(orderID);
-            //return StatusCode(response.StatusCode, response);
-            return null;
+            var response = dao.UpdateOrderStatus(updateOrderDTO.orderID, updateOrderDTO.orderStatus);
+            return StatusCode(response.StatusCode, response);
         }
     }
 }

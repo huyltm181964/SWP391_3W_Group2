@@ -110,7 +110,7 @@ namespace API.DAO
         {
             var listOder = db.Order
                              .Include(x => x.Account)
-                             .Where(x => x.OrderStatus == "Ordered")
+                             .Where(x => x.OrderStatus == "Delivery" || x.OrderStatus == "Delivered" || x.OrderStatus == "Completed")
                              .ToList();
             return new ResponseMessage
             {

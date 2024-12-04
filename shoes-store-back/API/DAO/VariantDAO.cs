@@ -131,46 +131,6 @@ namespace API.DAO
             };
         }
 
-        public ResponseMessage UpdateVariantQuantity(RestockDTO restockDTO)
-        {
-            var getVariant = db.ProductVariant.Include(x => x.Product).FirstOrDefault(x => x.VariantID == restockDTO.VariantID);
-            if (getVariant == null)
-            {
-                return new ResponseMessage
-                {
-                    Success = false,
-                    Message = "Variant Not Found",
-                    Data = new int[0],
-                    StatusCode = 404
-                };
-            }
-            getVariant.VariantQuantity += restockDTO.Quantity;
-
-            Import newImport = new()
-            {
-                ImportDate = DateTime.Now,
-                VariantID = restockDTO.VariantID,
-                Quantity = restockDTO.Quantity,
-            };
-
-            if (getVariant.VariantQuantity != 0 && getVariant.Product.ProductStatus == "Out of stock")
-            {
-                getVariant.Product.ProductStatus = "Still in stock";
-                db.Product.Update(getVariant.Product);
-            }
-
-            db.Import.Add(newImport);
-            db.ProductVariant.Update(getVariant);
-            db.SaveChanges();
-            return new ResponseMessage
-            {
-                Success = true,
-                Message = "Sucess",
-                Data = null,
-                StatusCode = 200
-            };
-        }
-
         public ResponseMessage DeleteVariant(int variantID)
         {
             var checkDelete = db.ProductVariant

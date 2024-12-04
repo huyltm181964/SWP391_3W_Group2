@@ -3,15 +3,16 @@ import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { OrderManagementService } from 'src/services/OrderManagementService'
+import { orderStatus } from 'src/utils/EnumList'
 
 const TABLE_HEAD = [
 	{ head: 'OrderID', customeStyle: '!text-left w-[10%]', key: 'orderID' },
 	{ head: 'AccountID', customeStyle: '!text-left w-[20%]', key: 'accountID' },
 	{ head: 'OrderAddress', customeStyle: 'text-right w-[15%]', key: 'orderAddress' },
 	{ head: 'TotalPrice', customeStyle: 'text-right w-[15%]', key: 'totalPrice' },
-	{ head: 'OrderDate', customeStyle: 'text-right w-[25%]', key: 'orderDate' },
+	{ head: 'OrderDate', customeStyle: 'text-right w-[15%]', key: 'orderDate' },
 	{ head: 'OrderStatus', customeStyle: 'text-right w-[10%]', key: 'orderStatus' },
-	{ head: 'Actions', customeStyle: 'text-right w-[15%]', key: 'actions' },
+	{ head: 'Actions', customeStyle: 'text-right w-[20%]', key: 'actions' },
 ]
 
 function OrderManagement() {
@@ -94,10 +95,8 @@ function OrderManagement() {
 		return pageNumbers
 	}
 
-	const handleUpdateStatus = async (orderId) => {
-		console.log(orderId)
-		const data = await OrderManagementService.UPDATE_ORDER(orderId)
-		console.log(data)
+	const handleUpdateStatus = async (orderId, orderStatus) => {
+		const data = await OrderManagementService.UPDATE_ORDER(orderId, orderStatus)
 		if (data) {
 			const updatedData = await OrderManagementService.GET_ALL()
 			setTableRows(updatedData)
@@ -148,15 +147,15 @@ function OrderManagement() {
 										<td className='p-4 text-right'>{row.orderStatus}</td>
 										<td className='p-4 text-right'>
 											<div className='flex justify-end gap-4'>
-												{row.orderStatus !== 'Completed' && (
+												{row.orderStatus !== 'Completed' && row.orderStatus !== 'Delivered' && (
 													<Confirmation
 														title='Are you sure?'
 														description='Do you really want to approve this item?'
-														handleConfirm={() => handleUpdateStatus(row.orderID)}
+														handleConfirm={() => handleUpdateStatus(row.orderID, 'Delivered')}
 													>
 														{(handleOpen) => (
 															<Button onClick={handleOpen} color='green'>
-																Approve
+																Delivered
 															</Button>
 														)}
 													</Confirmation>
