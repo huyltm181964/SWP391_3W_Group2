@@ -5,7 +5,7 @@ namespace API.Models
     public class Contact
     {
         [Key]
-        public int Id { get; set; }
+        public int ContactID { get; set; }
         [MaxLength(255)]
         public String Title { get; set; }
         [MaxLength(500)]

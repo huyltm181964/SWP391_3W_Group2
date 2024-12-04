@@ -1,16 +1,15 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers.Admin
+namespace API.Controllers.Staff
 {
-    [Route("api/v1/admin/comment")]
+    [Route("api/v1/staff/comment")]
     [ApiController]
-    public class AdminCommentController : ControllerBase
+    public class StaffCommentController : ControllerBase
     {
         private readonly CommentDAO commentDAO;
-        public AdminCommentController(CommentDAO commentDAO)
+        public StaffCommentController(CommentDAO commentDAO)
         {
             this.commentDAO = commentDAO;
         }

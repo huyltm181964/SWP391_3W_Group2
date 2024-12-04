@@ -21,7 +21,7 @@ namespace API.DAO
             this.env = _env;
         }
 
-        public ResponseMessage GetProfileByID(int accountID)
+        public ResponseMessage GetProfileByAccountID(int accountID)
         {
             var getProfile = db.Account
                                .FirstOrDefault(x => x.AccountID == accountID);

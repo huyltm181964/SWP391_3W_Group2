@@ -18,10 +18,10 @@ namespace API.Controllers.User
         }
 
         [HttpGet("get-profile"), Authorize]
-        public IActionResult GetProfileByID()
+        public IActionResult GetAccountProfile()
         {
             var user = JWTHandler.GetUserIdFromHttpContext(HttpContext);
-            var response = dao.GetProfileByID(user);
+            var response = dao.GetProfileByAccountID(user);
             return StatusCode(response.StatusCode, response);
         }
 
@@ -39,13 +39,6 @@ namespace API.Controllers.User
             var user = JWTHandler.GetUserIdFromHttpContext(HttpContext);
             var response = dao.UpdateProfile(user, profileDTO);
             return StatusCode(response.StatusCode, response);
-        }
-
-        [HttpPost("contact"), Authorize]
-        public IActionResult Contact([FromForm] ContactUsDTO contactUsDTO)
-        {
-            Ultils.sendMail("huynlnce181196@fpt.edu.vn", $"Hello, My name is {contactUsDTO.Name}\n I contact you with message: {contactUsDTO.Message}", "Contact from " + contactUsDTO.Email);
-            return StatusCode(200, new { success = true });
         }
     }
 }
