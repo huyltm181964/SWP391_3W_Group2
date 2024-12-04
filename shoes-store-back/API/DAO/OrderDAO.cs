@@ -76,8 +76,8 @@ namespace API.DAO
                     };
                 }
             }
-            addOrder.TotalPrice = (decimal)totalPrice;
 
+            addOrder.TotalPrice = (decimal)totalPrice;
             cartDao.TotalPriceCart(getAccount.AccountID);
 
             db.SaveChanges();
@@ -139,6 +139,15 @@ namespace API.DAO
 
             getOrder.OrderStatus = orderStatus;
             db.Order.Update(getOrder);
+
+            var notification = new Notification()
+            {
+                AccountID = getOrder.AccountID,
+                Title = $"Order #{getOrder.OrderID} status",
+                Description = $"Your order #{getOrder.OrderID} is now ${orderStatus}"
+            };
+            db.Notification.Add(notification);
+
             db.SaveChanges();
             return new ResponseMessage
             {
