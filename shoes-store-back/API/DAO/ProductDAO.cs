@@ -38,7 +38,15 @@ namespace API.DAO
             var getProduct = db.Product.FirstOrDefault(x => x.ProductID == productID);
             if (getProduct != null)
             {
-                getProduct.ProductStatus = "Out of business";
+                if(getProduct.ProductStatus.Equals("Out of business"))
+                {
+                    getProduct.ProductStatus = "In business";
+                }
+                else
+                {
+                  getProduct.ProductStatus = "Out of business";
+                }
+            
                 db.Product.Update(getProduct);
                 db.SaveChanges();
                 return new ResponseMessage

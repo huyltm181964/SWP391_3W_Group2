@@ -22,6 +22,7 @@ const TABLE_HEAD = [
 	{ head: 'Size', customeStyle: 'text-right w-[15%]', key: 'size' },
 	{ head: 'Color', customeStyle: 'text-right w-[15%]', key: 'color' },
 	{ head: 'Quantity', customeStyle: 'text-right w-[15%]', key: 'quantity' },
+	{ head: 'Selling Status', customeStyle: 'text-right w-[15%]', key: 'isStopSelling' },
 	{ head: 'Actions', customeStyle: 'text-right w-[15%]', key: 'actions' },
 ]
 
@@ -174,7 +175,7 @@ const ProductVariant = ({ open, handleClose, product }) => {
 					</thead>
 					<tbody>
 						{paginatedRows.map((row) => (
-							<tr className={`border-gray-300 ${row.variantQuantity === 0 ? 'bg-red-100' : ''}`}>
+							<tr className={`border-gray-300 ${row.isStopSelling ? 'bg-red-100' : ''}`}>
 								<td className='p-4'>{row.variantID}</td>
 								<td className='p-4 '>
 									<img
@@ -193,6 +194,8 @@ const ProductVariant = ({ open, handleClose, product }) => {
 								>
 									{row.variantQuantity}
 								</td>
+								<td className='p-4 text-right'>{row.isStopSelling ? 'No' : 'Yes'}</td>
+
 								<td className='p-4 text-right'>
 									<div className='flex justify-end gap-4'>
 										<IconButton

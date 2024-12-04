@@ -138,13 +138,8 @@ namespace API.DAO
                 .FirstOrDefault(x => x.VariantID == variantID);
             if (checkDelete != null)
             {
-                checkDelete.VariantQuantity = 0;
+                checkDelete.IsStopSelling = true;
                 db.ProductVariant.Update(checkDelete);
-                if (checkDelete.Product.ProductVariants.Sum(x => x.VariantQuantity) == 0)
-                {
-                    checkDelete.Product.ProductStatus = "Out of stock";
-                    db.Product.Update(checkDelete.Product);
-                }
 
                 db.SaveChanges();
                 return new ResponseMessage

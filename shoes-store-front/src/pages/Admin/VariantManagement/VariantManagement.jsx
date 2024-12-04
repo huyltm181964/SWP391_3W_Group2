@@ -163,6 +163,7 @@ function VariantManagement() {
 	const handleOpenVariant = async (productId) => {
 		setSelectedProduct(productId)
 		const data = await ProductManagementService.GET_DETAIL(productId)
+		console.log(data)
 		if (data) {
 			setProduct(data)
 		}
