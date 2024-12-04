@@ -9,6 +9,7 @@ namespace API.Models
         public int ExportID { get; set; }
         public int Quantity { get; set; }
         public DateTime ExportDate { get; set; }
+        [MaxLength(255)]
         public String ExportLocation { get; set; }
         public int VariantID { get; set; }
         [ForeignKey(nameof(VariantID))]

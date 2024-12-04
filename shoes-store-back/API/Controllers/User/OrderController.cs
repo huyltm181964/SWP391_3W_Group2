@@ -46,5 +46,11 @@ namespace API.Controllers.User
             var response = dao.GetPaymentURL(orderID);
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpPost("confirm")]
+        public IActionResult ConfirmOrder([FromBody] int orderID) { 
+            var response = dao.UpdateOrderStatus(orderID, "Completed");
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

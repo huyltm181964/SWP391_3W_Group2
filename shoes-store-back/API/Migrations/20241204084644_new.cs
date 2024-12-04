@@ -102,7 +102,7 @@ namespace API.Migrations
                 {
                     AccountID = table.Column<int>(type: "int", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,8 +180,8 @@ namespace API.Migrations
                 {
                     NotificationID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
                     AccountID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -206,6 +206,7 @@ namespace API.Migrations
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderStatus = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -253,7 +254,7 @@ namespace API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ExportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExportLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     VariantID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -274,7 +275,7 @@ namespace API.Migrations
                     ImportID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImportLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VariantID = table.Column<int>(type: "int", nullable: false)
