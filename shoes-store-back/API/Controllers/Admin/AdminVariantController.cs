@@ -30,13 +30,6 @@ namespace API.Controllers.Admin
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("update-quantity")]
-        public IActionResult UpdateQuantity([FromBody] RestockDTO restockDTO)
-        {
-            var response = dao.UpdateVariantQuantity(restockDTO);
-            return StatusCode(response.StatusCode, response);
-        }
-
         [HttpPost("delete")]
         public IActionResult SoftDelete([FromBody] int variantID)
         {

@@ -15,7 +15,6 @@ import { VariantManagementService } from 'src/services/VariantManagementService'
 import { GetImage } from 'src/utils/GetImage'
 import AddVariant from './AddVariant'
 import UpdateVariant from './UpdateVariant'
-import Restock from './Restock'
 
 const TABLE_HEAD = [
 	{ head: 'VariantID', customeStyle: '!text-left w-[10%]', key: 'id' },
@@ -36,7 +35,6 @@ const ProductVariant = ({ open, handleClose, product }) => {
 	const [tableRows, setTableRows] = useState([])
 	const [productId, setProductId] = useState()
 	const [selectedVariant, setSelectedVariant] = useState(null)
-	const [openRestockPage, setOpenRestockPage] = useState(false)
 
 	useEffect(() => {
 		setTableRows(product.productVariants)
@@ -137,24 +135,6 @@ const ProductVariant = ({ open, handleClose, product }) => {
 		}
 	}
 
-	const handleOpenRestock = (variant) => {
-		console.log(variant)
-		setSelectedVariant(variant)
-		setOpenRestockPage(true)
-	}
-
-	const handleRestock = async (quantity) => {
-		const data = await VariantManagementService.RESTOCK({
-			VariantID: selectedVariant.variantID,
-			Quantity: quantity,
-		})
-		if (data) {
-			const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
-			setTableRows(updatedData.productVariants)
-			setOpenRestockPage(false)
-		}
-	}
-
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
@@ -216,15 +196,6 @@ const ProductVariant = ({ open, handleClose, product }) => {
 								<td className='p-4 text-right'>
 									<div className='flex justify-end gap-4'>
 										<IconButton
-											title='Restock'
-											variant='text'
-											size='sm'
-											onClick={() => handleOpenRestock(row)}
-										>
-											<HeartIcon className='h-5 w-5 text-gray-900' />
-										</IconButton>
-
-										<IconButton
 											title='Update'
 											variant='text'
 											size='sm'
@@ -250,15 +221,7 @@ const ProductVariant = ({ open, handleClose, product }) => {
 						))}
 					</tbody>
 				</table>
-				{openRestockPage && selectedVariant && (
-					<Restock
-						open={openRestockPage}
-						handleClose={() => setOpenRestockPage(false)}
-						currentQuantity={selectedVariant.variantQuantity}
-						productName={selectedVariant.variantID}
-						onRestock={handleRestock}
-					/>
-				)}
+
 				{openUpdatePage && selectedVariant && (
 					<UpdateVariant
 						open={openUpdatePage}

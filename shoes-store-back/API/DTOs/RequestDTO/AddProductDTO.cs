@@ -12,6 +12,6 @@ namespace API.DTOs.RequestDTO
         [MaxLength(500)]
         public string ProductDescription { get; set; }
         [MaxLength(500)]
-        public string ProductStatus { get; set; } = "Out of stock";
+        public string ProductStatus { get; set; } = "In business";
     }
 }
