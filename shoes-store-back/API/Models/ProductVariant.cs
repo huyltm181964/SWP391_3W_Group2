@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace API.Models
 {
@@ -14,6 +12,7 @@ namespace API.Models
         [MaxLength(20)]
         public String VariantColor { get; set; }
         public int VariantQuantity { get; set; }
+        public bool IsSelling { get; set; }
 
         public int ProductID { get; set; }
         public virtual Product? Product { get; set; }
