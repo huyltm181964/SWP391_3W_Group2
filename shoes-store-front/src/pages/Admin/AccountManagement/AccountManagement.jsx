@@ -1,20 +1,21 @@
-import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, IconButton, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { AccountManagementService } from 'src/services/AccountManagementService'
 import { GetImage } from 'src/utils/GetImage'
 import StaffManagement from '../StaffManagement/StaffManagement'
 import { StaffManagementService } from 'src/services/StaffManagementService'
+import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 const TABLE_HEAD = [
 	{ head: 'Id', customeStyle: '!text-left w-[5%]', key: 'accountID' },
 	{ head: 'Avatar', customeStyle: '!text-left w-[9%]', key: 'avatar' },
 	{ head: 'AccountEmail', customeStyle: '!text-left w-[13%]', key: 'accountEmail' },
-	{ head: 'AccountName', customeStyle: 'text-left w-[13%]', key: 'accountName' },
-	{ head: 'Gender', customeStyle: 'text-center w-[8%]', key: 'gender' },
-	{ head: 'Birthday', customeStyle: 'text-center w-[10%]', key: 'birthDay' },
-	{ head: 'Phone', customeStyle: 'text-center w-[10%]', key: 'phone' },
-	{ head: 'Address', customeStyle: 'text-left w-[13%]', key: 'address' },
+	{ head: 'AccountName', customeStyle: 'text-left w-[12%]', key: 'accountName' },
+	{ head: 'Gender', customeStyle: 'text-center w-[7%]', key: 'gender' },
+	{ head: 'Birthday', customeStyle: 'text-center w-[13%]', key: 'birthDay' },
+	{ head: 'Phone', customeStyle: 'text-center w-[12%]', key: 'phone' },
+	{ head: 'Address', customeStyle: 'text-left w-[10%]', key: 'address' },
 	{ head: 'Status', customeStyle: '!text-left w-[9%]', key: 'status' },
 	{ head: 'Actions', customeStyle: 'text-center w-[10%]', key: 'actions' },
 ]
@@ -94,9 +95,9 @@ function AccountManagement() {
 	}
 
 	const handleUpdateStatus = async (email) => {
-		const data = await StaffManagementService.UPDATE_STAFF_STATUS(email)
+		const data = await AccountManagementService.UPDATE_STATUS(email)
 		if (data) {
-			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
+			const updatedData = await AccountManagementService.GET_ALL()
 			setTableRows(updatedData)
 		}
 	}
@@ -167,13 +168,21 @@ function AccountManagement() {
 													handleConfirm={() => handleUpdateStatus(row.accountEmail)}
 												>
 													{(handleOpen) => (
-														<Button
+														<IconButton
 															onClick={handleOpen}
-															color={row.status === 'Blocked' ? 'green' : 'red'}
-															className='my-1'
+															color={row.status === 'Blocked' ? 'success' : 'error'}
+															variant='text'
+															size='sm'
 														>
-															{row.status === 'Blocked' ? 'Activate' : 'Block'}
-														</Button>
+															{row.status === 'Blocked' ? (
+																<CheckCircleIcon
+																	title='activate'
+																	className='h-5 w-5 text-gray-900'
+																/>
+															) : (
+																<XMarkIcon title='block' className='h-5 w-5 text-gray-900' />
+															)}
+														</IconButton>
 													)}
 												</Confirmation>
 											</div>

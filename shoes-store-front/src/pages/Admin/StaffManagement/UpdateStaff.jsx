@@ -10,27 +10,44 @@ import {
 	Input,
 	Typography,
 } from '@material-tailwind/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { GetImage } from 'src/utils/GetImage'
 
-const AddStaff = ({ open, handleClose, handleAddStaff }) => {
+const UpdateStaff = ({ open, handleClose, existingStaff, handleUpdateStaff }) => {
 	const fileRef = useRef(null)
 	const [imagePresentation, setImagePresentation] = useState('')
 	const [imageFile, setImageFile] = useState(null)
 	const [values, setValues] = useState({
+		accountID: '',
 		image: '',
 		accountName: '',
 		accountEmail: '',
-		password: '',
 		gender: '',
 		birthday: '',
 		phone: '',
 		accountAddress: '',
 	})
+
+	useEffect(() => {
+		if (existingStaff) {
+			setValues({
+				accountID: existingStaff.accountID || '',
+				image: existingStaff.avatar || '',
+				accountName: existingStaff.accountName || '',
+				accountEmail: existingStaff.accountEmail || '',
+				gender: existingStaff.gender || '',
+				birthday: existingStaff.birthday || '',
+				phone: existingStaff.phone || '',
+				accountAddress: existingStaff.accountAddress || '',
+			})
+			console.log(existingStaff)
+		}
+	}, [existingStaff])
+
 	const [errors, setErrors] = useState({
 		image: '',
 		accountName: '',
 		accountEmail: '',
-		password: '',
 		gender: '',
 		birthday: '',
 		phone: '',
@@ -88,28 +105,27 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 		}
 
 		if (!values.accountName) newErrors.accountName = 'Account name is required.'
-		if (!values.password) newErrors.password = 'Password is required.'
 		if (!values.birthday) newErrors.birthday = 'Birthday is required.'
 		if (!values.accountAddress) newErrors.accountAddress = 'Address is required.'
-		if (!imageFile) newErrors.image = 'Avatar is required.'
+		if (!imageFile && !values.image) newErrors.image = 'Avatar is required.'
 
 		setErrors(newErrors)
 		return Object.keys(newErrors).length === 0
 	}
 
-	const handleAdd = () => {
+	const handleUpdate = () => {
 		if (validate()) {
 			const formData = new FormData()
+			formData.append('AccountID', values.accountID)
 			formData.append('Avatar', imageFile)
 			formData.append('AccountName', values.accountName)
 			formData.append('AccountEmail', values.accountEmail)
-			formData.append('Password', values.password)
 			formData.append('Gender', values.gender)
 			formData.append('Birthday', values.birthday)
 			formData.append('Phone', values.phone)
 			formData.append('AccountAddress', values.accountAddress)
-			console.log(formData)
-			handleAddStaff(formData)
+
+			handleUpdateStaff(formData)
 			handleClose()
 		}
 	}
@@ -118,7 +134,7 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 		<Dialog open={open} handler={handleClose} size='lg' className='rounded-md'>
 			<DialogHeader className='flex justify-between items-center'>
 				<Typography variant='h5' className='font-semibold'>
-					Add Staff
+					Update Staff of account id: {values.accountID}
 				</Typography>
 				<IconButton size='sm' onClick={handleClose}>
 					<XMarkIcon className='h-5 w-5 text-gray-700' />
@@ -129,10 +145,10 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 					<div className='flex flex-col items-center gap-2'>
 						<Typography className='font-semibold'>Avatar</Typography>
 						<div className='flex items-center justify-center flex-col'>
-							{imagePresentation ? (
+							{values.image || imagePresentation ? (
 								<div className='relative w-24 h-24 flex items-center justify-center'>
 									<Avatar
-										src={imagePresentation}
+										src={imagePresentation ? imagePresentation : GetImage(values.image)}
 										alt='Uploaded Image'
 										className='w-full h-full object-cover'
 									/>
@@ -209,16 +225,7 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 					/>
 					{errors.accountEmail && <Typography color='red'>{errors.accountEmail}</Typography>}
 				</div>
-				<div>
-					<Input
-						label='Password'
-						name='password'
-						value={values.password}
-						onChange={handleValueChange}
-						required
-					/>
-					{errors.password && <Typography color='red'>{errors.password}</Typography>}
-				</div>
+
 				<div className='flex gap-4'>
 					<div className='flex-1'>
 						<Input
@@ -261,7 +268,7 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 				<Button variant='text' color='gray' onClick={handleClose}>
 					Cancel
 				</Button>
-				<Button variant='gradient' color='blue' onClick={handleAdd}>
+				<Button variant='gradient' color='blue' onClick={handleUpdate}>
 					Add
 				</Button>
 			</DialogFooter>
@@ -269,4 +276,4 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 	)
 }
 
-export default AddStaff
+export default UpdateStaff

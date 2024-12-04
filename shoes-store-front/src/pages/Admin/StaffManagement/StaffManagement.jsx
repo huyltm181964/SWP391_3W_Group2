@@ -1,20 +1,22 @@
-import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, IconButton, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { AccountManagementService } from 'src/services/AccountManagementService'
 import { StaffManagementService } from 'src/services/StaffManagementService'
 import { GetImage } from 'src/utils/GetImage'
 import AddStaff from './AddStaff'
+import { CheckCircleIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import UpdateStaff from './UpdateStaff'
 
 const TABLE_HEAD = [
 	{ head: 'Id', customeStyle: '!text-left w-[5%]', key: 'accountID' },
 	{ head: 'Avatar', customeStyle: '!text-left w-[9%]', key: 'avatar' },
 	{ head: 'AccountEmail', customeStyle: '!text-left w-[13%]', key: 'accountEmail' },
-	{ head: 'AccountName', customeStyle: 'text-left w-[13%]', key: 'accountName' },
-	{ head: 'Gender', customeStyle: 'text-center w-[8%]', key: 'gender' },
-	{ head: 'Birthday', customeStyle: 'text-center w-[10%]', key: 'birthDay' },
-	{ head: 'Phone', customeStyle: 'text-center w-[10%]', key: 'phone' },
-	{ head: 'Address', customeStyle: 'text-left w-[13%]', key: 'address' },
+	{ head: 'AccountName', customeStyle: 'text-left w-[12%]', key: 'accountName' },
+	{ head: 'Gender', customeStyle: 'text-center w-[7%]', key: 'gender' },
+	{ head: 'Birthday', customeStyle: 'text-center w-[13%]', key: 'birthDay' },
+	{ head: 'Phone', customeStyle: 'text-center w-[12%]', key: 'phone' },
+	{ head: 'Address', customeStyle: 'text-left w-[10%]', key: 'address' },
 	{ head: 'Status', customeStyle: '!text-left w-[9%]', key: 'status' },
 	{ head: 'Actions', customeStyle: 'text-center w-[10%]', key: 'actions' },
 ]
@@ -25,6 +27,8 @@ function StaffManagement() {
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [tableRows, setTableRows] = useState([])
 	const [openAddPage, setOpenAddPage] = useState(false)
+	const [openUpdatePage, setOpenUpdatePage] = useState(false)
+	const [selectedStaff, setSelectedStaff] = useState(null)
 
 	useEffect(() => {
 		async function fetchAccounts() {
@@ -94,9 +98,9 @@ function StaffManagement() {
 	}
 
 	const handleUpdateStatus = async (email) => {
-		const data = await AccountManagementService.UPDATE_STATUS(email)
+		const data = await StaffManagementService.UPDATE_STAFF_STATUS(email)
 		if (data) {
-			const updatedData = await AccountManagementService.GET_ALL()
+			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
 			setTableRows(updatedData)
 		}
 	}
@@ -107,6 +111,21 @@ function StaffManagement() {
 			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
 			setTableRows(updatedData)
 			setOpenAddPage(false)
+		}
+	}
+
+	const handleOpenUpdate = (staff) => {
+		setSelectedStaff(staff)
+		setOpenUpdatePage(true)
+	}
+
+	const handleUpdateStaff = async (formData) => {
+		const data = await StaffManagementService.UPDATE_STAFF_INFO(formData)
+		if (data) {
+			const updatedData = await StaffManagementService.GET_ALL_STAFFS()
+			setTableRows(updatedData)
+			setSelectedStaff(null)
+			setOpenUpdatePage(false)
 		}
 	}
 
@@ -176,23 +195,40 @@ function StaffManagement() {
 										<td className='p-4'>{row.status}</td>
 										<td className='p-4 text-center'>
 											<div>
-												<Confirmation
-													title='Are you sure?'
-													description={`Do you really want to ${
-														row.status === 'Blocked' ? 'activate' : 'block'
-													} this account?`}
-													handleConfirm={() => handleUpdateStatus(row.accountEmail)}
-												>
-													{(handleOpen) => (
-														<Button
-															onClick={handleOpen}
-															color={row.status === 'Blocked' ? 'green' : 'red'}
-															className='my-1'
-														>
-															{row.status === 'Blocked' ? 'Activate' : 'Block'}
-														</Button>
-													)}
-												</Confirmation>
+												<div className='flex justify-end gap-4'>
+													<IconButton
+														variant='text'
+														size='sm'
+														onClick={() => handleOpenUpdate(row)}
+													>
+														<PencilIcon title='update' className='h-5 w-5 text-gray-900' />
+													</IconButton>
+													<Confirmation
+														title='Are you sure?'
+														description={`Do you really want to ${
+															row.status === 'Blocked' ? 'activate' : 'block'
+														} this account?`}
+														handleConfirm={() => handleUpdateStatus(row.accountEmail)}
+													>
+														{(handleOpen) => (
+															<IconButton
+																onClick={handleOpen}
+																color={row.status === 'Blocked' ? 'success' : 'error'}
+																variant='text'
+																size='sm'
+															>
+																{row.status === 'Blocked' ? (
+																	<CheckCircleIcon
+																		title='activate'
+																		className='h-5 w-5 text-gray-900'
+																	/>
+																) : (
+																	<XMarkIcon title='block' className='h-5 w-5 text-gray-900' />
+																)}
+															</IconButton>
+														)}
+													</Confirmation>
+												</div>
 											</div>
 										</td>
 									</tr>
@@ -200,6 +236,15 @@ function StaffManagement() {
 							})}
 						</tbody>
 					</table>
+
+					{openUpdatePage && selectedStaff && (
+						<UpdateStaff
+							open={openUpdatePage}
+							handleClose={() => setOpenUpdatePage(false)}
+							existingStaff={selectedStaff}
+							handleUpdateStaff={handleUpdateStaff}
+						/>
+					)}
 
 					<div className='flex justify-between items-center mt-4'>
 						<Button
