@@ -9,10 +9,10 @@ namespace API.Controllers.Admin
     [ApiController]
     [Route("api/v1/admin/staff-management")]
     [Authorize(Roles = "Admin")]
-    public class AdminStaffController : Controller
+    public class AdminStaffManagementController : Controller
     {
         private readonly AuthenticationDAO dao;
-        public AdminStaffController(AuthenticationDAO dao)
+        public AdminStaffManagementController(AuthenticationDAO dao)
         {
             this.dao = dao;
         }
