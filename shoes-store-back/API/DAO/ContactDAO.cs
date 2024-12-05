@@ -88,7 +88,7 @@ namespace API.DAO
                 AccountID = contact.AccountID,
                 Title = $"Answered contact #{contactID}",
                 Description = $"Dear {contact.Account!.AccountName}," +
-                $"\r\n\r\nThank you for reaching out to us. We have reviewed your request #{contact.ContactID} and provided a response. If you have any further questions or need additional assistance, please feel free to contact us again." +
+                $"\r\n\r\nThank you for reaching out to us. We have reviewed your request #{contactID} and provided a response. If you have any further questions or need additional assistance, please feel free to contact us again." +
                 $"\r\n\r\nBest regards," +
                 $"\r\nShoes store's staff"
             };
@@ -107,7 +107,7 @@ namespace API.DAO
 
         public ResponseMessage RejectContact(int contactID)
         {
-            var contact = db.Contact.FirstOrDefault(c => c.ContactID == contactID);
+            var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
 
             if (contact == null)
             {
@@ -128,7 +128,7 @@ namespace API.DAO
                 AccountID = contact.AccountID,
                 Title = $"Rejected contact #{contactID}",
                 Description = $"Dear {contact.Account!.AccountName}," +
-                $"\r\n\r\nThank you for reaching out to us. We appreciate your interest; however, we regret to inform you that we are unable to proceed with your request {contact.ContactID} at this time. If there is anything else we can assist you with, please don’t hesitate to let us know." +
+                $"\r\n\r\nThank you for reaching out to us. We appreciate your interest; however, we regret to inform you that we are unable to proceed with your request {contactID} at this time. If there is anything else we can assist you with, please don’t hesitate to let us know." +
                 $"\r\n\r\nBest regards," +
                 $"\r\nShoes store's staff"
             };

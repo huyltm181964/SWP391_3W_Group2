@@ -174,11 +174,11 @@ namespace API.DAO
             var notification = new Notification
             {
                 AccountID = accountID,
-                Title = "You have a new comment being banned",
+                Title = "New comment being banned",
                 Description = 
                 $"Your comment in product " +
                 $"{db.Product.FirstOrDefault(x => x.ProductID == productID)?.ProductName}" +
-                $" is banned because it {reason}"
+                $" is banned because it {reason.ToLower()}"
             };
 
             db.Comment.Remove(getComment);
