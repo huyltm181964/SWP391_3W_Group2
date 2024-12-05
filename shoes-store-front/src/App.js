@@ -20,6 +20,7 @@ import ProductDetail from './pages/Guest/ProductDetail'
 import Cart from './pages/User/Cart'
 import HistoryOrder from './pages/User/HistoryOrder'
 import Payment from './pages/User/Payment'
+import StaffDashboard from './pages/Staff/StaffDashboard'
 
 function App() {
 	const location = useLocation()
@@ -61,6 +62,7 @@ function App() {
 						<Route path='/account/payment/:id' element={<Payment />} />
 
 						<Route path='/dashboard' element={<Dashboard />} />
+						<Route path='/staff/dashboard' element={<StaffDashboard />} />
 
 						<Route path='/404' element={<Error404 />} />
 						<Route path='*' element={<Error404 />} />
