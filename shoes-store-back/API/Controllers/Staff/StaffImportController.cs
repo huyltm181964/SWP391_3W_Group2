@@ -1,7 +1,6 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -39,5 +38,20 @@ namespace API.Controllers.Staff
             var response = importDAO.GetProductHistory(variantId);
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpPost("import-product")]
+        public IActionResult ImportProduct([FromBody] ImportDTO importDTO)
+        {
+            var response = importDAO.AddImportProduct(importDTO);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpPost("update-import-product")]
+        public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
+        {
+            var response = importDAO.UpdateImportProduct(updateImportDTO);
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }
+

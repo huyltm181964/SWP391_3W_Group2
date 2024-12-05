@@ -1,6 +1,6 @@
 ﻿namespace API.DTOs.ResponseDTO
 {
-    public class StockDTO
+    public class StockResponse
     {
         public string? Id { get; set; }
         public string? Location { get; set; }

@@ -79,9 +79,9 @@ namespace API.DAO
             List<Import> imports = db.Import.Where(x => x.VariantID == variantId).ToList();
             List<Export> exports = db.Export.Where(x => x.VariantID == variantId).ToList();
 
-            List<StockDTO> stocks = new List<StockDTO>();
+            List<StockResponse> stocks = new List<StockResponse>();
 
-            stocks.AddRange(imports.Select(x => new StockDTO
+            stocks.AddRange(imports.Select(x => new StockResponse
             {
                 Id = $"Import-{x.ImportID:D2}",
                 Location = x.ImportLocation,
@@ -90,7 +90,7 @@ namespace API.DAO
                 Type = "Import"
             }));
 
-            stocks.AddRange(exports.Select(x => new StockDTO
+            stocks.AddRange(exports.Select(x => new StockResponse
             {
                 Id = $"Export-{x.ExportID:D2}",
                 Location = x.ExportLocation,
@@ -105,6 +105,76 @@ namespace API.DAO
                 Success = true,
                 Message = "Product history retrieved successfully.",
                 Data = stocks,
+                StatusCode = 200
+            };
+        }
+
+        public ResponseMessage AddImportProduct(ImportDTO importDTO)
+        {
+            var variant = db.ProductVariant
+                .Include(x => x.Product)
+                .ThenInclude(x => x.ProductVariants)
+                .FirstOrDefault(x => x.VariantID == importDTO.VariantID);
+
+            if (variant == null)
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Variant not found.",
+                    Data = null,
+                    StatusCode = 404
+                };
+            }
+
+            var import = new Import
+            {
+                ImportDate = DateTime.Now,
+                Quantity = importDTO.Quantity,
+                ImportPrice = importDTO.ImportPrice,
+                VariantID = importDTO.VariantID,
+                ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}"
+            };
+
+            db.Import.Add(import);
+            db.SaveChanges();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Import product added successfully.",
+                Data = import,
+                StatusCode = 200
+            };
+        }
+
+        public ResponseMessage UpdateImportProduct(UpdateImportDTO updateImportDTO)
+        {
+            var existingImport = db.Import
+                .FirstOrDefault(x => x.ImportID == updateImportDTO.ImportID);
+
+            if (existingImport == null)
+            {
+                return new ResponseMessage
+                {
+                    Success = false,
+                    Message = "Import record not found.",
+                    Data = null,
+                    StatusCode = 404
+                };
+            }
+
+            existingImport.ImportPrice = updateImportDTO.ImportPrice;
+            existingImport.ImportLocation = $"{updateImportDTO.City}, {updateImportDTO.District}, {updateImportDTO.Ward}, {updateImportDTO.AddressDetail}";
+
+            db.Import.Update(existingImport);
+            db.SaveChanges();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Import product updated successfully.",
+                Data = existingImport,
                 StatusCode = 200
             };
         }
