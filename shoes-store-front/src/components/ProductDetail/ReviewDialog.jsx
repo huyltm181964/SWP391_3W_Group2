@@ -51,8 +51,8 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 	const handleSubmit = async () => {
 		let response
 
-		if (rate <= 0) {
-			enqueueSnackbar('Please pick an rate to add the comment for the product', {
+		if (rate <= 0 || !content) {
+			enqueueSnackbar('Please pick an rate and enter review to add the comment for the product', {
 				variant: 'error',
 			})
 			return
@@ -71,8 +71,10 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 
 		if (response.success) {
 			enqueueSnackbar(response.message, { variant: 'success' })
+			setTimeout(() => {
+				window.location.href = '/product/' + product.productID
+			}, 2000)
 		}
-		window.location.href = '/product/' + product.productID
 		handleClose()
 	}
 
@@ -103,6 +105,7 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 						)}
 						<Textarea
 							value={content}
+							required
 							onChange={(e) => setContent(e.target.value)}
 							label='Description review'
 						/>
@@ -120,7 +123,7 @@ const ReviewDialog = ({ open, handleClose, product }) => {
 					</DialogFooter>
 				</>
 			) : (
-				<DialogBody>Please login submit a review</DialogBody>
+				<DialogBody>Please login to submit a review</DialogBody>
 			)}
 		</Dialog>
 	)

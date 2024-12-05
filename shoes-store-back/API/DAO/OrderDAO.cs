@@ -85,7 +85,7 @@ namespace API.DAO
             {
                 Success = true,
                 Data = m.Map<CheckOutReponse>(addOrder),
-                Message = "Success",
+                Message = "Checkout successfully. Please go to history order to pay for it before we can delivery it to you.",
                 StatusCode = 200
             };
         }

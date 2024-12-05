@@ -3,4 +3,5 @@ export const CommentRequest = {
 	GET_COMMENT: '/comment/get-comment',
 	DELETE_COMMENT: '/comment/delete-comment',
 	UPDATE_COMMENT: '/comment/update-comment',
+	REPORT_COMMENT: '/comment/report-comment',
 }

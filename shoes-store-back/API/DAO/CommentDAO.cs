@@ -216,7 +216,7 @@ namespace API.DAO
             return new ResponseMessage
             {
                 Success = true,
-                Message = "Unreport comment successfully",
+                Message = "Report comment successfully",
                 Data = null,
                 StatusCode = 200
             };

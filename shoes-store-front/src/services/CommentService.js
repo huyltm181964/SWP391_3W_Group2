@@ -14,4 +14,6 @@ export const CommentService = {
 			.then((response) => response),
 	UPDATE_COMMENT: async (formBody) =>
 		await axiosFormBody.put(CommentRequest.UPDATE_COMMENT, formBody).then((response) => response),
+	REPORT_COMMENT: async (formBody) =>
+		await axiosFormBody.post(CommentRequest.REPORT_COMMENT, formBody).then((response) => response),
 }
