@@ -66,7 +66,7 @@ namespace API.DAO
 
         public ResponseMessage AnswerContact(int contactID, string answer)
         {
-            var contact = db.Contact.FirstOrDefault(c => c.ContactID == contactID);
+            var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
 
             if (contact == null)
             {
@@ -80,7 +80,20 @@ namespace API.DAO
             }
 
             contact.Answer = answer;
+            contact.AnswerDate = DateTime.Now;
             db.Contact.Update(contact);
+
+            var notification = new Notification()
+            {
+                AccountID = contact.AccountID,
+                Title = $"Answered contact #{contactID}",
+                Description = $"Dear {contact.Account!.AccountName}," +
+                $"\r\n\r\nThank you for reaching out to us. We have reviewed your request #{contact.ContactID} and provided a response. If you have any further questions or need additional assistance, please feel free to contact us again." +
+                $"\r\n\r\nBest regards," +
+                $"\r\nShoes store's staff"
+            };
+            db.Notification.Add(notification);
+
             db.SaveChanges();
 
             return new ResponseMessage
@@ -109,6 +122,18 @@ namespace API.DAO
 
             contact.IsRejected = true;
             db.Contact.Update(contact);
+
+            var notification = new Notification()
+            {
+                AccountID = contact.AccountID,
+                Title = $"Rejected contact #{contactID}",
+                Description = $"Dear {contact.Account!.AccountName}," +
+                $"\r\n\r\nThank you for reaching out to us. We appreciate your interest; however, we regret to inform you that we are unable to proceed with your request {contact.ContactID} at this time. If there is anything else we can assist you with, please don’t hesitate to let us know." +
+                $"\r\n\r\nBest regards," +
+                $"\r\nShoes store's staff"
+            };
+            db.Notification.Add(notification);
+
             db.SaveChanges();
 
             return new ResponseMessage
