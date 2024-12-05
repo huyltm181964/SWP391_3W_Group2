@@ -23,6 +23,7 @@ namespace API
             services.AddScoped<CommentDAO>();
             services.AddScoped<StatisticsDAO>();
             services.AddScoped<VariantDAO>();
+            services.AddScoped<ImportDAO>();
             services.AddDbContext<ShoesDbContext>();
             services.AddScoped<Ultils>();
             services.AddAutoMapper(typeof(Program));

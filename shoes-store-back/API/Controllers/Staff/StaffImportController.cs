@@ -12,19 +12,32 @@ namespace API.Controllers.Staff
     [Authorize(Roles = "Staff")]
     public class StaffImportController : ControllerBase
     {
-        private readonly ProductDAO productDAO;
+        private readonly ImportDAO importDAO;
 
-        public StaffImportController(ProductDAO productDAO)
+        public StaffImportController(ImportDAO importDAO)
         {
-            this.productDAO = productDAO;
+            this.importDAO = importDAO;
         }
 
         [HttpGet("get-products")]
         public IActionResult GetProducts()
         {
-            var response = productDAO.GetProducts();
+            var response = importDAO.GetProducts();
             return StatusCode(response.StatusCode, response);
         }
 
+        [HttpGet("detail/{productId}")]
+        public IActionResult ProductDetail(int productId)
+        {
+            var response = importDAO.GetDetail(productId);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpGet("get-stock-history")]
+        public IActionResult GetProductStockHistory(int variantId)
+        {
+            var response = importDAO.GetProductHistory(variantId);
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }
