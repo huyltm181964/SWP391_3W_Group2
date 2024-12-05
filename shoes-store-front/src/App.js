@@ -21,6 +21,7 @@ import Cart from './pages/User/Cart'
 import HistoryOrder from './pages/User/HistoryOrder'
 import Payment from './pages/User/Payment'
 import StaffDashboard from './pages/Staff/StaffDashboard'
+import { RoleRedirect, ProtectedRoute } from './utils/PrivateRoute'
 
 function App() {
 	const location = useLocation()
@@ -42,7 +43,7 @@ function App() {
 		<div className='flex flex-col min-h-screen'>
 			{!location.pathname.startsWith('/auth') && renderHeader()}
 			<div className='flex-grow'>
-				<Suspense fallback={<div className='container'>Loading...</div>}>
+				<RoleRedirect role={role}>
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/about' element={<AboutUs />} />
@@ -61,13 +62,27 @@ function App() {
 						<Route path='/account/history-order' element={<HistoryOrder />} />
 						<Route path='/account/payment/:id' element={<Payment />} />
 
-						<Route path='/dashboard' element={<Dashboard />} />
-						<Route path='/staff/dashboard' element={<StaffDashboard />} />
+						<Route
+							path='/dashboard'
+							element={
+								<ProtectedRoute role={role} allowedRole='admin' redirectPath='/'>
+									<Dashboard />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='/staff/dashboard'
+							element={
+								<ProtectedRoute role={role} allowedRole='staff' redirectPath='/'>
+									<StaffDashboard />
+								</ProtectedRoute>
+							}
+						/>
 
 						<Route path='/404' element={<Error404 />} />
 						<Route path='*' element={<Error404 />} />
 					</Routes>
-				</Suspense>
+				</RoleRedirect>
 			</div>
 			{!location.pathname.startsWith('/auth') && renderHeader() && <Footer />}
 		</div>

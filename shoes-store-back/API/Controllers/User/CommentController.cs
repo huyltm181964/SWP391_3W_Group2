@@ -33,10 +33,11 @@ namespace API.Controllers.User
         }
 
         [HttpDelete("delete-comment/{productID}"), Authorize]
-        public IActionResult DeleteComment(int productID) {
+        public IActionResult DeleteComment(int productID)
+        {
             var accountID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
             var reponse = dao.DeleteComment(accountID, productID);
-            return StatusCode(reponse.StatusCode,reponse);
+            return StatusCode(reponse.StatusCode, reponse);
         }
 
         [HttpPut("update-comment"), Authorize]
@@ -44,6 +45,19 @@ namespace API.Controllers.User
         {
             var accountID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
             var reponse = dao.UpdateComment(accountID, commentDTO);
+            return StatusCode(reponse.StatusCode, reponse);
+        }
+
+        [HttpPost("report-comment"), Authorize]
+        public IActionResult ReportComment([FromBody] CommentIdDTO idDTO)
+        {
+            var accountID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
+            if (accountID == idDTO.AccountID)
+            {
+                return BadRequest(new { success = false, message = "You can't report your comment" });
+            }
+
+            var reponse = dao.ReportComment(idDTO.AccountID, idDTO.ProductID);
             return StatusCode(reponse.StatusCode, reponse);
         }
     }
