@@ -15,8 +15,10 @@ namespace API
         {
             services.AddScoped<AccountDAO>();
             services.AddScoped<AuthenticationDAO>();
-            services.AddScoped<ProductDAO>();
             services.AddScoped<CartDAO>();
+            services.AddScoped<ContactDAO>();
+            services.AddScoped<NotificationDAO>();
+            services.AddScoped<ProductDAO>();
             services.AddScoped<OrderDAO>();
             services.AddScoped<CommentDAO>();
             services.AddScoped<StatisticsDAO>();

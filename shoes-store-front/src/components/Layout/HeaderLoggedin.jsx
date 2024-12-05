@@ -1,14 +1,17 @@
 import { Avatar } from '@material-tailwind/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AccountService } from 'src/services/AccountService'
 import { AuthService } from 'src/services/AuthService'
 import { GetImage } from 'src/utils/GetImage'
+import NotificationBadge from '../Notification/NotificationBadge'
+import useOutsideClick from 'src/utils/HandleClick/useOutsideClick'
 
 const HeaderLoggedin = () => {
 	const [open, setOpen] = useState(false)
 	const [profile, setProfile] = useState({})
 
+	const dropdownRef = useRef(null)
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -22,6 +25,8 @@ const HeaderLoggedin = () => {
 		fetchData()
 		window.addEventListener('storage', fetchData)
 	}, [])
+
+	useOutsideClick(dropdownRef, () => setOpen(false))
 
 	return (
 		<nav
@@ -37,79 +42,86 @@ const HeaderLoggedin = () => {
 						Shoes Store
 					</span>
 				</a>
-				<div className='flex relative items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse'>
-					<button
-						type='button'
-						className='flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600'
-						id='user-menu-button'
-						onClick={() => setOpen(!open)}
-					>
-						<span className='sr-only'>Open user menu</span>
-						<Avatar
-							size='md'
-							variant='circular'
-							className='w-8 h-8 rounded-full'
-							src={GetImage(profile?.avatar)}
-						/>
-					</button>
-					<div
-						className='z-50 absolute text-base list-none divide-y divide-gray-100 rounded-lg shadow bg-gray-100'
-						hidden={!open}
-						id='user-dropdown'
-						style={{ top: '100%', right: '50%' }}
-					>
-						<div className='px-4 py-3'>
-							<span className='block text-sm text-gray-900 dark:text-white'>
-								{profile.accountName}
-							</span>
-							<span className='block text-sm  text-gray-500 truncate dark:text-gray-400'>
-								{profile.accountEmail}
-							</span>
+				<div className='flex items-center gap-10 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse'>
+					<NotificationBadge />
+					<div className='relative'>
+						<button
+							type='button'
+							className='flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600'
+							id='user-menu-button'
+							onClick={(e) => {
+								e.stopPropagation()
+								setOpen(!open)
+							}}
+						>
+							<Avatar
+								size='md'
+								variant='circular'
+								className='rounded-full'
+								src={GetImage(profile?.avatar)}
+							/>
+						</button>
+						<div
+							ref={dropdownRef}
+							className='z-50 absolute text-base list-none divide-y divide-gray-100 rounded-lg shadow bg-gray-100'
+							hidden={!open}
+							id='user-dropdown'
+							style={{ top: '100%', right: '50%' }}
+						>
+							<div className='px-4 py-3'>
+								<span className='block text-sm text-gray-900 dark:text-white'>
+									{profile.accountName}
+								</span>
+								<span className='block text-sm  text-gray-500 truncate dark:text-gray-400'>
+									{profile.accountEmail}
+								</span>
+							</div>
+							<ul className='py-2' aria-labelledby='user-menu-button'>
+								<li>
+									<a
+										onClick={() => {
+											navigate('/account/profile')
+											setOpen(false)
+										}}
+										className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+									>
+										Profile Settings
+									</a>
+								</li>
+								<li>
+									<a
+										onClick={() => {
+											navigate('/account/cart')
+											setOpen(false)
+										}}
+										className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+									>
+										Cart
+									</a>
+								</li>
+								<li>
+									<a
+										onClick={() => {
+											navigate('/account/history-order')
+											setOpen(false)
+										}}
+										className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+									>
+										History Order
+									</a>
+								</li>
+								<li>
+									<a
+										onClick={() => AuthService.LOGOUT()}
+										className='block px-4 py-2 text-sm select-none cursor-pointer text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+									>
+										Sign out
+									</a>
+								</li>
+							</ul>
 						</div>
-						<ul className='py-2' aria-labelledby='user-menu-button'>
-							<li>
-								<a
-									onClick={() => {
-										navigate('/account/profile')
-										setOpen(false)
-									}}
-									className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-								>
-									Profile Settings
-								</a>
-							</li>
-							<li>
-								<a
-									onClick={() => {
-										navigate('/account/cart')
-										setOpen(false)
-									}}
-									className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-								>
-									Cart
-								</a>
-							</li>
-							<li>
-								<a
-									onClick={() => {
-										navigate('/account/history-order')
-										setOpen(false)
-									}}
-									className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-								>
-									History Order
-								</a>
-							</li>
-							<li>
-								<a
-									onClick={() => AuthService.LOGOUT()}
-									className='block px-4 py-2 text-sm select-none cursor-pointer text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-								>
-									Sign out
-								</a>
-							</li>
-						</ul>
 					</div>
+
 					<button
 						data-collapse-toggle='navbar-user'
 						type='button'

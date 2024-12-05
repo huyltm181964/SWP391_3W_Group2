@@ -73,7 +73,6 @@ namespace API.DAO
                 }
             }
 
-            db.Notification.UpdateRange(account.Notifications);
             db.SaveChanges();
 
             return new ResponseMessage()
