@@ -15,6 +15,7 @@ namespace API.Utils.MiddleWare
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(

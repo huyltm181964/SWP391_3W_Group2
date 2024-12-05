@@ -144,7 +144,7 @@ namespace API.DAO
             {
                 AccountID = getOrder.AccountID,
                 Title = $"Order #{getOrder.OrderID} status",
-                Description = $"Your order #{getOrder.OrderID} is now ${orderStatus}"
+                Description = $"Your order #{getOrder.OrderID} is now {orderStatus.ToLower()}"
             };
             db.Notification.Add(notification);
 
