@@ -2,7 +2,7 @@ const categoriesList = ['Bitis', 'Nike', 'Adidas', 'Gucci']
 
 const categoriesTab = ['All', ...categoriesList]
 
-const orderStatus = {
+const orderStatusEnum = {
 	UNPAID: 'Unpaid',
 	ORDERED: 'Ordered',
 	DELIVERY: 'Delivery',
@@ -10,4 +10,4 @@ const orderStatus = {
 	COMPLETED: 'Completed',
 }
 
-export { categoriesList, categoriesTab, orderStatus }
+export { categoriesList, categoriesTab, orderStatusEnum }

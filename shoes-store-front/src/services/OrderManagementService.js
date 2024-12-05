@@ -3,8 +3,10 @@ import axiosFormBody from '../utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 
 export const OrderManagementService = {
-	GET_ALL: async () =>
-		await axiosFormBody.get(OrderManagementRequest.GET_ALL).then((response) => response.data),
+	GET_DELIVERY_ORDER: async () =>
+		await axiosFormBody
+			.get(OrderManagementRequest.GET_DELIVERY_ORDER)
+			.then((response) => response.data),
 
 	UPDATE_ORDER: async (orderId, orderStatus) => {
 		const requestBody = { orderId, orderStatus }

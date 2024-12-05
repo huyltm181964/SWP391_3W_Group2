@@ -1,9 +1,8 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { OrderManagementService } from 'src/services/OrderManagementService'
-import { orderStatus } from 'src/utils/EnumList'
+import { orderStatusEnum } from 'src/utils/EnumList'
 
 const TABLE_HEAD = [
 	{ head: 'OrderID', customeStyle: '!text-left w-[10%]', key: 'orderID' },
@@ -24,7 +23,7 @@ function OrderManagement() {
 
 	useEffect(() => {
 		async function fetchOrders() {
-			const data = await OrderManagementService.GET_ALL()
+			const data = await OrderManagementService.GET_DELIVERY_ORDER()
 			if (data) {
 				setTableRows(data)
 			}
@@ -98,7 +97,7 @@ function OrderManagement() {
 	const handleUpdateStatus = async (orderId, orderStatus) => {
 		const data = await OrderManagementService.UPDATE_ORDER(orderId, orderStatus)
 		if (data) {
-			const updatedData = await OrderManagementService.GET_ALL()
+			const updatedData = await OrderManagementService.GET_DELIVERY_ORDER()
 			setTableRows(updatedData)
 		}
 	}
@@ -147,19 +146,19 @@ function OrderManagement() {
 										<td className='p-4 text-right'>{row.orderStatus}</td>
 										<td className='p-4 text-right'>
 											<div className='flex justify-end gap-4'>
-												{row.orderStatus !== 'Completed' && row.orderStatus !== 'Delivered' && (
-													<Confirmation
-														title='Are you sure?'
-														description='Do you really want to approve this item?'
-														handleConfirm={() => handleUpdateStatus(row.orderID, 'Delivered')}
-													>
-														{(handleOpen) => (
-															<Button onClick={handleOpen} color='green'>
-																Delivered
-															</Button>
-														)}
-													</Confirmation>
-												)}
+												<Confirmation
+													title='Confirm deliveried order?'
+													description='Are you sure you want to confirm this order as deliveried?'
+													handleConfirm={() =>
+														handleUpdateStatus(row.orderID, orderStatusEnum.DELIVERIED)
+													}
+												>
+													{(handleOpen) => (
+														<Button onClick={handleOpen} color='green'>
+															Deliveried
+														</Button>
+													)}
+												</Confirmation>
 											</div>
 										</td>
 									</tr>

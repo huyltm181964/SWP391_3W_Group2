@@ -1,11 +1,13 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Staff
 {
     [Route("api/v1/staff/comment")]
     [ApiController]
+    [Authorize(Roles = "Staff")]
     public class StaffCommentController : ControllerBase
     {
         private readonly CommentDAO commentDAO;
