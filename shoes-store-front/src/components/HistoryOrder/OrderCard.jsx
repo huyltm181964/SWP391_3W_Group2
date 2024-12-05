@@ -1,8 +1,7 @@
 import { Accordion, AccordionBody, AccordionHeader } from '@material-tailwind/react'
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatDateWithLetterMonth, getDateFromDateTime } from 'src/utils/DateUtil'
-import { orderStatus } from 'src/utils/EnumList'
+import { orderStatusEnum } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
 
 const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
@@ -40,7 +39,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 						</p>
 					</div>
 					<div class='flex items-center gap-3 max-md:mt-5'>
-						{order?.orderStatus === orderStatus.UNPAID && (
+						{order?.orderStatus === orderStatusEnum.UNPAID && (
 							<button
 								onClick={() => navigate('/account/payment/' + order?.orderID)}
 								type='button'
@@ -49,7 +48,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 								Get Payment
 							</button>
 						)}
-						{order?.orderStatus === orderStatus.UNPAID && (
+						{order?.orderStatus === orderStatusEnum.UNPAID && (
 							<button
 								onClick={() => handleCancel(order?.orderID)}
 								type='button'
@@ -58,7 +57,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 								Cancel order
 							</button>
 						)}
-						{order?.orderStatus === orderStatus.DELIVERIED && (
+						{order?.orderStatus === orderStatusEnum.DELIVERIED && (
 							<button
 								onClick={() => handleConfirm(order?.orderID)}
 								type='button'

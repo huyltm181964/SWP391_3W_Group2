@@ -17,10 +17,10 @@ namespace API.Controllers.Admin
             this.dao = dao;
         }
 
-        [HttpGet("get-all"), Authorize]
+        [HttpGet("get-delivery-order"), Authorize]
         public IActionResult GetAllOrder()
         {
-            var response = dao.GetOrderedOrder();
+            var response = dao.GetOrderByStatus("Delivery");
             return StatusCode(response.StatusCode, response);
         }
 

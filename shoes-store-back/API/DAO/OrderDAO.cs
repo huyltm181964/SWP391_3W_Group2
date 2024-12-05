@@ -106,11 +106,11 @@ namespace API.DAO
             };
         }
 
-        public ResponseMessage GetOrderedOrder()
+        public ResponseMessage GetOrderByStatus(string orderStatus)
         {
             var listOder = db.Order
                              .Include(x => x.Account)
-                             .Where(x => x.OrderStatus == "Delivery" || x.OrderStatus == "Delivered" || x.OrderStatus == "Completed")
+                             .Where(x => x.OrderStatus == orderStatus)
                              .ToList();
             return new ResponseMessage
             {

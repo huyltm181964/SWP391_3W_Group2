@@ -1,5 +1,6 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace API.Controllers.Staff
 {
     [Route("api/v1/staff/contact")]
     [ApiController]
+    [Authorize(Roles = "Staff")]
     public class StaffContactController : ControllerBase
     {
         private readonly ContactDAO contactDAO;
