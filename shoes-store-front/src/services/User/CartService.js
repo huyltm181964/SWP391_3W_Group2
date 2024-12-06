@@ -1,4 +1,4 @@
-import { CartRequest } from 'src/requests/CartRequest'
+import { CartRequest } from 'src/requests/User/CartRequest'
 import axiosFormData from 'src/utils/axiosFormData'
 
 export const CartService = {

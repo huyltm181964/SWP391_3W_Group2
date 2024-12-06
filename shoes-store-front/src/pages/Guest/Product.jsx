@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import FilterCategory from 'src/components/Product/FilterCategory'
 import ProductCard from 'src/components/Product/ProductCard'
-import { ProductService } from 'src/services/ProductService'
+import { ProductService } from 'src/services/User/ProductService'
 
 const Product = () => {
 	const [products, setProducts] = useState([])

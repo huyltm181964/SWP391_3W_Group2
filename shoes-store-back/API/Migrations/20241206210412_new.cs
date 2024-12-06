@@ -158,8 +158,8 @@ namespace API.Migrations
                     Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    AnswerDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    AnswerDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsRejected = table.Column<bool>(type: "bit", nullable: false),
                     AccountID = table.Column<int>(type: "int", nullable: false)
                 },

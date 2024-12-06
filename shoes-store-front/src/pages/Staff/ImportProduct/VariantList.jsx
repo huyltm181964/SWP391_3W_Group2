@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from 'react'
 import { GetImage } from 'src/utils/GetImage'
 import ProductList from './ProductList'
-import { ImportProductService } from 'src/services/ImportProductService'
+import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import StockHistory from './StockHistory'
 
 const TABLE_HEAD = [

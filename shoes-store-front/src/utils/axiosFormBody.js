@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
-import { AuthService } from 'src/services/AuthService'
+import { AuthService } from 'src/services/User/AuthService'
 
 const axiosFormBody = axios.create({
 	baseURL: 'https://localhost:7212/api/v1',

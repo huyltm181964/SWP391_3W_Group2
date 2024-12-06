@@ -12,8 +12,8 @@ namespace API.Models
         public String Description { get; set; }
         public DateTime CreatedDate { get; set; }
         [MaxLength(500)]
-        public String Answer { get; set; }
-        public DateTime AnswerDate { get; set; }
+        public String? Answer { get; set; }
+        public DateTime? AnswerDate { get; set; }
         public bool IsRejected { get; set; } = false;
 
         public int AccountID { get; set; }

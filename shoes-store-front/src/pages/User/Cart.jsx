@@ -1,9 +1,9 @@
 import { Checkbox, Input, Typography } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
-import { AccountService } from 'src/services/AccountService'
-import { CartService } from 'src/services/CartService'
-import { OrderService } from 'src/services/OrderService'
+import { AccountService } from 'src/services/User/AccountService'
+import { CartService } from 'src/services/User/CartService'
+import { OrderService } from 'src/services/User/OrderService'
 import { GetImage } from 'src/utils/GetImage'
 
 const Cart = () => {

@@ -1,4 +1,4 @@
-import { OrderRequest } from 'src/requests/OrderRequest'
+import { OrderRequest } from 'src/requests/User/OrderRequest'
 import axiosFormBody from 'src/utils/axiosFormBody'
 
 export const OrderService = {

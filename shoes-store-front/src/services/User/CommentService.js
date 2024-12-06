@@ -1,4 +1,4 @@
-import { CommentRequest } from 'src/requests/CommentRequest'
+import { CommentRequest } from 'src/requests/User/CommentRequest'
 import axiosFormBody from 'src/utils/axiosFormBody'
 
 export const CommentService = {

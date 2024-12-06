@@ -1,5 +1,5 @@
-import { OrderManagementRequest } from 'src/requests/OrderManagementRequest'
-import axiosFormBody from '../utils/axiosFormBody'
+import { OrderManagementRequest } from 'src/requests/Admin/OrderManagementRequest'
+import axiosFormBody from '../../utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 
 export const OrderManagementService = {

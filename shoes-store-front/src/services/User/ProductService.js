@@ -1,4 +1,4 @@
-import { ProductRequest } from 'src/requests/ProductRequest'
+import { ProductRequest } from 'src/requests/User/ProductRequest'
 import axiosFormBody from 'src/utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 
