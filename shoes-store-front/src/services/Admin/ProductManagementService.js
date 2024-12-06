@@ -1,5 +1,5 @@
-import { ProductManagementRequest } from 'src/requests/ProductManagementRequest'
-import axiosFormBody from '../utils/axiosFormBody'
+import { ProductManagementRequest } from 'src/requests/Admin/ProductManagementRequest'
+import axiosFormBody from '../../utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 
 export const ProductManagementService = {

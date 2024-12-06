@@ -1,4 +1,4 @@
-import { StatisticRequest } from 'src/requests/StatisticRequest'
+import { StatisticRequest } from 'src/requests/Admin/StatisticRequest'
 import axiosFormBody from 'src/utils/axiosFormBody'
 
 export const StatisticService = {

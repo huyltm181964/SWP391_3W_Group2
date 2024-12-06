@@ -10,7 +10,7 @@ import {
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import CrudTabs from 'src/components/CrudTabs/CrudTabs'
-import { ImportProductService } from 'src/services/ImportProductService'
+import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
 import VariantList from './VariantList'

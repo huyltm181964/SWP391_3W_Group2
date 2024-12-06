@@ -1,5 +1,5 @@
-import { AccountManagementRequest } from 'src/requests/AccountManagementRequest'
-import axiosFormBody from '../utils/axiosFormBody'
+import { AccountManagementRequest } from 'src/requests/Admin/AccountManagementRequest'
+import axiosFormBody from '../../utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 
 export const AccountManagementService = {

@@ -5,17 +5,13 @@ import {
 	DialogFooter,
 	DialogHeader,
 	IconButton,
-	Input,
 	Rating,
 	Textarea,
 	Typography,
 } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { CommentService } from 'src/services/CommentService'
+import { useEffect, useState } from 'react'
+import { CommentService } from 'src/services/User/CommentService'
 
 const ReviewDialog = ({ open, handleClose, product }) => {
 	const isLoggedIn = !!localStorage.getItem('token')

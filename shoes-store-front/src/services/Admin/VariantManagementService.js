@@ -1,4 +1,4 @@
-import { VariantManagementRequest } from 'src/requests/VariantManagementRequest'
+import { VariantManagementRequest } from 'src/requests/Admin/VariantManagementRequest'
 import axiosFormBody from 'src/utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 

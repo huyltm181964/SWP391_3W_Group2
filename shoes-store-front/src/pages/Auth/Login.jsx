@@ -4,8 +4,8 @@ import { Button, Card, CardBody, CardHeader, Input, Typography } from '@material
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { enqueueSnackbar } from 'notistack'
-import { AuthService } from 'src/services/AuthService'
-import { AuthRequest } from 'src/requests/AuthRequest'
+import { AuthService } from 'src/services/User/AuthService'
+import { AuthRequest } from 'src/requests/User/AuthRequest'
 import { useGoogleLogin } from '@react-oauth/google'
 
 function Login() {
@@ -49,9 +49,11 @@ function Login() {
 			localStorage.setItem('token', token)
 			localStorage.setItem('role', role)
 			window.dispatchEvent(new Event('storage'))
-			if (role == 'User') {
+			if (role.toLowerCase() === 'User') {
 				navigate('/')
-			} else if (role == 'Admin') {
+			} else if (role.toLowerCase() === 'Staff') {
+				navigate('/staff/dashboard')
+			} else if (role.toLowerCase() === 'Admin') {
 				navigate('/dashboard')
 			} else {
 				navigate('/auth/login')

@@ -1,8 +1,8 @@
 import { Button } from '@material-tailwind/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AuthRequest } from 'src/requests/AuthRequest'
-import { AuthService } from 'src/services/AuthService'
+import { AuthRequest } from 'src/requests/User/AuthRequest'
+import { AuthService } from 'src/services/User/AuthService'
 import { GetLogo } from 'src/utils/GetImage'
 
 const ForgotPassword = () => {

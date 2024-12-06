@@ -4,8 +4,8 @@ import { Button, Card, CardBody, CardHeader, Input, Typography } from '@material
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { enqueueSnackbar } from 'notistack'
-import { AuthService } from 'src/services/AuthService'
-import { AuthRequest } from 'src/requests/AuthRequest'
+import { AuthService } from 'src/services/User/AuthService'
+import { AuthRequest } from 'src/requests/User/AuthRequest'
 
 function Register() {
 	const [formBody, setFormBody] = useState({

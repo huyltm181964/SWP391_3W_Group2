@@ -1,13 +1,12 @@
 import { enqueueSnackbar } from 'notistack'
-import React from 'react'
 import { useState } from 'react'
-import { AccountService } from 'src/services/AccountService'
+import { ContactService } from 'src/services/User/ContactService'
 
 const ContactUs = () => {
 	const [formBody, setFormBody] = useState({
 		name: '',
-		email: '',
-		message: '',
+		title: '',
+		description: '',
 	})
 
 	const handleChangeValue = (e) => {
@@ -23,14 +22,14 @@ const ContactUs = () => {
 			return
 		}
 
-		const data = await AccountService.CONTACT_US(formBody)
-		if (data?.success) {
-			enqueueSnackbar('Send contact successfully', { variant: 'success' })
+		const response = await ContactService.ADD_CONTACT(formBody)
+		if (response?.success) {
+			enqueueSnackbar(response.message, { variant: 'success' })
 
 			setFormBody({
 				name: '',
-				email: '',
-				message: '',
+				title: '',
+				description: '',
 			})
 		}
 	}
@@ -66,17 +65,17 @@ const ContactUs = () => {
 
 					<div class='mb-3 w-full'>
 						<label class='block font-medium mb-[2px] text-teal-700' htmlFor='exampleInput90'>
-							Email
+							Brief Problem
 						</label>
 						<input
-							type='email'
-							name='email'
+							type='text'
+							name='title'
 							required
-							value={formBody.email}
+							value={formBody.title}
 							onChange={handleChangeValue}
 							class='px-2 py-2 border w-full outline-none rounded-md'
 							id='exampleInput90'
-							placeholder='your email address'
+							placeholder='your main problem'
 						/>
 					</div>
 
@@ -86,10 +85,10 @@ const ContactUs = () => {
 						</label>
 						<textarea
 							class='px-2 py-2 border rounded-[5px] w-full outline-none resize-none'
-							name='message'
-							placeholder='your message'
+							name='description'
+							placeholder='description of your problem'
 							required
-							value={formBody.message}
+							value={formBody.description}
 							onChange={handleChangeValue}
 						></textarea>
 					</div>

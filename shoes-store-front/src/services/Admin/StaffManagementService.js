@@ -1,6 +1,6 @@
 import axiosFormData from 'src/utils/axiosFormData'
-import axiosFormBody from '../utils/axiosFormBody'
-import { StaffManagementRequest } from 'src/requests/StaffManagementRequest'
+import axiosFormBody from '../../utils/axiosFormBody'
+import { StaffManagementRequest } from 'src/requests/Admin/StaffManagementRequest'
 
 export const StaffManagementService = {
 	GET_ALL_STAFFS: async () =>

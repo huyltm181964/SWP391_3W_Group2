@@ -1,7 +1,7 @@
 import { Card } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useState } from 'react'
-import { AccountService } from 'src/services/AccountService'
+import { AccountService } from 'src/services/User/AccountService'
 
 const ChangePasswordForm = () => {
 	const [oldPassword, setOldPassword] = useState('')
