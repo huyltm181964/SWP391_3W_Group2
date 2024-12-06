@@ -18,15 +18,15 @@ const StaffDashboard = () => {
 		setSelectedPage(page)
 		setSelectedPageKey(pageKey)
 	}
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		const data = await AccountService.GET_PROFILE()
-	// 		if (data) {
-	// 			setProfile(data)
-	// 		}
-	// 	}
-	// 	fetchData()
-	// }, [])
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await AccountService.GET_PROFILE()
+			if (data) {
+				setProfile(data)
+			}
+		}
+		fetchData()
+	}, [])
 
 	const LIST_ITEM_STYLES =
 		'text-gray-500 hover:text-white focus:text-white active:text-white hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'
@@ -53,8 +53,8 @@ const StaffDashboard = () => {
 						</Typography>
 					</div>
 					<hr className='my-2 border-gray-800' />
-					<ListItem
-						className={LIST_ITEM_STYLES}
+						<ListItem
+							className={LIST_ITEM_STYLES}
 						selected={selectedPageKey === 'Statistic'}
 						onClick={() => handleSelectPage(<StaffStatistics />, 'Statistic')}
 					>

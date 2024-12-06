@@ -13,6 +13,7 @@ import CrudTabs from 'src/components/CrudTabs/CrudTabs'
 import { ImportProductService } from 'src/services/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
+import ProductVariant from './ProductVariant'
 
 const TABLE_HEAD = [
 	{
@@ -66,20 +67,20 @@ function ImportProduct() {
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
-	// const [openVariantPage, setOpenVariantPage] = useState(false)
+	const [openVariantPage, setOpenVariantPage] = useState(false)
 	const [selectedProduct, setSelectedProduct] = useState(null)
 	const [product, setProduct] = useState([])
 
 	useEffect(() => {
-		// async function fetchProducts() {
-		// 	const data = await ImportProductService.GET_ALL_PRODUCT()
-		// 	if (data) {
-		// 		const filteredData = data.filter((product) => product.productStatus !== 'Out of business')
-		// 		setTableRows(filteredData)
-		// 	}
-		// }
-		// fetchProducts()
-	}, []) //openVariantPage
+		async function fetchProducts() {
+			const data = await ImportProductService.GET_ALL_PRODUCT()
+			if (data) {
+				const filteredData = data.filter((product) => product.productStatus !== 'Out of business')
+				setTableRows(filteredData)
+			}
+		}
+		fetchProducts()
+	}, [openVariantPage])
 
 	useEffect(() => {
 		let filteredData = tableRows
@@ -154,13 +155,13 @@ function ImportProduct() {
 	}
 
 	const handleOpenVariant = async (productId) => {
-		// setSelectedProduct(productId)
-		// const data = await ProductManagementService.GET_DETAIL(productId)
-		// console.log(data)
-		// if (data) {
-		// 	setProduct(data)
-		// }
-		// setOpenVariantPage(true)
+		setSelectedProduct(productId)
+		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
+		console.log(data)
+		if (data) {
+			setProduct(data)
+		}
+		setOpenVariantPage(true)
 	}
 
 	return (
@@ -170,7 +171,7 @@ function ImportProduct() {
 					<div className='rounded-none flex flex-wrap gap-4 justify-between mb-4'>
 						<div>
 							<Typography variant='h3' color='blue-gray'>
-								Variant Management
+								Product List
 							</Typography>
 						</div>
 						<div className='flex items-center w-full shrink-0 gap-4 md:w-max'>
@@ -179,6 +180,7 @@ function ImportProduct() {
 								label='Search'
 								icon={<MagnifyingGlassIcon className='h-5 w-5' />}
 								value={searchTerm}
+								s
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
 						</div>
@@ -261,14 +263,14 @@ function ImportProduct() {
 							})}
 						</tbody>
 					</table>
-					{/* {openVariantPage && selectedProduct && (
+					{openVariantPage && selectedProduct && (
 						<ProductVariant
 							open={openVariantPage}
 							handleClose={() => setOpenVariantPage(false)}
 							existingProduct={selectedProduct}
 							product={product}
 						/>
-					)} */}
+					)}
 					<div className='flex justify-between items-center mt-4'>
 						<Button
 							onClick={() => handleChangePage(page - 1)}

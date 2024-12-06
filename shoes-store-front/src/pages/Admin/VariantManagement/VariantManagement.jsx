@@ -177,7 +177,7 @@ function VariantManagement() {
 					<div className='rounded-none flex flex-wrap gap-4 justify-between mb-4'>
 						<div>
 							<Typography variant='h3' color='blue-gray'>
-								Variant Management
+								Product List
 							</Typography>
 						</div>
 						<div className='flex items-center w-full shrink-0 gap-4 md:w-max'>
