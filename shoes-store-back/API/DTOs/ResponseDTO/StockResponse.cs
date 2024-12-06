@@ -7,5 +7,6 @@
         public DateTime? Date { get; set; }
         public int? Quantity { get; set; }
         public string? Type { get; set; } 
+        public Decimal? UnitPrice { get; set; }
     }
 }

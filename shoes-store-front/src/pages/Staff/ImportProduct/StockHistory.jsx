@@ -1,21 +1,25 @@
+import { PencilIcon } from '@heroicons/react/24/solid'
 import {
-    Button,
-    Dialog,
-    DialogBody,
-    DialogFooter,
-    DialogHeader,
-    Typography,
+	Button,
+	Dialog,
+	DialogBody,
+	DialogFooter,
+	DialogHeader,
+	IconButton,
+	Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import { ImportProductService } from 'src/services/ImportProductService'
 import ImportProduct from './ImportProduct'
 
 const TABLE_HEAD = [
-	{ head: 'ID', customeStyle: '!text-left w-[10%]', key: 'Id' },
-	{ head: 'Date', customeStyle: 'text-left w-[20%]', key: 'date' },
+	{ head: 'ID', customeStyle: '!text-left w-[13%]', key: 'id' },
+	{ head: 'Date', customeStyle: 'text-left w-[15%]', key: 'date' },
+	{ head: 'Address', customeStyle: 'text-center w-[30%]', key: 'location' },
 	{ head: 'Quantity', customeStyle: 'text-right w-[10%]', key: 'quantity' },
-	{ head: 'Address', customeStyle: 'text-center w-[40%]', key: 'location' },
-	{ head: 'Actions', customeStyle: 'text-right w-[20%]', key: 'actions' },
+	{ head: 'UnitPrice', customeStyle: 'text-right w-[10%]', key: 'unitPrice' },
+	{ head: 'Total Price', customeStyle: 'text-right w-[12%]', key: 'totalPrice' },
+	{ head: 'Actions', customeStyle: 'text-right w-[10%]', key: 'actions' },
 ]
 
 const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }) => {
@@ -24,17 +28,13 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [tableRows, setTableRows] = useState([])
-	const [productId, setProductId] = useState()
-	const [selectedImport, setSelectedImport] = useState(null)
-	const [openStockHistoryPage, setOpenStockHistoryPage] = useState(null)
-	const [variant, setVariant] = useState([])
 	const [openAddPage, setOpenAddPage] = useState(false)
 
 	useEffect(() => {
 		setTableRows(stockHistoryData)
 	}, [open])
 
-	const sanitizeNumeric = (value) => parseFloat(value.replace(/[^0-9.-]+/g, '') || 0)
+	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '') || 0)
 
 	const sortedRows = [...tableRows].sort((a, b) => {
 		if (!sortColumn) return 0
@@ -42,7 +42,7 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 		let valueA = a[sortColumn]
 		let valueB = b[sortColumn]
 
-		if (sortColumn === 'price' || sortColumn === 'quantity') {
+		if (sortColumn === 'quantity' || sortColumn === 'unitPrice' || sortColumn === 'totalPrice') {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -95,17 +95,6 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 		return pageNumbers
 	}
 
-	const handleOpenStockHistory = async (variantId) => {
-		setSelectedImport(variantId)
-		const data = await ImportProductService.GET_STOCK_HISTORY(variantId)
-		console.log(data)
-		if (data) {
-			setVariant(data)
-		}
-
-		setOpenStockHistoryPage(true)
-	}
-
 	const handleImport = async (formData) => {
 		const data = await ImportProductService.IMPORT_PRODUCT(formData)
 
@@ -124,7 +113,7 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 			</DialogHeader>
 			<DialogBody divider className=' max-h-[80vh] overflow-auto'>
 				<div className='flex justify-between mb-4'>
-					<Button onClick={() => setOpenAddPage(true)}>Add Variant</Button>
+					<Button onClick={() => setOpenAddPage(true)}>Import Product</Button>
 					{openAddPage && (
 						<ImportProduct
 							open={openAddPage}
@@ -159,20 +148,26 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 							<tr className={`border-gray-300 `}>
 								<td className='p-4'>{row.id}</td>
 								<td className='p-4 text-left'>{row.date.split('T')[0]}</td>
-								<td className='p-4 text-right'>{row.quantity}</td>
 								<td className='p-4 text-left break-words whitespace-normal'>{row.location}</td>
+								{row.id.includes('Import') ? (
+									<td className='p-4 text-right'>+ {row.quantity}</td>
+								) : (
+									<td className='p-4 text-right'>- {row.quantity}</td>
+								)}
+								<td className='p-4 text-right'>{row.unitPrice}</td>
+								<td className='p-4 text-right'>{row.unitPrice * row.quantity}</td>
 
 								<td className='p-4 text-right'>
 									<div className='flex justify-end gap-4'>
 										{!row.isStopSelling && (
-											<Button
-												variant=''
-												title='View Stock History'
-												style={{ whiteSpace: 'normal' }}
-												onClick={() => handleOpenStockHistory(row.variantID)}
+											<IconButton
+												title='Update'
+												variant='text'
+												size='sm'
+												// onClick={() => handleOpenUpdate(row)}
 											>
-												View Stock History
-											</Button>
+												<PencilIcon className='h-5 w-5 text-gray-900' />
+											</IconButton>
 										)}
 									</div>
 								</td>
