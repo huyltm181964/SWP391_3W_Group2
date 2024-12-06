@@ -135,7 +135,13 @@ namespace API.DAO
                 VariantID = importDTO.VariantID,
                 ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}"
             };
+            
+            if (import != null)
+            {
+               variant.VariantQuantity += importDTO.Quantity;
+            }
 
+            db.ProductVariant.Update(variant);
             db.Import.Add(import);
             db.SaveChanges();
 

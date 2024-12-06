@@ -6,11 +6,11 @@ import { AccountService } from 'src/services/AccountService'
 import { AuthService } from 'src/services/AuthService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
 import ExportProduct from './ExportProduct/ExportProduct'
-import ImportProduct from './ImportProduct/ImportProduct'
+import ProductList from './ImportProduct/ProductList'
 import StaffStatistics from './StaffStatistics/StaffStatistics'
 
 const StaffDashboard = () => {
-	const [selectedPage, setSelectedPage] = useState(<ImportProduct />)
+	const [selectedPage, setSelectedPage] = useState(<ProductList />)
 	const [selectedPageKey, setSelectedPageKey] = useState('ImportProduct')
 	const [profile, setProfile] = useState({})
 
@@ -18,15 +18,15 @@ const StaffDashboard = () => {
 		setSelectedPage(page)
 		setSelectedPageKey(pageKey)
 	}
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		const data = await AccountService.GET_PROFILE()
-	// 		if (data) {
-	// 			setProfile(data)
-	// 		}
-	// 	}
-	// 	fetchData()
-	// }, [])
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await AccountService.GET_PROFILE()
+			if (data) {
+				setProfile(data)
+			}
+		}
+		fetchData()
+	}, [])
 
 	const LIST_ITEM_STYLES =
 		'text-gray-500 hover:text-white focus:text-white active:text-white hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'
@@ -67,7 +67,7 @@ const StaffDashboard = () => {
 					<ListItem
 						className={LIST_ITEM_STYLES}
 						selected={selectedPageKey === 'ImportProduct'}
-						onClick={() => handleSelectPage(<ImportProduct />, 'ImportProduct')}
+						onClick={() => handleSelectPage(<ProductList />, 'ImportProduct')}
 					>
 						<ListItemPrefix>
 							<ShoppingCartIcon className='h-5 w-5' />

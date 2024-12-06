@@ -1,9 +1,4 @@
-import {
-	ArrowLeftIcon,
-	ArrowRightIcon,
-	MagnifyingGlassIcon,
-	PencilIcon,
-} from '@heroicons/react/24/solid'
+import { ArrowRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import {
 	Button,
 	Card,
@@ -15,10 +10,10 @@ import {
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import CrudTabs from 'src/components/CrudTabs/CrudTabs'
-import { ProductManagementService } from 'src/services/ProductManagementService'
+import { ImportProductService } from 'src/services/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
-import ProductVariant from './ProductVariant'
+import VariantList from './VariantList'
 
 const TABLE_HEAD = [
 	{
@@ -63,7 +58,7 @@ const TABLE_HEAD = [
 	},
 ]
 
-function VariantManagement() {
+function ProductList() {
 	const [tableRows, setTableRows] = useState([])
 	const [categoryTab, setCategoryTab] = useState(0)
 	const [filteredRows, setFilteredRows] = useState([...tableRows])
@@ -78,8 +73,7 @@ function VariantManagement() {
 
 	useEffect(() => {
 		async function fetchProducts() {
-			const data = await ProductManagementService.GET_ALL()
-
+			const data = await ImportProductService.GET_ALL_PRODUCT()
 			if (data) {
 				const filteredData = data.filter((product) => product.productStatus !== 'Out of business')
 				setTableRows(filteredData)
@@ -162,7 +156,7 @@ function VariantManagement() {
 
 	const handleOpenVariant = async (productId) => {
 		setSelectedProduct(productId)
-		const data = await ProductManagementService.GET_DETAIL(productId)
+		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
 		console.log(data)
 		if (data) {
 			setProduct(data)
@@ -186,6 +180,7 @@ function VariantManagement() {
 								label='Search'
 								icon={<MagnifyingGlassIcon className='h-5 w-5' />}
 								value={searchTerm}
+								s
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
 						</div>
@@ -269,7 +264,7 @@ function VariantManagement() {
 						</tbody>
 					</table>
 					{openVariantPage && selectedProduct && (
-						<ProductVariant
+						<VariantList
 							open={openVariantPage}
 							handleClose={() => setOpenVariantPage(false)}
 							existingProduct={selectedProduct}
@@ -318,4 +313,4 @@ function VariantManagement() {
 	)
 }
 
-export default VariantManagement
+export default ProductList

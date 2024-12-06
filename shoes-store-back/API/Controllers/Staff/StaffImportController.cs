@@ -32,7 +32,7 @@ namespace API.Controllers.Staff
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("get-stock-history")]
+        [HttpGet("get-stock-history/{variantId}")]
         public IActionResult GetProductStockHistory(int variantId)
         {
             var response = importDAO.GetProductHistory(variantId);
@@ -40,7 +40,7 @@ namespace API.Controllers.Staff
         }
 
         [HttpPost("import-product")]
-        public IActionResult ImportProduct([FromBody] ImportDTO importDTO)
+        public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
         {
             var response = importDAO.AddImportProduct(importDTO);
             return StatusCode(response.StatusCode, response);
