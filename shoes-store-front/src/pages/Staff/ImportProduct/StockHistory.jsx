@@ -1,15 +1,14 @@
 import {
-	Button,
-	Dialog,
-	DialogBody,
-	DialogFooter,
-	DialogHeader,
-	Typography,
+    Button,
+    Dialog,
+    DialogBody,
+    DialogFooter,
+    DialogHeader,
+    Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
-import { GetImage } from 'src/utils/GetImage'
-import ProductList from './ProductList'
 import { ImportProductService } from 'src/services/ImportProductService'
+import ImportProduct from './ImportProduct'
 
 const TABLE_HEAD = [
 	{ head: 'ID', customeStyle: '!text-left w-[10%]', key: 'Id' },
@@ -29,6 +28,7 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 	const [selectedImport, setSelectedImport] = useState(null)
 	const [openStockHistoryPage, setOpenStockHistoryPage] = useState(null)
 	const [variant, setVariant] = useState([])
+	const [openAddPage, setOpenAddPage] = useState(false)
 
 	useEffect(() => {
 		setTableRows(stockHistoryData)
@@ -106,12 +106,34 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 		setOpenStockHistoryPage(true)
 	}
 
+	const handleImport = async (formData) => {
+		const data = await ImportProductService.IMPORT_PRODUCT(formData)
+
+		if (data) {
+			const variantID = formData.get('VariantID')
+			const updatedData = await ImportProductService.GET_STOCK_HISTORY(variantID)
+			setTableRows(updatedData)
+			setOpenAddPage(false)
+		}
+	}
+
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
 				<Typography variant='h4'>Stock History of variant id: {existingVariantId}</Typography>
 			</DialogHeader>
 			<DialogBody divider className=' max-h-[80vh] overflow-auto'>
+				<div className='flex justify-between mb-4'>
+					<Button onClick={() => setOpenAddPage(true)}>Add Variant</Button>
+					{openAddPage && (
+						<ImportProduct
+							open={openAddPage}
+							handleClose={() => setOpenAddPage(false)}
+							handleImport={handleImport}
+							existingVariantId={existingVariantId}
+						/>
+					)}
+				</div>
 				<table className='w-full table-fixed mt-4'>
 					<thead>
 						<tr>
