@@ -8,7 +8,7 @@ import {
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import { GetImage } from 'src/utils/GetImage'
-import ImportProduct from './ImportProduct'
+import ProductList from './ProductList'
 import { ImportProductService } from 'src/services/ImportProductService'
 
 const TABLE_HEAD = [

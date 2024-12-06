@@ -40,7 +40,7 @@ namespace API.Controllers.Staff
         }
 
         [HttpPost("import-product")]
-        public IActionResult ImportProduct([FromBody] ImportDTO importDTO)
+        public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
         {
             var response = importDAO.AddImportProduct(importDTO);
             return StatusCode(response.StatusCode, response);

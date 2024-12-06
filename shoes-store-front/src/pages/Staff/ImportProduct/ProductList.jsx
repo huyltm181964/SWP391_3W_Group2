@@ -13,7 +13,7 @@ import CrudTabs from 'src/components/CrudTabs/CrudTabs'
 import { ImportProductService } from 'src/services/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
-import ProductVariant from './ProductVariant'
+import VariantList from './VariantList'
 
 const TABLE_HEAD = [
 	{
@@ -58,7 +58,7 @@ const TABLE_HEAD = [
 	},
 ]
 
-function ImportProduct() {
+function ProductList() {
 	const [tableRows, setTableRows] = useState([])
 	const [categoryTab, setCategoryTab] = useState(0)
 	const [filteredRows, setFilteredRows] = useState([...tableRows])
@@ -264,7 +264,7 @@ function ImportProduct() {
 						</tbody>
 					</table>
 					{openVariantPage && selectedProduct && (
-						<ProductVariant
+						<VariantList
 							open={openVariantPage}
 							handleClose={() => setOpenVariantPage(false)}
 							existingProduct={selectedProduct}
@@ -313,4 +313,4 @@ function ImportProduct() {
 	)
 }
 
-export default ImportProduct
+export default ProductList

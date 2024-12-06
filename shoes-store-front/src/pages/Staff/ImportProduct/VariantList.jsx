@@ -8,7 +8,7 @@ import {
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import { GetImage } from 'src/utils/GetImage'
-import ImportProduct from './ImportProduct'
+import ProductList from './ProductList'
 import { ImportProductService } from 'src/services/ImportProductService'
 import StockHistory from './StockHistory'
 
@@ -19,10 +19,10 @@ const TABLE_HEAD = [
 	{ head: 'Color', customeStyle: 'text-right w-[15%]', key: 'color' },
 	{ head: 'Quantity', customeStyle: 'text-right w-[15%]', key: 'quantity' },
 	{ head: 'Selling Status', customeStyle: 'text-right w-[10%]', key: 'isStopSelling' },
-	{ head: 'Actions', customeStyle: 'text-right w-[20%]', key: 'actions' },
+	{ head: 'Actions', customeStyle: 'text-center w-[20%]', key: 'actions' },
 ]
 
-const ProductVariant = ({ open, handleClose, product }) => {
+const VariantList = ({ open, handleClose, product }) => {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
@@ -159,8 +159,8 @@ const ProductVariant = ({ open, handleClose, product }) => {
 								</td>
 								<td className='p-4 text-right'>{row.isStopSelling ? 'No' : 'Yes'}</td>
 
-								<td className='p-4 text-right'>
-									<div className='flex justify-end gap-4'>
+								<td className='p-4 text-center'>
+									<div className='flex justify-center gap-4'>
 										{!row.isStopSelling && (
 											<Button
 												variant='contained'
@@ -214,4 +214,4 @@ const ProductVariant = ({ open, handleClose, product }) => {
 	)
 }
 
-export default ProductVariant
+export default VariantList
