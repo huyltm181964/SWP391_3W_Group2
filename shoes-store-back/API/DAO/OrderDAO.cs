@@ -111,6 +111,7 @@ namespace API.DAO
             var listOder = db.Order
                              .Include(x => x.Account)
                              .Where(x => x.OrderStatus == orderStatus)
+                             .Include(x => x.OrderDetails).ThenInclude(x => x.Variant).ThenInclude(x => x.Product)
                              .ToList();
             return new ResponseMessage
             {

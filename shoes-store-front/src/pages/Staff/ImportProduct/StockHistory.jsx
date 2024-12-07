@@ -235,7 +235,11 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 				</div>
 			</DialogBody>
 			<DialogFooter>
-				<Button variant='text' onClick={handleClose}>
+				<Button
+					variant='text'
+					className='px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600'
+					onClick={handleClose}
+				>
 					Close
 				</Button>
 			</DialogFooter>
