@@ -2,14 +2,13 @@ import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import { AdjustmentsVerticalIcon, ChartBarIcon, ShoppingCartIcon } from '@heroicons/react/24/solid'
 import { Avatar, Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
+import NotificationBadge from 'src/components/Notification/NotificationBadge'
 import { AccountService } from 'src/services/User/AccountService'
 import { AuthService } from 'src/services/User/AuthService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
-import ExportProduct from './ExportProduct/ExportProduct'
+import OrderList from './ExportProduct/OrderList'
 import ProductList from './ImportProduct/ProductList'
 import StaffStatistics from './StaffStatistics/StaffStatistics'
-import NotificationBadge from 'src/components/Notification/NotificationBadge'
-import OrderList from './ExportProduct/OrderList'
 
 const StaffDashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<ProductList />)
