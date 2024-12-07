@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { ArrowUturnLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
 import {
 	Button,
 	Dialog,
@@ -198,26 +198,47 @@ const ProductVariant = ({ open, handleClose, product }) => {
 
 								<td className='p-4 text-right'>
 									<div className='flex justify-end gap-4'>
-										<IconButton
-											title='Update'
-											variant='text'
-											size='sm'
-											onClick={() => handleOpenUpdate(row)}
-										>
-											<PencilIcon className='h-5 w-5 text-gray-900' />
-										</IconButton>
-
-										<Confirmation
-											title='Are you sure?'
-											description='Do you really want to delete this item?'
-											handleConfirm={() => handleRemoveVariant(row.variantID)}
-										>
-											{(handleOpen) => (
-												<IconButton title='Delete' onClick={handleOpen} variant='text' size='sm'>
-													<TrashIcon className='h-5 w-5 text-gray-900' />
+										{!row.isStopSelling ? (
+											<>
+												<IconButton
+													title='Update'
+													variant='text'
+													size='sm'
+													onClick={() => handleOpenUpdate(row)}
+												>
+													<PencilIcon className='h-5 w-5 text-gray-900' />
 												</IconButton>
-											)}
-										</Confirmation>
+
+												<Confirmation
+													title='Are you sure?'
+													description='Do you really want to delete this item?'
+													handleConfirm={() => handleRemoveVariant(row.variantID)}
+												>
+													{(handleOpen) => (
+														<IconButton
+															title='Delete'
+															onClick={handleOpen}
+															variant='text'
+															size='sm'
+														>
+															<TrashIcon className='h-5 w-5 text-gray-900' />
+														</IconButton>
+													)}
+												</Confirmation>
+											</>
+										) : (
+											<Confirmation
+												title='Are you sure?'
+												description='Do you really want to restore this item?'
+												handleConfirm={() => handleRemoveVariant(row.variantID)}
+											>
+												{(handleOpen) => (
+													<IconButton title='Restore' onClick={handleOpen} variant='text' size='sm'>
+														<ArrowUturnLeftIcon className='h-5 w-5 text-gray-900' />
+													</IconButton>
+												)}
+											</Confirmation>
+										)}
 									</div>
 								</td>
 							</tr>
