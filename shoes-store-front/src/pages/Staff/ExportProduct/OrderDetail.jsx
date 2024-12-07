@@ -7,35 +7,30 @@ import {
 	Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
-import { ImportProductService } from 'src/services/Staff/ImportProductService'
+import Confirmation from 'src/components/Confirmation/Confirmation'
+import { ExportProductService } from 'src/services/Staff/ExportProductService'
 import { GetImage } from 'src/utils/GetImage'
-import StockHistory from './StockHistory'
 
 const TABLE_HEAD = [
-	{ head: 'VariantID', customeStyle: '!text-left w-[10%]', key: 'id' },
+	{ head: 'Variant ID', customeStyle: '!text-left w-[10%]', key: 'variantID' },
 	{ head: 'Image', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Size', customeStyle: 'text-right w-[15%]', key: 'size' },
-	{ head: 'Color', customeStyle: 'text-right w-[15%]', key: 'color' },
+	{ head: 'Variant Size', customeStyle: 'text-left w-[10%]', key: 'image' },
+	{ head: 'Variant Color', customeStyle: 'text-left w-[10%]', key: 'image' },
 	{ head: 'Quantity', customeStyle: 'text-right w-[15%]', key: 'quantity' },
-	{ head: 'Selling Status', customeStyle: 'text-right w-[10%]', key: 'isStopSelling' },
+	{ head: 'Unit Price', customeStyle: 'text-right w-[15%]', key: 'color' },
 	{ head: 'Actions', customeStyle: 'text-center w-[20%]', key: 'actions' },
 ]
 
-const VariantList = ({ open, handleClose, product }) => {
+const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) => {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [tableRows, setTableRows] = useState([])
-	const [productId, setProductId] = useState()
-	const [selectedVariant, setSelectedVariant] = useState(null)
-	const [openStockHistoryPage, setOpenStockHistoryPage] = useState(null)
-	const [stockHistoryData, setStockHistoryData] = useState([])
 
 	useEffect(() => {
-		setTableRows(product.productVariants)
-		setProductId(product)
-	}, [open])
+		setTableRows(orderDetailData)
+	}, [open, orderDetailData])
 
 	const sanitizeNumeric = (value) => parseFloat(value.replace(/[^0-9.-]+/g, '') || 0)
 
@@ -98,20 +93,21 @@ const VariantList = ({ open, handleClose, product }) => {
 		return pageNumbers
 	}
 
-	const handleOpenStockHistory = async (variantId) => {
-		setSelectedVariant(variantId)
-		const data = await ImportProductService.GET_STOCK_HISTORY(variantId)
-		if (data) {
-			setStockHistoryData(data)
-		}
+	const handleExportProduct = async (orderId, variantId) => {
+		const formBody = { orderID: orderId, variantID: variantId }
+		console.log(formBody)
+		await ExportProductService.EXPORT_PRODUCT(formBody)
+	}
 
-		setOpenStockHistoryPage(true)
+	const handleExportAllProduct = async (orderId) => {
+		await ExportProductService.EXPORT_ALL_PRODUCT(orderId)
+		handleClose()
 	}
 
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
-				<Typography variant='h4'>Variant List of {product.productName}</Typography>
+				<Typography variant='h4'>Order Detail of Order ID: {existingOrderId}</Typography>
 			</DialogHeader>
 			<DialogBody divider className=' max-h-[80vh] overflow-auto'>
 				<table className='w-full table-fixed mt-4'>
@@ -135,54 +131,48 @@ const VariantList = ({ open, handleClose, product }) => {
 						</tr>
 					</thead>
 					<tbody>
-						{paginatedRows.map((row) => (
-							<tr className={`border-gray-300 ${row.isStopSelling ? 'bg-red-100' : ''}`}>
-								<td className='p-4'>{row.variantID}</td>
-								<td className='p-4 '>
-									<img
-										className='aspect-square object-cover'
-										src={GetImage(row.variantImg)}
-										alt='row.variantImg'
-									/>
-								</td>
-								<td className='p-4 text-right'>{row.variantSize}</td>
-								<td className='p-4 text-right'>{row.variantColor}</td>
-								<td
-									className='p-4 text-right'
-									style={{
-										color: row.variantQuantity === 0 ? 'red' : 'inherit',
-									}}
-								>
-									{row.variantQuantity}
-								</td>
-								<td className='p-4 text-right'>{row.isStopSelling ? 'No' : 'Yes'}</td>
-
-								<td className='p-4 text-center'>
-									<div className='flex justify-center gap-4'>
-										{!row.isStopSelling && (
+						{paginatedRows.map((row) =>
+							!row.isExported ? (
+								<tr className='border-gray-300' key={row.variantID}>
+									<td className='p-4'>{row.variantID}</td>
+									<td className='p-4'>
+										<img
+											className='aspect-square object-cover'
+											src={GetImage(row.variant.variantImg)}
+											alt={row.variant.variantImg}
+										/>
+									</td>
+									<td className='p-4 text-right'>{row.variant.variantSize}</td>
+									<td className='p-4 text-right'>{row.variant.variantColor}</td>
+									<td className='p-4 text-right'>{row.quantity}</td>
+									<td className='p-4 text-right'>{row.unitPrice}</td>
+									<td className='p-4 text-center'>
+										<div className='flex justify-center gap-4'>
 											<Button
 												variant='contained'
-												onClick={() => handleOpenStockHistory(row.variantID)}
+												onClick={() => handleExportProduct(existingOrderId, row.variantID)}
 											>
-												View Stock
-												<br />
-												History
+												Export
 											</Button>
-										)}
-									</div>
-								</td>
-							</tr>
-						))}
+										</div>
+									</td>
+								</tr>
+							) : null
+						)}
 					</tbody>
 				</table>
-				{openStockHistoryPage && selectedVariant && (
-					<StockHistory
-						open={openStockHistoryPage}
-						handleClose={() => setOpenStockHistoryPage(false)}
-						existingVariantId={selectedVariant}
-						stockHistoryData={stockHistoryData}
-					/>
-				)}
+				<Confirmation
+					title='Are you sure?'
+					description='Do you really want to export all variant?'
+					handleConfirm={() => handleExportAllProduct(existingOrderId)}
+				>
+					{(handleOpen) => (
+						<Button className='w-full' onClick={handleOpen} variant='contained'>
+							Export All
+						</Button>
+					)}
+				</Confirmation>
+
 				<div className='flex justify-between items-center mt-4'>
 					<Button
 						onClick={() => handleChangePage(page - 1)}
@@ -216,4 +206,4 @@ const VariantList = ({ open, handleClose, product }) => {
 	)
 }
 
-export default VariantList
+export default OrderDetail

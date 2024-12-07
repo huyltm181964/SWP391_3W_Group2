@@ -9,6 +9,7 @@ import ExportProduct from './ExportProduct/ExportProduct'
 import ProductList from './ImportProduct/ProductList'
 import StaffStatistics from './StaffStatistics/StaffStatistics'
 import NotificationBadge from 'src/components/Notification/NotificationBadge'
+import OrderList from './ExportProduct/OrderList'
 
 const StaffDashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<ProductList />)
@@ -79,7 +80,7 @@ const StaffDashboard = () => {
 					<ListItem
 						className={LIST_ITEM_STYLES}
 						selected={selectedPageKey === 'ExportProduct'}
-						onClick={() => handleSelectPage(<ExportProduct />, 'ExportProduct')}
+						onClick={() => handleSelectPage(<OrderList />, 'ExportProduct')}
 					>
 						<ListItemPrefix>
 							<AdjustmentsVerticalIcon className='h-5 w-5' />
