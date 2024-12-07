@@ -3,7 +3,7 @@ import { Button, Input, Radio, Rating, Typography } from '@material-tailwind/rea
 import { enqueueSnackbar } from 'notistack'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { CartService } from 'src/services/CartService'
+import { CartService } from 'src/services/User/CartService'
 import { getAvarage } from 'src/utils/Calculator'
 import { GetImage } from 'src/utils/GetImage'
 

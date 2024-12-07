@@ -183,11 +183,10 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("AnswerDate")
+                    b.Property<DateTime?>("AnswerDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedDate")

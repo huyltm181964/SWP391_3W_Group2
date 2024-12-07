@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import CrudTabs from 'src/components/CrudTabs/CrudTabs'
-import { ProductManagementService } from 'src/services/ProductManagementService'
+import { ProductManagementService } from 'src/services/Admin/ProductManagementService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
 import AddProduct from './AddProduct'

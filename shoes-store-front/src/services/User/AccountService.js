@@ -1,6 +1,6 @@
-import { AccountRequest } from '../requests/AccountRequest'
-import axiosFormBody from '../utils/axiosFormBody'
-import axiosFormData from '../utils/axiosFormData'
+import { AccountRequest } from '../../requests/User/AccountRequest'
+import axiosFormBody from '../../utils/axiosFormBody'
+import axiosFormData from '../../utils/axiosFormData'
 
 export const AccountService = {
 	GET_PROFILE: async () =>
@@ -11,6 +11,6 @@ export const AccountService = {
 		await axiosFormData.put(AccountRequest.UPDATE_PROFILE, formData).then((response) => response),
 	ACTIVE_ACCOUNT: async () =>
 		await axiosFormBody.put(AccountRequest.ACTIVE_ACCOUNT).then((response) => response.data),
-	CONTACT_US: async (formData) =>
-		await axiosFormData.post(AccountRequest.CONTACT_US, formData).then((response) => response),
+	CONTACT_US: async (formBody) =>
+		await axiosFormBody.post(AccountRequest.CONTACT_US, formBody).then((response) => response),
 }

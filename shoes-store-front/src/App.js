@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 import Error404 from './components/Error/Error404'
@@ -17,11 +17,11 @@ import ContactUs from './pages/Guest/ContactUs'
 import Home from './pages/Guest/Home'
 import Product from './pages/Guest/Product'
 import ProductDetail from './pages/Guest/ProductDetail'
+import StaffDashboard from './pages/Staff/StaffDashboard'
 import Cart from './pages/User/Cart'
 import HistoryOrder from './pages/User/HistoryOrder'
 import Payment from './pages/User/Payment'
-import StaffDashboard from './pages/Staff/StaffDashboard'
-import { RoleRedirect, ProtectedRoute } from './utils/PrivateRoute'
+import { ProtectedRoute, RoleRedirect } from './utils/PrivateRoute'
 
 function App() {
 	const location = useLocation()

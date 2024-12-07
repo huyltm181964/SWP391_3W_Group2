@@ -2,11 +2,18 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Button, Rating, Typography } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
 import React from 'react'
-import { CommentService } from 'src/services/CommentService'
+import { CommentService } from 'src/services/User/CommentService'
 import { formatDateTimeWithLetterMonth } from 'src/utils/DateUtil'
 
 const UserReview = ({ comment }) => {
+	const isLoggedIn = !!localStorage.getItem('token')
+
 	const handleReport = async (accountID, productID) => {
+		if (!isLoggedIn) {
+			enqueueSnackbar('You need to login before report other comment', { variant: 'error' })
+			return
+		}
+
 		const formBody = {
 			accountID,
 			productID,

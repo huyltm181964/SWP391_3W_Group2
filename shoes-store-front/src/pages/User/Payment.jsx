@@ -2,7 +2,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { Card, CardBody, CardHeader, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { OrderService } from 'src/services/OrderService'
+import { OrderService } from 'src/services/User/OrderService'
 
 const Payment = () => {
 	const { id } = useParams()

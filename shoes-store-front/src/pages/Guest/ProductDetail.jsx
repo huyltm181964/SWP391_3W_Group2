@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import ProductDetailInformation from 'src/components/ProductDetail/ProductDetailInformation'
 import ReviewDialog from 'src/components/ProductDetail/ReviewDialog'
 import UserReview from 'src/components/ProductDetail/UserReview'
-import { ProductService } from 'src/services/ProductService'
+import { ProductService } from 'src/services/User/ProductService'
 
 const ProductDetail = () => {
 	const { id } = useParams()

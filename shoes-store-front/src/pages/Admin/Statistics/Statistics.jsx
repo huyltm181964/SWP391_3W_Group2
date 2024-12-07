@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
-import { StatisticService } from 'src/services/StatisticService'
+import { StatisticService } from 'src/services/Admin/StatisticService'
 
 const Statistics = () => {
 	const [comments, setComments] = useState({ count: 0, percentage: 0, extra: 0 })

@@ -2,7 +2,7 @@ import { Button, Typography } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AuthService } from 'src/services/AuthService'
+import { AuthService } from 'src/services/User/AuthService'
 import axiosFormBody from 'src/utils/axiosFormBody'
 
 const OTP = () => {

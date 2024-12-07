@@ -4,7 +4,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import OrderCard from 'src/components/HistoryOrder/OrderCard'
-import { OrderService } from 'src/services/OrderService'
+import { OrderService } from 'src/services/User/OrderService'
 
 const HistoryOrder = () => {
 	const [historyOrder, setHistoryOrder] = useState([])

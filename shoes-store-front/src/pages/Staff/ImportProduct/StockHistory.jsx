@@ -9,7 +9,7 @@ import {
 	Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
-import { ImportProductService } from 'src/services/ImportProductService'
+import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import ImportProduct from './ImportProduct'
 
 const TABLE_HEAD = [

@@ -3,5 +3,4 @@ export const AccountRequest = {
 	CHANGE_PASSWORD: '/account/change-password',
 	UPDATE_PROFILE: '/account/update-profile',
 	ACTIVE_ACCOUNT: '/account/active',
-	CONTACT_US: '/account/contact',
 }

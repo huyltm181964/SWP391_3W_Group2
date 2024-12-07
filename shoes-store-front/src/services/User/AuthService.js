@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { AuthRequest } from '../requests/AuthRequest'
-import axiosFormBody from '../utils/axiosFormBody'
+import { AuthRequest } from '../../requests/User/AuthRequest'
+import axiosFormBody from '../../utils/axiosFormBody'
 
 export const AuthService = {
 	LOGIN: async (formBody) =>

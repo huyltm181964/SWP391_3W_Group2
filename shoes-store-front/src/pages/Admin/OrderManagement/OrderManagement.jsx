@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
-import { OrderManagementService } from 'src/services/OrderManagementService'
+import { OrderManagementService } from 'src/services/Admin/OrderManagementService'
 import { orderStatusEnum } from 'src/utils/EnumList'
 
 const TABLE_HEAD = [

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ShoesDbContext))]
-    [Migration("20241204133931_new")]
+    [Migration("20241206210412_new")]
     partial class @new
     {
         /// <inheritdoc />
@@ -186,11 +186,10 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("AnswerDate")
+                    b.Property<DateTime?>("AnswerDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedDate")
