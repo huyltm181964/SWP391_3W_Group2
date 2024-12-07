@@ -18,7 +18,7 @@ const NotificationDialog = ({ notificationID, handleClose }) => {
 		fetch()
 	}, [notificationID])
 	return (
-		<Dialog open={!!notification}>
+		<Dialog open={!!notification} handler={handleClose}>
 			<DialogHeader className='flex items-center justify-center'>
 				<Typography variant='h6' className='flex-grow'>
 					Notification: #{notificationID}
@@ -31,7 +31,9 @@ const NotificationDialog = ({ notificationID, handleClose }) => {
 				<Typography variant='h6' className='font-bold'>
 					{notification?.title}
 				</Typography>
-				<Typography variant='paragraph'>{notification?.description}</Typography>
+				<Typography variant='paragraph' className='whitespace-pre-wrap'>
+					{notification?.description}
+				</Typography>
 			</DialogBody>
 		</Dialog>
 	)
