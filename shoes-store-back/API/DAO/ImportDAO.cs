@@ -87,8 +87,20 @@ namespace API.DAO
                 Location = x.ImportLocation,
                 Date = x.ImportDate,
                 Quantity = x.Quantity,
+                UnitPrice = x.ImportPrice,
                 Type = "Import"
             }));
+
+            var exportWithPrice = db.Export
+             .Include(e => e.ProductVariant) 
+                 .ThenInclude(pv => pv.Product) 
+             .Select(e => new
+             {
+                 ProductPrice = e.ProductVariant.Product.ProductPrice
+             })
+             .FirstOrDefault();
+
+
 
             stocks.AddRange(exports.Select(x => new StockResponse
             {
@@ -96,6 +108,7 @@ namespace API.DAO
                 Location = x.ExportLocation,
                 Date = x.ExportDate,
                 Quantity = x.Quantity,
+                UnitPrice = exportWithPrice.ProductPrice,
                 Type = "Export"
             }));
 

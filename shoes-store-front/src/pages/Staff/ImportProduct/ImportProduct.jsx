@@ -37,11 +37,36 @@ const ImportProduct = ({ open, handleClose, handleImport, existingVariantId }) =
 
 	const validate = () => {
 		const newErrors = {}
-		if (!values.quantity) newErrors.quantity = 'Quantity is required.'
-		if (!values.importPrice) newErrors.importPrice = 'Price is required.'
-		if (!values.city) newErrors.city = 'City is required.'
-		if (!values.district) newErrors.district = 'District is required.'
-		if (!values.ward) newErrors.ward = 'Ward is required.'
+
+		if (!values.quantity) {
+			newErrors.quantity = 'Quantity is required.'
+		} else if (!Number.isInteger(Number(values.quantity))) {
+			newErrors.quantity = 'Quantity must be an integer.'
+		} else if (Number(values.quantity) <= 0) {
+			newErrors.quantity = 'Quantity must be a positive integer.'
+		}
+
+		if (!values.importPrice) {
+			newErrors.importPrice = 'Price is required.'
+		} else if (Number(values.importPrice) <= 0) {
+			newErrors.importPrice = 'Price must be a positive number.'
+		}
+
+		if (!values.addressDetail) {
+			newErrors.addressDetail = 'Address detail is required.'
+		}
+
+		if (!values.city) {
+			newErrors.city = 'City is required.'
+		}
+
+		if (!values.district) {
+			newErrors.district = 'District is required.'
+		}
+
+		if (!values.ward) {
+			newErrors.ward = 'Ward is required.'
+		}
 
 		setErrors(newErrors)
 		return Object.keys(newErrors).length === 0
@@ -67,30 +92,43 @@ const ImportProduct = ({ open, handleClose, handleImport, existingVariantId }) =
 		<Dialog open={open} handler={handleClose} size='lg' className='rounded-md'>
 			<DialogHeader className='flex justify-between items-center'>
 				<Typography variant='h5' className='font-semibold'>
-					Add Variant
+					Import Product
 				</Typography>
 			</DialogHeader>
 			<DialogBody className='space-y-4 flex flex-col'>
-				<div>
-					<Input
-						label='Quantity'
-						name='quantity'
-						type='number'
-						value={values.quantity}
-						onChange={handleValueChange}
-						required
-						error={!!errors.quantity}
-					/>
-				</div>
-				<div>
-					<Input
-						label='Import Price'
-						name='importPrice'
-						value={values.importPrice}
-						onChange={handleValueChange}
-						required
-						error={!!errors.importPrice}
-					/>
+				<div className='flex justify-between'>
+					<div className='w-full pr-4'>
+						<Input
+							label='Quantity'
+							name='quantity'
+							type='number'
+							value={values.quantity}
+							onChange={handleValueChange}
+							required
+							error={!!errors.quantity}
+						/>
+						{errors.quantity && (
+							<Typography variant='small' color='red'>
+								{errors.quantity}
+							</Typography>
+						)}
+					</div>
+					<div className='w-full'>
+						<Input
+							label='Import Price'
+							name='importPrice'
+							type='number'
+							value={values.importPrice}
+							onChange={handleValueChange}
+							required
+							error={!!errors.importPrice}
+						/>
+						{errors.importPrice && (
+							<Typography variant='small' color='red'>
+								{errors.importPrice}
+							</Typography>
+						)}
+					</div>
 				</div>
 				<div>
 					<Input
@@ -101,7 +139,13 @@ const ImportProduct = ({ open, handleClose, handleImport, existingVariantId }) =
 						required
 						error={!!errors.addressDetail}
 					/>
+					{errors.addressDetail && (
+						<Typography variant='small' color='red'>
+							{errors.addressDetail}
+						</Typography>
+					)}
 				</div>
+
 				<LocationSelector values={values} setValues={setValues} errors={errors} />
 			</DialogBody>
 			<DialogFooter className='space-x-4'>
