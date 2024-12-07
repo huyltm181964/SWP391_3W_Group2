@@ -1,11 +1,10 @@
+import { CheckCircleIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { Button, Card, CardBody, IconButton, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
-import { AccountManagementService } from 'src/services/Admin/AccountManagementService'
 import { StaffManagementService } from 'src/services/Admin/StaffManagementService'
 import { GetImage } from 'src/utils/GetImage'
 import AddStaff from './AddStaff'
-import { CheckCircleIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import UpdateStaff from './UpdateStaff'
 
 const TABLE_HEAD = [
@@ -35,7 +34,6 @@ function StaffManagement() {
 			const data = await StaffManagementService.GET_ALL_STAFFS()
 			if (data) {
 				setTableRows(data)
-				console.log(data)
 			}
 		}
 		fetchAccounts()

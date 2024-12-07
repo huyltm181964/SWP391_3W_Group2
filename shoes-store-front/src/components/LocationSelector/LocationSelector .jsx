@@ -8,14 +8,10 @@ const LocationSelector = ({ values, setValues, errors }) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			try {
-				const response = await axios.get(
-					'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json'
-				)
-				setCities(response.data)
-			} catch (error) {
-				console.error('Error fetching data:', error)
-			}
+			const response = await axios.get(
+				'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json'
+			)
+			setCities(response.data)
 		}
 		fetchData()
 	}, [])

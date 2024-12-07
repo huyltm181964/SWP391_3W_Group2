@@ -1,11 +1,11 @@
 import {
-	Button,
-	Dialog,
-	DialogBody,
-	DialogFooter,
-	DialogHeader,
-	Input,
-	Typography,
+    Button,
+    Dialog,
+    DialogBody,
+    DialogFooter,
+    DialogHeader,
+    Input,
+    Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import LocationSelector from 'src/components/LocationSelector/LocationSelector '
@@ -29,9 +29,6 @@ const UpdateImportProduct = ({ open, handleClose, existingImportProduct, handleU
 			const ward = location[2] || ''
 			const addressDetail = location.slice(3).join(', ') || ''
 
-			console.log('city: ', city)
-			console.log('district: ', district)
-			console.log('ward: ', ward)
 			setValues({
 				importId: existingImportProduct.id || '',
 				importPrice: existingImportProduct.unitPrice || '',

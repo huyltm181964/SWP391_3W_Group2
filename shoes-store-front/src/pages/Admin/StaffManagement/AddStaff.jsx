@@ -108,7 +108,6 @@ const AddStaff = ({ open, handleClose, handleAddStaff }) => {
 			formData.append('Birthday', values.birthday)
 			formData.append('Phone', values.phone)
 			formData.append('AccountAddress', values.accountAddress)
-			console.log(formData)
 			handleAddStaff(formData)
 			handleClose()
 		}

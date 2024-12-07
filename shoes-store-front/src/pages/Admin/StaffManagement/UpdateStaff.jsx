@@ -40,7 +40,6 @@ const UpdateStaff = ({ open, handleClose, existingStaff, handleUpdateStaff }) =>
 				phone: existingStaff.phone || '',
 				accountAddress: existingStaff.accountAddress || '',
 			})
-			console.log(existingStaff)
 		}
 	}, [existingStaff])
 

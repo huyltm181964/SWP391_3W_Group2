@@ -6,9 +6,8 @@ import {
 	DialogBody,
 	DialogFooter,
 	DialogHeader,
-	IconButton,
 	Input,
-	Typography,
+	Typography
 } from '@material-tailwind/react'
 import { useEffect, useRef, useState } from 'react'
 import { categoriesList } from 'src/utils/EnumList'

@@ -7,9 +7,8 @@ import {
 	Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
-import { GetImage } from 'src/utils/GetImage'
-import ProductList from './ProductList'
 import { ImportProductService } from 'src/services/Staff/ImportProductService'
+import { GetImage } from 'src/utils/GetImage'
 import StockHistory from './StockHistory'
 
 const TABLE_HEAD = [
@@ -102,7 +101,6 @@ const VariantList = ({ open, handleClose, product }) => {
 	const handleOpenStockHistory = async (variantId) => {
 		setSelectedVariant(variantId)
 		const data = await ImportProductService.GET_STOCK_HISTORY(variantId)
-		console.log(data)
 		if (data) {
 			setStockHistoryData(data)
 		}

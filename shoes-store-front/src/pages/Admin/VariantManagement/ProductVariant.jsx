@@ -1,4 +1,4 @@
-import { HeartIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
 import {
 	Button,
 	Dialog,

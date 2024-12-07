@@ -112,7 +112,6 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 
 	const handleOpenUpdate = (importProduct, variantId) => {
 		setSelectedImport(importProduct)
-		console.log(importProduct)
 		setSelectedVariantId(variantId)
 		setOpenUpdatePage(true)
 	}
