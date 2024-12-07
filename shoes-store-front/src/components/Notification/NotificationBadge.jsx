@@ -14,9 +14,6 @@ const NotificationBadge = () => {
 	const [openDetail, setOpenDetail] = useState(false)
 	const [isEvent, setIsEvent] = useState(false)
 
-	const notificationRef = useRef(null)
-
-	useOutsideClick(notificationRef, () => setOpen(false))
 	useEffect(() => {
 		const fetch = async () => {
 			const data = await NotificationService.GET_ALL()
@@ -44,7 +41,11 @@ const NotificationBadge = () => {
 			{openDetail && (
 				<NotificationDialog handleClose={() => setOpenDetail(false)} notificationID={selectedId} />
 			)}
-			<div className='relative'>
+			<div
+				className='relative'
+				onMouseOver={() => setOpen(true)}
+				onMouseLeave={() => setOpen(false)}
+			>
 				<div className='flex items-center'>
 					<Badge
 						content={notifications?.filter((notification) => !notification?.isRead).length}
@@ -55,20 +56,15 @@ const NotificationBadge = () => {
 								: 'blue'
 						}
 					>
-						<IconButton
-							onClick={(e) => {
-								e.stopPropagation()
-								setOpen(!open)
-							}}
-							variant='text'
-						>
+						<IconButton size='lg' variant='text'>
 							<BellAlertIcon className='h-6 w-6' />
 						</IconButton>
 					</Badge>
 				</div>
 				<Card
-					ref={notificationRef}
-					className={`absolute z-50 right-0 w-96 shadow-gray-300 ${!open && 'hidden'}`}
+					className={`max-h-[300px] overflow-auto absolute z-50 right-0 w-96 shadow-gray-300 ${
+						!open && 'hidden'
+					}`}
 				>
 					<div className='flex justify-center items-center m-2 mb-0'>
 						<Typography variant='h6' className='font-bold flex-grow'>
@@ -92,7 +88,7 @@ const NotificationBadge = () => {
 								<ListItem
 									onClick={() => handleOpenDetail(notification.notificationID)}
 									key={notification?.notificationID}
-									className='flex gap-5 overflow-hidden'
+									className='flex gap-5 overflow-hidden h-max'
 								>
 									<Badge invisible={notification?.isRead}>
 										<IconButton className='w-8 h-8 rounded-full' ripple={false}>

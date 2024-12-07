@@ -8,6 +8,7 @@ import { GetImage, GetLogo } from 'src/utils/GetImage'
 import ExportProduct from './ExportProduct/ExportProduct'
 import ProductList from './ImportProduct/ProductList'
 import StaffStatistics from './StaffStatistics/StaffStatistics'
+import NotificationBadge from 'src/components/Notification/NotificationBadge'
 
 const StaffDashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<ProductList />)
@@ -96,8 +97,12 @@ const StaffDashboard = () => {
 					</ListItem>
 				</List>
 			</Card>
-
-			<div className='w-4/5 p-6 h-full ml-auto'>{selectedPage}</div>
+			<div className='w-4/5 p-6 h-full ml-auto'>
+				<div className='w-fit ml-auto'>
+					<NotificationBadge />
+				</div>
+				{selectedPage}
+			</div>
 		</div>
 	)
 }

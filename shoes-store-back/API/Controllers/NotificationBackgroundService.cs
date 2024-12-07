@@ -39,11 +39,11 @@ namespace API.Controllers
                 {
                     if (lastImport != null)
                     {
-                        notifyDescription += $"(#{variant.Product!.ProductID}) {variant.Product.ProductName} (Size: {variant.VariantSize} / {variant.VariantColor}) is almost out of stock and hasn't been import for {totalDays:N0} days.\n";
+                        notifyDescription += $"· (#{variant.Product!.ProductID}) {variant.Product.ProductName} (Size: {variant.VariantSize} / {variant.VariantColor}) is almost out of stock and hasn't been import for {totalDays:N0} days.\n";
                     }
                     else
                     {
-                        notifyDescription += $"(#{variant.Product!.ProductID}) {variant.Product.ProductName} (Size: {variant.VariantSize} / {variant.VariantColor}) hasn't never been import.\n";
+                        notifyDescription += $"· (#{variant.Product!.ProductID}) {variant.Product.ProductName} (Size: {variant.VariantSize} / {variant.VariantColor}) hasn't never been import.\n";
                     }
                 }
             });

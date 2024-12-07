@@ -19,7 +19,7 @@ namespace API.DAO
                 .FirstOrDefault(x => x.AccountID == accountID);
             return new ResponseMessage()
             {
-                Data = account?.Notifications ?? [],
+                Data = account?.Notifications.OrderByDescending(n => n.NotificationID).ToList() ?? [],
                 Message = "Success",
                 StatusCode = 200,
                 Success = true

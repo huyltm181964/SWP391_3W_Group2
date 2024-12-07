@@ -30,7 +30,8 @@ namespace API.Controllers.Staff
         public IActionResult Export([FromBody] ExportDTO dto)
         {
             var response = exportDAO.ExportOrderDetail(dto.OrderID, dto.VariantID);
-            if (response.Data != null) {
+            if (response.Data != null)
+            {
                 orderDAO.UpdateOrderStatus(dto.OrderID, response.Data.ToString()!);
             }
             return StatusCode(response.StatusCode, response);
@@ -40,7 +41,10 @@ namespace API.Controllers.Staff
         public IActionResult ExportAll([FromBody] int orderID)
         {
             var response = exportDAO.ExportAllOrderDetailInOrder(orderID);
-            orderDAO.UpdateOrderStatus(orderID, "Delivery");
+            if (response.StatusCode == 200)
+            {
+                orderDAO.UpdateOrderStatus(orderID, "Delivery");
+            }
             return StatusCode(response.StatusCode, response);
         }
     }
