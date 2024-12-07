@@ -138,7 +138,15 @@ namespace API.DAO
                 .FirstOrDefault(x => x.VariantID == variantID);
             if (checkDelete != null)
             {
-                checkDelete.IsStopSelling = true;
+                if (checkDelete.IsStopSelling.Equals(true))
+                {
+                    checkDelete.IsStopSelling = false;
+                }
+                else
+                {
+                    checkDelete.IsStopSelling = true;
+                }
+
                 db.ProductVariant.Update(checkDelete);
 
                 db.SaveChanges();

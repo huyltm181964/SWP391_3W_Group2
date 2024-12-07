@@ -1,4 +1,9 @@
-import { MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+import {
+	ArrowUturnLeftIcon,
+	MagnifyingGlassIcon,
+	PencilIcon,
+	TrashIcon,
+} from '@heroicons/react/24/solid'
 import {
 	Button,
 	Card,
@@ -272,28 +277,53 @@ function ProductManagement() {
 											{row.productStatus}
 										</td>
 										<td className='p-4 text-right'>
-											{row.productStatus !== 'Out of business' && (
-												<div className='flex justify-end gap-4'>
-													<IconButton
-														variant='text'
-														size='sm'
-														onClick={() => handleOpenUpdate(row)}
-													>
-														<PencilIcon className='h-5 w-5 text-gray-900' />
-													</IconButton>
+											<div className='flex justify-end gap-4'>
+												{row.productStatus !== 'Out of business' ? (
+													<>
+														<IconButton
+															variant='text'
+															size='sm'
+															onClick={() => handleOpenUpdate(row)}
+															title='Update'
+														>
+															<PencilIcon className='h-5 w-5 text-gray-900' />
+														</IconButton>
+														<Confirmation
+															title='Are you sure?'
+															description='Do you really want to delete this item?'
+															handleConfirm={() => handleRemoveProduct(row.productID)}
+														>
+															{(handleOpen) => (
+																<IconButton
+																	title='Delete'
+																	onClick={handleOpen}
+																	variant='text'
+																	size='sm'
+																>
+																	<TrashIcon className='h-5 w-5 text-gray-900' />
+																</IconButton>
+															)}
+														</Confirmation>
+													</>
+												) : (
 													<Confirmation
 														title='Are you sure?'
-														description='Do you really want to delete this item?'
+														description='Do you really want to restore this item?'
 														handleConfirm={() => handleRemoveProduct(row.productID)}
 													>
 														{(handleOpen) => (
-															<IconButton onClick={handleOpen} variant='text' size='sm'>
-																<TrashIcon className='h-5 w-5 text-gray-900' />
+															<IconButton
+																title='Restore'
+																onClick={handleOpen}
+																variant='text'
+																size='sm'
+															>
+																<ArrowUturnLeftIcon className='h-5 w-5 text-gray-900' />
 															</IconButton>
 														)}
 													</Confirmation>
-												</div>
-											)}
+												)}
+											</div>
 										</td>
 									</tr>
 								)
