@@ -42,7 +42,6 @@ namespace API.DAO
             }
         }
 
-
         public ResponseMessage GetDetail(int productId)
         {
             var product = db.Product
@@ -83,7 +82,7 @@ namespace API.DAO
 
             stocks.AddRange(imports.Select(x => new StockResponse
             {
-                Id = $"Import-{x.ImportID:D2}",
+                Id = x.ImportID,
                 Location = x.ImportLocation,
                 Date = x.ImportDate,
                 Quantity = x.Quantity,
@@ -91,24 +90,13 @@ namespace API.DAO
                 Type = "Import"
             }));
 
-            var exportWithPrice = db.Export
-             .Include(e => e.ProductVariant) 
-                 .ThenInclude(pv => pv.Product) 
-             .Select(e => new
-             {
-                 ProductPrice = e.ProductVariant.Product.ProductPrice
-             })
-             .FirstOrDefault();
-
-
-
             stocks.AddRange(exports.Select(x => new StockResponse
             {
-                Id = $"Export-{x.ExportID:D2}",
+                Id = x.ExportID,
                 Location = x.ExportLocation,
                 Date = x.ExportDate,
                 Quantity = x.Quantity,
-                UnitPrice = exportWithPrice.ProductPrice,
+                UnitPrice = 0,
                 Type = "Export"
             }));
 

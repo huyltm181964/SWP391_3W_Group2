@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from 'react'
 import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import ImportProduct from './ImportProduct'
+import UpdateImportProduct from './UpdateImportProduct'
 
 const TABLE_HEAD = [
 	{ head: 'ID', customeStyle: '!text-left w-[13%]', key: 'id' },
@@ -29,6 +30,9 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [tableRows, setTableRows] = useState([])
 	const [openAddPage, setOpenAddPage] = useState(false)
+	const [openUpdatePage, setOpenUpdatePage] = useState(false)
+	const [selectedImport, setSelectedImport] = useState(null)
+	const [selectedVariantId, setSelectedVariantId] = useState(null)
 
 	useEffect(() => {
 		setTableRows(stockHistoryData)
@@ -106,6 +110,23 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 		}
 	}
 
+	const handleOpenUpdate = (importProduct, variantId) => {
+		setSelectedImport(importProduct)
+		console.log(importProduct)
+		setSelectedVariantId(variantId)
+		setOpenUpdatePage(true)
+	}
+
+	const handleUpdateImport = async (formData) => {
+		const data = await ImportProductService.UPDATE_IMPORT_PRODUCT(formData)
+		if (data) {
+			const updatedData = await ImportProductService.GET_STOCK_HISTORY(selectedVariantId)
+			setTableRows(updatedData)
+			setSelectedImport(null)
+			setOpenUpdatePage(false)
+		}
+	}
+
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
@@ -146,25 +167,34 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 					<tbody>
 						{paginatedRows.map((row) => (
 							<tr className={`border-gray-300 `}>
-								<td className='p-4'>{row.id}</td>
+								<td className='p-4'>
+									{row.type}-{row.id}
+								</td>
 								<td className='p-4 text-left'>{row.date.split('T')[0]}</td>
 								<td className='p-4 text-left break-words whitespace-normal'>{row.location}</td>
-								{row.id.includes('Import') ? (
+								{row.type === 'Import' ? (
 									<td className='p-4 text-right'>+ {row.quantity}</td>
 								) : (
 									<td className='p-4 text-right'>- {row.quantity}</td>
 								)}
-								<td className='p-4 text-right'>{row.unitPrice}</td>
-								<td className='p-4 text-right'>{row.unitPrice * row.quantity}</td>
-
+								{row.type === 'Import' ? (
+									<td className='p-4 text-right'>{row.unitPrice}</td>
+								) : (
+									<td className='p-4 text-right'> </td>
+								)}
+								{row.type === 'Import' ? (
+									<td className='p-4 text-right'>{row.unitPrice * row.quantity}</td>
+								) : (
+									<td className='p-4 text-right'> </td>
+								)}
 								<td className='p-4 text-right'>
 									<div className='flex justify-end gap-4'>
-										{!row.isStopSelling && (
+										{row.type === 'Import' && (
 											<IconButton
 												title='Update'
 												variant='text'
 												size='sm'
-												// onClick={() => handleOpenUpdate(row)}
+												onClick={() => handleOpenUpdate(row, existingVariantId)}
 											>
 												<PencilIcon className='h-5 w-5 text-gray-900' />
 											</IconButton>
@@ -175,6 +205,15 @@ const StockHistory = ({ open, handleClose, existingVariantId, stockHistoryData }
 						))}
 					</tbody>
 				</table>
+
+				{openUpdatePage && selectedImport && (
+					<UpdateImportProduct
+						open={openUpdatePage}
+						handleClose={() => setOpenUpdatePage(false)}
+						existingImportProduct={selectedImport}
+						handleUpdateImport={handleUpdateImport}
+					/>
+				)}
 
 				<div className='flex justify-between items-center mt-4'>
 					<Button

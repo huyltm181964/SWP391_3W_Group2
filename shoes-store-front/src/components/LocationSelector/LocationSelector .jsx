@@ -61,6 +61,19 @@ const LocationSelector = ({ values, setValues, errors }) => {
 		}))
 	}
 
+	useEffect(() => {
+		if (values.city) {
+			const selectedCityData = cities.find((city) => city.Name === values.city)
+			setDistricts(selectedCityData?.Districts || [])
+			if (values.district) {
+				const selectedDistrictData = selectedCityData?.Districts.find(
+					(district) => district.Name === values.district
+				)
+				setWards(selectedDistrictData?.Wards || [])
+			}
+		}
+	}, [values.city, values.district, cities])
+
 	return (
 		<div className='flex justify-between gap-4'>
 			<div>
