@@ -1,4 +1,5 @@
-﻿using API.DAO;
+﻿using API.Controllers;
+using API.DAO;
 using API.Data;
 using API.Utils.MiddleWare;
 using API.Utils.Ultils;
@@ -37,6 +38,7 @@ namespace API
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddHttpContextAccessor();
+            services.AddHostedService<NotificationBackgroundService>();
             services.AddScoped<GlobalExceptionMiddleware>();
             services.AddScoped<JWTAuthenticationMiddleware>();
 
