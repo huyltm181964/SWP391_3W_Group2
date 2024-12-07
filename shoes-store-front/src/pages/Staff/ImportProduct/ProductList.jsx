@@ -157,7 +157,6 @@ function ProductList() {
 	const handleOpenVariant = async (productId) => {
 		setSelectedProduct(productId)
 		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
-		console.log(data)
 		if (data) {
 			setProduct(data)
 		}

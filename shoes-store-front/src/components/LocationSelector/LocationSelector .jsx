@@ -8,14 +8,10 @@ const LocationSelector = ({ values, setValues, errors }) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			try {
-				const response = await axios.get(
-					'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json'
-				)
-				setCities(response.data)
-			} catch (error) {
-				console.error('Error fetching data:', error)
-			}
+			const response = await axios.get(
+				'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json'
+			)
+			setCities(response.data)
 		}
 		fetchData()
 	}, [])
@@ -60,6 +56,19 @@ const LocationSelector = ({ values, setValues, errors }) => {
 			ward: wardName,
 		}))
 	}
+
+	useEffect(() => {
+		if (values.city) {
+			const selectedCityData = cities.find((city) => city.Name === values.city)
+			setDistricts(selectedCityData?.Districts || [])
+			if (values.district) {
+				const selectedDistrictData = selectedCityData?.Districts.find(
+					(district) => district.Name === values.district
+				)
+				setWards(selectedDistrictData?.Wards || [])
+			}
+		}
+	}, [values.city, values.district, cities])
 
 	return (
 		<div className='flex justify-between gap-4'>

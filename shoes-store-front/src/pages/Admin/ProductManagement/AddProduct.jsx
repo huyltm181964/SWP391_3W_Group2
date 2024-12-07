@@ -1,16 +1,16 @@
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import {
+	Avatar,
 	Button,
 	Dialog,
-	DialogHeader,
 	DialogBody,
 	DialogFooter,
+	DialogHeader,
+	IconButton,
 	Input,
 	Typography,
-	IconButton,
-	Avatar,
 } from '@material-tailwind/react'
-import { XMarkIcon, PlusIcon } from '@heroicons/react/24/solid'
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import { categoriesList } from 'src/utils/EnumList'
 
 const AddProduct = ({ open, handleClose, handleAddProduct }) => {

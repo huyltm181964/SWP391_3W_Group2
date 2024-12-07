@@ -8,16 +8,16 @@ import {
 	UserGroupIcon,
 } from '@heroicons/react/24/solid'
 import { Avatar, Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react'
-import Statistics from './Statistics/Statistics'
-import ProductManagement from './ProductManagement/ProductManagement'
-import VariantManagement from './VariantManagement/VariantManagement'
-import OrderManagement from './OrderManagement/OrderManagement'
-import AccountManagement from './AccountManagement/AccountManagement'
 import { useEffect, useState } from 'react'
-import { AuthService } from 'src/services/User/AuthService'
 import { AccountService } from 'src/services/User/AccountService'
+import { AuthService } from 'src/services/User/AuthService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
+import AccountManagement from './AccountManagement/AccountManagement'
+import OrderManagement from './OrderManagement/OrderManagement'
+import ProductManagement from './ProductManagement/ProductManagement'
 import StaffManagement from './StaffManagement/StaffManagement'
+import Statistics from './Statistics/Statistics'
+import VariantManagement from './VariantManagement/VariantManagement'
 
 const Dashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<Statistics />)

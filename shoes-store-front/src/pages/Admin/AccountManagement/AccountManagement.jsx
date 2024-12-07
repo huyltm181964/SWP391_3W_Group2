@@ -1,11 +1,9 @@
+import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { Button, Card, CardBody, IconButton, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
 import { AccountManagementService } from 'src/services/Admin/AccountManagementService'
 import { GetImage } from 'src/utils/GetImage'
-import StaffManagement from '../StaffManagement/StaffManagement'
-import { StaffManagementService } from 'src/services/Admin/StaffManagementService'
-import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 const TABLE_HEAD = [
 	{ head: 'Id', customeStyle: '!text-left w-[5%]', key: 'accountID' },
@@ -32,7 +30,6 @@ function AccountManagement() {
 			const data = await AccountManagementService.GET_ALL()
 			if (data) {
 				setTableRows(data)
-				console.log(data)
 			}
 		}
 		fetchAccounts()

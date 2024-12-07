@@ -2,7 +2,7 @@
 {
     public class StockResponse
     {
-        public string? Id { get; set; }
+        public int? Id { get; set; }
         public string? Location { get; set; }
         public DateTime? Date { get; set; }
         public int? Quantity { get; set; }
