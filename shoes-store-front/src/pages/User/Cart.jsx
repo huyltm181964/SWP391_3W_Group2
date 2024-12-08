@@ -84,15 +84,17 @@ const Cart = () => {
 
 	return (
 		<section className='p-4'>
-			<h2 class='text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl'>Shopping Cart</h2>
+			<h2 className='text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl'>
+				Shopping Cart
+			</h2>
 
-			<div class='mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8'>
-				<div class='mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl'>
-					<div class='space-y-6'>
+			<div className='mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8'>
+				<div className='mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl'>
+					<div className='space-y-6'>
 						{cartItems?.length !== 0 ? (
 							cartItems.map((cartItem) => (
-								<div class='rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6'>
-									<div class='space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0'>
+								<div className='rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6'>
+									<div className='space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0'>
 										<Checkbox
 											id={`checkbox-${cartItem.variantID}`}
 											checked={selectedVariants.includes(cartItem.variantID)}
@@ -101,11 +103,11 @@ const Cart = () => {
 											className='w-6 h-6 md:order-1'
 										/>
 										<div className='w-1/6'>
-											<img class='w-full' src={GetImage(cartItem.variant?.variantImg)} />
+											<img alt='' className='w-full' src={GetImage(cartItem.variant?.variantImg)} />
 										</div>
 
-										<div class='flex items-center justify-between w-2/6 md:order-3 md:justify-end gap-3'>
-											<div class='flex items-center justify-between w-1/2'>
+										<div className='flex items-center justify-between w-2/6 md:order-3 md:justify-end gap-3'>
+											<div className='flex items-center justify-between w-1/2'>
 												<button
 													type='button'
 													id='decrement-button'
@@ -113,10 +115,10 @@ const Cart = () => {
 														handleUpdateItem(cartItem.variantID, cartItem.quantity - 1)
 													}
 													data-input-counter-decrement='counter-input'
-													class='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700'
+													className='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700'
 												>
 													<svg
-														class='h-2.5 w-2.5 text-gray-900 dark:text-white'
+														className='h-2.5 w-2.5 text-gray-900 dark:text-white'
 														aria-hidden='true'
 														xmlns='http://www.w3.org/2000/svg'
 														fill='none'
@@ -135,7 +137,7 @@ const Cart = () => {
 													type='text'
 													id='counter-input'
 													data-input-counter
-													class='w-20 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white'
+													className='w-20 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white'
 													placeholder=''
 													value={cartItem.quantity}
 													required
@@ -147,10 +149,10 @@ const Cart = () => {
 														handleUpdateItem(cartItem.variantID, cartItem.quantity + 1)
 													}
 													data-input-counter-increment='counter-input'
-													class='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700'
+													className='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700'
 												>
 													<svg
-														class='h-2.5 w-2.5 text-gray-900 dark:text-white'
+														className='h-2.5 w-2.5 text-gray-900 dark:text-white'
 														aria-hidden='true'
 														xmlns='http://www.w3.org/2000/svg'
 														fill='none'
@@ -166,27 +168,27 @@ const Cart = () => {
 													</svg>
 												</button>
 											</div>
-											<div class='text-end md:order-4 md:w-1/2'>
-												<p class='text-base font-bold text-gray-900 dark:text-white'>
+											<div className='text-end md:order-4 md:w-1/2'>
+												<p className='text-base font-bold text-gray-900 dark:text-white'>
 													${cartItem.totalItemPrice}
 												</p>
 											</div>
 										</div>
 
-										<div class='w-3/6 min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md'>
-											<p class='text-base font-medium text-gray-900 '>
+										<div className='w-3/6 min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md'>
+											<p className='text-base font-medium text-gray-900 '>
 												{cartItem.variant?.product?.productName}{' '}
 												{`(Size: ${cartItem.variant?.variantSize} | Color: ${cartItem.variant?.variantColor})`}
 											</p>
 
-											<div class='flex items-center gap-4'>
+											<div className='flex items-center gap-4'>
 												<button
 													type='button'
 													onClick={() => handleRemoveItem(cartItem.variantID)}
-													class='inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500'
+													className='inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500'
 												>
 													<svg
-														class='me-1.5 h-5 w-5'
+														className='me-1.5 h-5 w-5'
 														aria-hidden='true'
 														xmlns='http://www.w3.org/2000/svg'
 														width='24'
@@ -217,47 +219,49 @@ const Cart = () => {
 					</div>
 				</div>
 
-				<div class='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'>
+				<div className='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'>
 					<form
 						onSubmit={handleCheckout}
-						class='space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6'
+						className='space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6'
 					>
-						<p class='text-xl font-semibold text-gray-900 dark:text-white'>Order summary</p>
+						<p className='text-xl font-semibold text-gray-900 dark:text-white'>Order summary</p>
 
-						<div class='space-y-4'>
+						<div className='space-y-4'>
 							<Input
 								label='Address'
 								value={orderAddress}
 								required
 								onChange={(e) => setOrderAddress(e.target.value)}
 							/>
-							<dl class='flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700'>
-								<dt class='text-base font-bold text-gray-900 dark:text-white'>Quantity</dt>
-								<dd class='text-base font-bold text-gray-900 dark:text-white'>{totalQuantity}</dd>
+							<dl className='flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700'>
+								<dt className='text-base font-bold text-gray-900 dark:text-white'>Quantity</dt>
+								<dd className='text-base font-bold text-gray-900 dark:text-white'>
+									{totalQuantity}
+								</dd>
 							</dl>
-							<dl class='flex items-center justify-between gap-4'>
-								<dt class='text-base font-bold text-gray-900 dark:text-white'>Total</dt>
-								<dd class='text-base font-bold text-gray-900 dark:text-white'>${totalPrice}</dd>
+							<dl className='flex items-center justify-between gap-4'>
+								<dt className='text-base font-bold text-gray-900 dark:text-white'>Total</dt>
+								<dd className='text-base font-bold text-gray-900 dark:text-white'>${totalPrice}</dd>
 							</dl>
 						</div>
 
 						<button
 							type='submit'
-							class='flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
+							className='flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
 						>
 							Proceed to Checkout
 						</button>
 
-						<div class='flex items-center justify-center gap-2'>
-							<span class='text-sm font-normal text-gray-500 dark:text-gray-400'> or </span>
+						<div className='flex items-center justify-center gap-2'>
+							<span className='text-sm font-normal text-gray-500 dark:text-gray-400'> or </span>
 							<a
 								href='/product'
 								title=''
-								class='inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500'
+								className='inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500'
 							>
 								Continue Shopping
 								<svg
-									class='h-5 w-5'
+									className='h-5 w-5'
 									aria-hidden='true'
 									xmlns='http://www.w3.org/2000/svg'
 									fill='none'

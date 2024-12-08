@@ -1,11 +1,10 @@
 import { MinusCircleIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { BellAlertIcon, ChatBubbleBottomCenterIcon, CubeIcon } from '@heroicons/react/24/solid'
 import { Badge, Card, IconButton, List, ListItem, Typography } from '@material-tailwind/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NotificationService } from 'src/services/NotificationService'
-import useOutsideClick from 'src/utils/HandleClick/useOutsideClick'
-import NotificationDialog from './NotificationDialog'
 import Confirmation from '../Confirmation/Confirmation'
+import NotificationDialog from './NotificationDialog'
 
 const NotificationBadge = () => {
 	const [open, setOpen] = useState(false)

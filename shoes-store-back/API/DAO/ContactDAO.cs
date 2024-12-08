@@ -22,7 +22,7 @@ namespace API.DAO
             {
                 AccountID = accountID,
                 CreatedDate = DateTime.Now,
-                Title = contactUsDTO.Title,
+                Title = contactUsDTO.Name + " - " + contactUsDTO.Title,
                 Description = contactUsDTO.Description,
             };
 

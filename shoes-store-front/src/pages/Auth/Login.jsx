@@ -49,11 +49,11 @@ function Login() {
 			localStorage.setItem('token', token)
 			localStorage.setItem('role', role)
 			window.dispatchEvent(new Event('storage'))
-			if (role.toLowerCase() === 'User') {
+			if (role.toLowerCase() === 'user') {
 				navigate('/')
-			} else if (role.toLowerCase() === 'Staff') {
+			} else if (role.toLowerCase() === 'staff') {
 				navigate('/staff/dashboard')
-			} else if (role.toLowerCase() === 'Admin') {
+			} else if (role.toLowerCase() === 'admin') {
 				navigate('/dashboard')
 			} else {
 				navigate('/auth/login')
@@ -93,9 +93,11 @@ function Login() {
 				localStorage.setItem('token', token)
 				localStorage.setItem('role', role)
 				window.dispatchEvent(new Event('storage'))
-				if (role == 'User') {
+				if (role.toLowerCase() === 'user') {
 					navigate('/')
-				} else if (role == 'Admin') {
+				} else if (role.toLowerCase() === 'staff') {
+					navigate('/staff/dashboard')
+				} else if (role.toLowerCase() === 'admin') {
 					navigate('/dashboard')
 				} else {
 					navigate('/auth/login')
