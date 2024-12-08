@@ -16,7 +16,9 @@ namespace API.DAO
 
         public ResponseMessage ExportAllOrderDetailInOrder(int orderID)
         {
-            var order = db.Order.FirstOrDefault(o => o.OrderID == orderID);
+            var order = db.Order
+                .Include(o => o.OrderDetails)
+                .FirstOrDefault(o => o.OrderID == orderID);
             if (order == null)
             {
                 return new ResponseMessage()
@@ -89,7 +91,9 @@ namespace API.DAO
 
         public ResponseMessage ExportOrderDetail(int orderID, int variantID)
         {
-            var order = db.Order.FirstOrDefault(o => o.OrderID == orderID);
+            var order = db.Order
+                .Include(o => o.OrderDetails)
+                .FirstOrDefault(o => o.OrderID == orderID);
             if (order == null)
             {
                 return new ResponseMessage()
