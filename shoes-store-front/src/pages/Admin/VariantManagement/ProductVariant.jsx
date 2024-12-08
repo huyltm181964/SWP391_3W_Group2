@@ -104,13 +104,11 @@ const ProductVariant = ({ open, handleClose, product }) => {
 	}
 
 	const handleAddVariant = async (formData) => {
-		const data = await VariantManagementService.ADD_VARIANT(formData)
+		await VariantManagementService.ADD_VARIANT(formData)
 
-		if (data) {
-			const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
-			setTableRows(updatedData.productVariants)
-			setOpenAddPage(false)
-		}
+		const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
+		setTableRows(updatedData.productVariants)
+		setOpenAddPage(false)
 	}
 
 	const handleOpenUpdate = (variant) => {
@@ -119,21 +117,19 @@ const ProductVariant = ({ open, handleClose, product }) => {
 	}
 
 	const handleUpdateVariant = async (formData) => {
-		const data = await VariantManagementService.UPDATE_VARIANT(formData)
-		if (data) {
-			const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
-			setTableRows(updatedData.productVariants)
-			selectedVariant(null)
-			setOpenUpdatePage(false)
-		}
+		await VariantManagementService.UPDATE_VARIANT(formData)
+
+		const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
+		setTableRows(updatedData.productVariants)
+		selectedVariant(null)
+		setOpenUpdatePage(false)
 	}
 
 	const handleRemoveVariant = async (variantId) => {
-		const data = await VariantManagementService.DELETE_VARIANT(variantId)
-		if (data) {
-			const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
-			setTableRows(updatedData.productVariants)
-		}
+		await VariantManagementService.DELETE_VARIANT(variantId)
+
+		const updatedData = await ProductManagementService.GET_DETAIL(product.productID)
+		setTableRows(updatedData.productVariants)
 	}
 
 	return (
@@ -194,7 +190,9 @@ const ProductVariant = ({ open, handleClose, product }) => {
 								>
 									{row.variantQuantity}
 								</td>
-								<td className='p-4 text-right'>{row.isStopSelling ? 'No' : 'Yes'}</td>
+								<td className='p-4 text-right'>
+									{row.isStopSelling ? 'Out of business' : 'In bussiness'}
+								</td>
 
 								<td className='p-4 text-right'>
 									<div className='flex justify-end gap-4'>

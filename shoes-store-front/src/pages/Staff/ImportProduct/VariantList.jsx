@@ -14,11 +14,10 @@ import StockHistory from './StockHistory'
 const TABLE_HEAD = [
 	{ head: 'VariantID', customeStyle: '!text-left w-[10%]', key: 'id' },
 	{ head: 'Image', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Size', customeStyle: 'text-right w-[15%]', key: 'size' },
-	{ head: 'Color', customeStyle: 'text-right w-[15%]', key: 'color' },
-	{ head: 'Quantity', customeStyle: 'text-right w-[15%]', key: 'quantity' },
-	{ head: 'Selling Status', customeStyle: 'text-right w-[10%]', key: 'isStopSelling' },
-	{ head: 'Actions', customeStyle: 'text-center w-[20%]', key: 'actions' },
+	{ head: 'Size', customeStyle: 'text-right w-[10%]', key: 'size' },
+	{ head: 'Color', customeStyle: 'text-right w-[10%]', key: 'color' },
+	{ head: 'Quantity', customeStyle: 'text-right w-[10%]', key: 'quantity' },
+	{ head: 'Actions', customeStyle: 'text-center w-[10%]', key: 'actions' },
 ]
 
 const VariantList = ({ open, handleClose, product }) => {
@@ -37,7 +36,7 @@ const VariantList = ({ open, handleClose, product }) => {
 		setProductId(product)
 	}, [open])
 
-	const sanitizeNumeric = (value) => parseFloat(value.replace(/[^0-9.-]+/g, '') || 0)
+	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '') || 0)
 
 	const sortedRows = [...tableRows].sort((a, b) => {
 		if (!sortColumn) return 0
@@ -45,7 +44,7 @@ const VariantList = ({ open, handleClose, product }) => {
 		let valueA = a[sortColumn]
 		let valueB = b[sortColumn]
 
-		if (sortColumn === 'price' || sortColumn === 'quantity') {
+		if (sortColumn === 'quantity') {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -136,7 +135,7 @@ const VariantList = ({ open, handleClose, product }) => {
 					</thead>
 					<tbody>
 						{paginatedRows.map((row) => (
-							<tr className={`border-gray-300 ${row.isStopSelling ? 'bg-red-100' : ''}`}>
+							<tr className={`border-gray-300 `}>
 								<td className='p-4'>{row.variantID}</td>
 								<td className='p-4 '>
 									<img
@@ -155,20 +154,17 @@ const VariantList = ({ open, handleClose, product }) => {
 								>
 									{row.variantQuantity}
 								</td>
-								<td className='p-4 text-right'>{row.isStopSelling ? 'No' : 'Yes'}</td>
 
 								<td className='p-4 text-center'>
 									<div className='flex justify-center gap-4'>
-										{!row.isStopSelling && (
-											<Button
-												variant='contained'
-												onClick={() => handleOpenStockHistory(row.variantID)}
-											>
-												View Stock
-												<br />
-												History
-											</Button>
-										)}
+										<Button
+											variant='contained'
+											onClick={() => handleOpenStockHistory(row.variantID)}
+										>
+											View Stock
+											<br />
+											History
+										</Button>
 									</div>
 								</td>
 							</tr>

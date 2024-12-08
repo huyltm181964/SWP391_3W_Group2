@@ -168,18 +168,26 @@ const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 					</select>
 					{errors.category && <Typography color='red'>{errors.category}</Typography>}
 				</div>
-				<div>
-					<Input
-						label='Description'
+				<div className="border">
+					<label htmlFor='description'>Description</label>
+					<textarea
+						id='description'
 						name='description'
 						value={values.description}
 						onChange={handleValueChange}
-						textarea
 						rows={3}
+						style={{
+							whiteSpace: 'pre-wrap',
+							overflowWrap: 'break-word',
+							width: '100%',
+						}}
 						required
-						error={!!errors.description}
 					/>
-					{errors.description && <Typography color='red'>{errors.description}</Typography>}
+					{errors.description && (
+						<Typography color='red' style={{ marginTop: '5px' }}>
+							{errors.description}
+						</Typography>
+					)}
 				</div>
 			</DialogBody>
 			<DialogFooter className='space-x-4'>

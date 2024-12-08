@@ -73,7 +73,6 @@ const LocationSelector = ({ values, setValues, errors }) => {
 	return (
 		<div className='flex justify-between gap-4'>
 			<div>
-				<label>City:</label>
 				<select
 					id='city'
 					value={values.city}
@@ -93,7 +92,6 @@ const LocationSelector = ({ values, setValues, errors }) => {
 			</div>
 
 			<div>
-				<label>District:</label>
 				<select
 					id='district'
 					value={values.district}
@@ -114,7 +112,6 @@ const LocationSelector = ({ values, setValues, errors }) => {
 			</div>
 
 			<div>
-				<label>Ward:</label>
 				<select
 					id='ward'
 					value={values.ward}

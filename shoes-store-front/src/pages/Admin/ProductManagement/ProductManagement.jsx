@@ -25,37 +25,33 @@ import UpdateProduct from './UpdateProduct'
 const TABLE_HEAD = [
 	{
 		head: 'ID',
-		customeStyle: '!text-left w-[7%]',
+		customeStyle: '!text-center w-[10%]',
 		key: 'productID',
 	},
 	{
 		head: 'Image',
-		customeStyle: '!text-left w-[13%]',
+		customeStyle: '!text-center w-[20%]',
 		key: 'image',
 	},
 	{
 		head: 'Name',
-		customeStyle: '!text-right w-[20%]',
+		customeStyle: '!text-center w-[15%]',
 		key: 'productName',
 	},
 	{
 		head: 'Price',
-		customeStyle: 'text-right w-[15%]',
+		customeStyle: 'text-center w-[15%]',
 		key: 'productPrice',
 	},
 	{
 		head: 'Category',
-		customeStyle: 'text-right w-[15%]',
+		customeStyle: 'text-center w-[15%]',
 		key: 'productCategory',
 	},
-	{
-		head: 'Description',
-		customeStyle: 'text-left w-[15%]',
-		key: 'productDescription',
-	},
+
 	{
 		head: 'Status',
-		customeStyle: 'text-right w-[10%]',
+		customeStyle: 'text-center w-[10%]',
 		key: 'productStatus',
 	},
 	{
@@ -164,30 +160,24 @@ function ProductManagement() {
 	}
 
 	const handleAddProduct = async (formData) => {
-		const data = await ProductManagementService.ADD_PRODUCT(formData)
-		if (data) {
-			const updatedData = await ProductManagementService.GET_ALL()
-			setTableRows(updatedData)
-			setOpenAddPage(false)
-		}
+		await ProductManagementService.ADD_PRODUCT(formData)
+		const updatedData = await ProductManagementService.GET_ALL()
+		setTableRows(updatedData)
+		setOpenAddPage(false)
 	}
 
 	const handleUpdateProduct = async (formData) => {
-		const data = await ProductManagementService.UPDATE_PRODUCT(formData)
-		if (data) {
-			const updatedData = await ProductManagementService.GET_ALL()
-			setTableRows(updatedData)
-			setSelectedProduct(null)
-			setOpenUpdatePage(false)
-		}
+		await ProductManagementService.UPDATE_PRODUCT(formData)
+		const updatedData = await ProductManagementService.GET_ALL()
+		setTableRows(updatedData)
+		setSelectedProduct(null)
+		setOpenUpdatePage(false)
 	}
 
 	const handleRemoveProduct = async (productId) => {
-		const data = await ProductManagementService.DELETE_PRODUCT(productId)
-		if (data) {
-			const updatedData = await ProductManagementService.GET_ALL()
-			setTableRows(updatedData)
-		}
+		await ProductManagementService.DELETE_PRODUCT(productId)
+		const updatedData = await ProductManagementService.GET_ALL()
+		setTableRows(updatedData)
 	}
 
 	return (
@@ -252,22 +242,17 @@ function ProductManagement() {
 											row.productStatus === 'Out of business' ? 'bg-red-100' : ''
 										}`}
 									>
-										<td className='p-4'>{row.productID}</td>
-										<td className='p-4'>
+										<td className='p-4 text-left'>{row.productID}</td>
+										<td className='p-4 text-center'>
 											<img
-												style={{
-													width: '120px',
-													height: '100px',
-													objectFit: 'contain',
-												}}
+												className='aspect-square object-cover'
 												src={GetImage(row.productImg)}
 												alt='Product Image'
 											/>
 										</td>
-										<td className='p-4 text-right'>{row.productName}</td>
-										<td className='p-4 text-right'>{row.productPrice}</td>
-										<td className='p-4 text-right'>{row.productCategory}</td>
-										<td className='p-4 break-words whitespace-normal'>{row.productDescription}</td>
+										<td className='p-4 text-left'>{row.productName}</td>
+										<td className='p-4 text-center'>{row.productPrice}</td>
+										<td className='p-4 text-center'>{row.productCategory}</td>
 										<td
 											className='p-4 text-right'
 											style={{
