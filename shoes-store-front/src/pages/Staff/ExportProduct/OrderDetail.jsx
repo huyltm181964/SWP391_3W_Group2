@@ -31,6 +31,7 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 	useEffect(() => {
 		setTableRows(orderDetailData)
 	}, [open, orderDetailData])
+
 	useEffect(() => {
 		if (tableRows.length > 0 && tableRows.every((row) => row.isExported)) {
 			handleClose()
