@@ -34,7 +34,7 @@ namespace API.DAO
 
         public ResponseMessage GetAllReportedComment()
         {
-            var reportedComments = db.Comment.Where(comment => comment.IsReported).ToList();
+            var reportedComments = db.Comment.Where(comment => comment.IsReported).Include(x=>x.Account).ToList();
             return new ResponseMessage
             {
                 Success = true,
