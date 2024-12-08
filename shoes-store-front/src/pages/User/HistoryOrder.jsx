@@ -39,19 +39,24 @@ const HistoryOrder = () => {
 
 	return (
 		<div className='p-4 flex flex-col gap-2'>
-			{historyOrder.length !== 0 ? (
-				historyOrder.map((order) => (
-					<OrderCard
-						open={open === order?.orderID}
-						handleCancel={handleCancel}
-						handleConfirm={handleConfirmOrder}
-						setOpen={handleOpen}
-						order={order}
-					/>
-				))
-			) : (
-				<Typography variant='h4'>No order has been placed</Typography>
-			)}
+			<h2 className='text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl'>
+				History Order
+			</h2>
+			<div className='ml-5'>
+				{historyOrder.length !== 0 ? (
+					historyOrder.map((order) => (
+						<OrderCard
+							open={open === order?.orderID}
+							handleCancel={handleCancel}
+							handleConfirm={handleConfirmOrder}
+							setOpen={handleOpen}
+							order={order}
+						/>
+					))
+				) : (
+					<Typography variant='h4'>No order has been placed</Typography>
+				)}
+			</div>
 		</div>
 	)
 }

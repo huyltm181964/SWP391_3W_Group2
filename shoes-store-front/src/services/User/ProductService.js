@@ -1,6 +1,5 @@
 import { ProductRequest } from 'src/requests/User/ProductRequest'
 import axiosFormBody from 'src/utils/axiosFormBody'
-import axiosFormData from 'src/utils/axiosFormData'
 
 export const ProductService = {
 	GET_ALL: async () =>

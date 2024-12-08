@@ -1,16 +1,14 @@
 import { Card, Radio } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AccountService } from 'src/services/User/AccountService'
-import { getDate, getDateFromDateTime, getOffsetDate } from 'src/utils/DateUtil'
+import { getDateFromDateTime, getOffsetDate } from 'src/utils/DateUtil'
 import { GetImage } from 'src/utils/GetImage'
 
 const UserProfile = () => {
 	const [profile, setProfile] = useState({})
 	const [imageFile, setImageFile] = useState(null)
 	const [imagePresentation, setImagePresentation] = useState(null)
-
-	const [updated, setUpdated] = useState(false)
 
 	const imageRef = useRef(null)
 
@@ -56,7 +54,6 @@ const UserProfile = () => {
 		if (data?.success) {
 			window.dispatchEvent(new Event('storage'))
 			enqueueSnackbar('Update profile successfully', { variant: 'success' })
-			setUpdated((prev) => !prev)
 		}
 	}
 
@@ -67,6 +64,7 @@ const UserProfile = () => {
 				<form onSubmit={handleSubmit} class='grid mx-auto mt-8'>
 					<div class='flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0'>
 						<img
+							alt=''
 							class='object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500'
 							src={imagePresentation ? imagePresentation : GetImage(profile.avatar)}
 						/>
