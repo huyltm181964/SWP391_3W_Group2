@@ -1,5 +1,5 @@
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
-import { AdjustmentsVerticalIcon, ChartBarIcon, ShoppingCartIcon } from '@heroicons/react/24/solid'
+import { AdjustmentsVerticalIcon, ArrowDownTrayIcon, ArrowUpTrayIcon, ChatBubbleLeftEllipsisIcon, ShoppingCartIcon } from '@heroicons/react/24/solid'
 import { Avatar, Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import NotificationBadge from 'src/components/Notification/NotificationBadge'
@@ -8,7 +8,7 @@ import { AuthService } from 'src/services/User/AuthService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
 import OrderList from './ExportProduct/OrderList'
 import ProductList from './ImportProduct/ProductList'
-import StaffStatistics from './StaffStatistics/StaffStatistics'
+import ReportCommentManagement from './ReportCommentManagement/ReportCommentManagement'
 
 const StaffDashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<ProductList />)
@@ -41,52 +41,54 @@ const StaffDashboard = () => {
 				</div>
 				<hr className='my-2 border-gray-800' />
 				<List>
-					<div className='mb-2 flex items-center gap-2 py-4'>
-						<ListItemPrefix>
-							<Avatar
-								size='sm'
-								className='aspect-square object-cover'
-								src={GetImage(profile.avatar)}
-							/>
-						</ListItemPrefix>
-						<Typography className='mr-auto font-normal text-white'>
-							{profile.accountName}
-						</Typography>
-					</div>
-					<hr className='my-2 border-gray-800' />
-					<ListItem
-						className={LIST_ITEM_STYLES}
-						selected={selectedPageKey === 'Statistic'}
-						onClick={() => handleSelectPage(<StaffStatistics />, 'Statistic')}
-					>
-						<ListItemPrefix>
-							<ChartBarIcon className='h-5 w-5' />
-						</ListItemPrefix>
-						Statistics
-					</ListItem>
+  <div className="mb-2 flex items-center gap-2 py-4">
+    <ListItemPrefix>
+      <Avatar
+        size="sm"
+        className="aspect-square object-cover"
+        src={GetImage(profile.avatar)}
+      />
+    </ListItemPrefix>
+    <Typography className="mr-auto font-normal text-white">
+      {profile.accountName}
+    </Typography>
+  </div>
+  <hr className="my-2 border-gray-800" />
 
-					<ListItem
-						className={LIST_ITEM_STYLES}
-						selected={selectedPageKey === 'ImportProduct'}
-						onClick={() => handleSelectPage(<ProductList />, 'ImportProduct')}
-					>
-						<ListItemPrefix>
-							<ShoppingCartIcon className='h-5 w-5' />
-						</ListItemPrefix>
-						Import Product
-					</ListItem>
+  <ListItem
+    className={LIST_ITEM_STYLES}
+    selected={selectedPageKey === 'ImportProduct'}
+    onClick={() => handleSelectPage(<ProductList />, 'ImportProduct')}
+  >
+    <ListItemPrefix>
+      <ArrowDownTrayIcon className="h-5 w-5" />
+    </ListItemPrefix>
+    Import Product
+  </ListItem>
 
-					<ListItem
-						className={LIST_ITEM_STYLES}
-						selected={selectedPageKey === 'ExportProduct'}
-						onClick={() => handleSelectPage(<OrderList />, 'ExportProduct')}
-					>
-						<ListItemPrefix>
-							<AdjustmentsVerticalIcon className='h-5 w-5' />
-						</ListItemPrefix>
-						Export Product
-					</ListItem>
-				</List>
+  <ListItem
+    className={LIST_ITEM_STYLES}
+    selected={selectedPageKey === 'ExportProduct'}
+    onClick={() => handleSelectPage(<OrderList />, 'ExportProduct')}
+  >
+    <ListItemPrefix>
+      <ArrowUpTrayIcon className="h-5 w-5" />
+    </ListItemPrefix>
+    Export Product
+  </ListItem>
+
+  <ListItem
+    className={LIST_ITEM_STYLES}
+    selected={selectedPageKey === 'Comment'}
+    onClick={() => handleSelectPage(<ReportCommentManagement />, 'Comment')}
+  >
+    <ListItemPrefix>
+      <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
+    </ListItemPrefix>
+    Comment Management
+  </ListItem>
+</List>
+
 				<hr className='my-2 border-gray-800' />
 				<List>
 					<ListItem onClick={() => AuthService.LOGOUT()} className={LIST_ITEM_STYLES}>

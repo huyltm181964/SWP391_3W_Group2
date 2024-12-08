@@ -95,11 +95,9 @@ function OrderManagement() {
 	}
 
 	const handleUpdateStatus = async (orderId, orderStatus) => {
-		const data = await OrderManagementService.UPDATE_ORDER(orderId, orderStatus)
-		if (data) {
-			const updatedData = await OrderManagementService.GET_DELIVERY_ORDER()
-			setTableRows(updatedData)
-		}
+		await OrderManagementService.UPDATE_ORDER(orderId, orderStatus)
+		const updatedData = await OrderManagementService.GET_DELIVERY_ORDER()
+		setTableRows(updatedData)
 	}
 
 	return (

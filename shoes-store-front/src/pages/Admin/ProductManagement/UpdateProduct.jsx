@@ -7,7 +7,7 @@ import {
 	DialogFooter,
 	DialogHeader,
 	Input,
-	Typography
+	Typography,
 } from '@material-tailwind/react'
 import { useEffect, useRef, useState } from 'react'
 import { categoriesList } from 'src/utils/EnumList'
@@ -171,16 +171,27 @@ const UpdateProduct = ({ open, handleClose, existingProduct, handleUpdateProduct
 					))}
 				</select>
 				{errors.category && <Typography color='red'>{errors.category}</Typography>}
-				<Input
-					label='Description'
-					name='description'
-					value={values.description}
-					onChange={handleValueChange}
-					textarea
-					rows={3}
-					error={Boolean(errors.description)}
-					helperText={errors.description}
-				/>
+				<div className='border'>
+					<label htmlFor='description'>Description</label>
+					<textarea
+						id='description'
+						name='description'
+						value={values.description}
+						onChange={handleValueChange}
+						rows={3}
+						style={{
+							whiteSpace: 'pre-wrap',
+							overflowWrap: 'break-word',
+							width: '100%',
+						}}
+						required
+					/>
+					{errors.description && (
+						<Typography color='red' style={{ marginTop: '5px' }}>
+							{errors.description}
+						</Typography>
+					)}
+				</div>
 			</DialogBody>
 			<DialogFooter className='space-x-4'>
 				<Button variant='text' color='gray' onClick={handleClose}>
