@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AccountService } from 'src/services/User/AccountService'
 import { AuthService } from 'src/services/User/AuthService'
 import { GetImage } from 'src/utils/GetImage'
-import NotificationBadge from '../Notification/NotificationBadge'
+import NotificationBadge from '../components/Notification/NotificationBadge'
 import useOutsideClick from 'src/utils/HandleClick/useOutsideClick'
 
 const HeaderLoggedin = () => {
@@ -108,6 +108,17 @@ const HeaderLoggedin = () => {
 										className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
 									>
 										History Order
+									</a>
+								</li>
+								<li>
+									<a
+										onClick={() => {
+											navigate('/account/history-contact')
+											setOpen(false)
+										}}
+										className='block px-4 py-2 select-none cursor-pointer text-sm text-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+									>
+										History Contact
 									</a>
 								</li>
 								<li>
