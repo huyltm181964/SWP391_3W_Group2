@@ -23,14 +23,14 @@ namespace API.Controllers.Staff
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("/unreport")]
+        [HttpPost("unreport")]
         public IActionResult UnreportComment([FromBody] CommentIdDTO commentIdDTO)
         {
             var response = commentDAO.UnreportComment(commentIdDTO.AccountID, commentIdDTO.ProductID);
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("/ban")]
+        [HttpPost("ban")]
         public IActionResult BanComment([FromBody] CommentBanDTO commentBanDTO)
         {
             var response = commentDAO.BanComment(commentBanDTO.CommentIdDTO.AccountID,
