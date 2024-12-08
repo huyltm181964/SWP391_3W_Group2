@@ -94,9 +94,7 @@ function OrderList() {
 		return pageNumbers
 	}
 	const handleOpenOrderDetail = async (order) => {
-		console.log('Order: ', order)
 		setSelectedOrderId(order.orderID)
-		console.log('Detail', order.orderDetails)
 		setOrderDetailData(order.orderDetails)
 		setOpenOrderDetailPage(true)
 	}
@@ -141,7 +139,7 @@ function OrderList() {
 										<td className='p-4 text-left break-words whitespace-normal'>
 											{row.account.accountEmail}
 										</td>
-										<td className='p-4 text-left'>{row.account.phone}</td>
+										<td className='p-4 text-center'>{row.phone || 'N/A'}</td>
 										<td className='p-4 text-left break-words whitespace-normal'>
 											{row.orderAddress}
 										</td>

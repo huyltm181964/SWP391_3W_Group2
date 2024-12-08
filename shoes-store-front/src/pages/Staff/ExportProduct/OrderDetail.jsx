@@ -31,6 +31,11 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 	useEffect(() => {
 		setTableRows(orderDetailData)
 	}, [open, orderDetailData])
+	useEffect(() => {
+		if (tableRows.length > 0 && tableRows.every((row) => row.isExported)) {
+			handleClose()
+		}
+	}, [tableRows, handleClose])
 
 	const sanitizeNumeric = (value) => parseFloat(value.replace(/[^0-9.-]+/g, '') || 0)
 
@@ -97,6 +102,9 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 		const formBody = { orderID: orderId, variantID: variantId }
 		console.log(formBody)
 		await ExportProductService.EXPORT_PRODUCT(formBody)
+		setTableRows((prevRows) =>
+			prevRows.map((row) => (row.variantID === variantId ? { ...row, isExported: true } : row))
+		)
 	}
 
 	const handleExportAllProduct = async (orderId) => {
