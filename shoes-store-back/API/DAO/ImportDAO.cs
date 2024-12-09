@@ -16,6 +16,7 @@ namespace API.DAO
             this.db = db;
         }
 
+        //Don gian de hieu
         public ResponseMessage GetProducts()
         {
 
@@ -29,6 +30,7 @@ namespace API.DAO
             };
         }
 
+        //Lay product detail thoi
         public ResponseMessage GetDetail(int productId)
         {
             var product = db.Product
@@ -45,28 +47,17 @@ namespace API.DAO
             };
         }
 
+        //Lấy 2 list import và export gộp thành 1
         public ResponseMessage GetProductHistory(int variantId)
         {
-            var checkDelete = db.ProductVariant
-                .Include(x => x.Product).ThenInclude(x => x.ProductVariants)
-                .FirstOrDefault(x => x.VariantID == variantId);
-
-            if (checkDelete == null)
-            {
-                return new ResponseMessage
-                {
-                    Success = false,
-                    Message = "Variant Not Found",
-                    Data = null,
-                    StatusCode = 404
-                };
-            }
-
+            //Lấy 2 list by variant id
             List<Import> imports = db.Import.Where(x => x.VariantID == variantId).ToList();
             List<Export> exports = db.Export.Where(x => x.VariantID == variantId).ToList();
 
+            //Tạo list StockResponse để gộp 2 list thành 1
             List<StockResponse> stocks = new List<StockResponse>();
 
+            //Gộp lại thành StockResponse
             stocks.AddRange(imports.Select(x => new StockResponse
             {
                 Id = x.ImportID,
@@ -77,6 +68,7 @@ namespace API.DAO
                 Type = "Import"
             }));
 
+            //Gộp lại thành StockResponse
             stocks.AddRange(exports.Select(x => new StockResponse
             {
                 Id = x.ExportID,
@@ -87,6 +79,7 @@ namespace API.DAO
                 Type = "Export"
             }));
 
+            //Order stocks by desc
             stocks = stocks.OrderByDescending(x => x.Date).ToList();
             return new ResponseMessage
             {
@@ -97,8 +90,10 @@ namespace API.DAO
             };
         }
 
+        //Nhập kho
         public ResponseMessage AddImportProduct(ImportDTO importDTO)
         {
+            //Nhập vào variant cụ thể
             var variant = db.ProductVariant
                 .Include(x => x.Product)
                 .ThenInclude(x => x.ProductVariants)
@@ -121,13 +116,11 @@ namespace API.DAO
                 Quantity = importDTO.Quantity,
                 ImportPrice = importDTO.ImportPrice,
                 VariantID = importDTO.VariantID,
-                ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}"
+                ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}" //Gộp tất cả thành location
             };
 
-            if (import != null)
-            {
-                variant.VariantQuantity += importDTO.Quantity;
-            }
+            //Sau khi nhập thì variant sẽ đc tăng quantity
+            variant.VariantQuantity += importDTO.Quantity;
 
             db.ProductVariant.Update(variant);
             db.Import.Add(import);
@@ -142,6 +135,7 @@ namespace API.DAO
             };
         }
 
+        //Cập nhật thông tin nhập kho
         public ResponseMessage UpdateImportProduct(UpdateImportDTO updateImportDTO)
         {
             var existingImport = db.Import
@@ -159,7 +153,7 @@ namespace API.DAO
             }
 
             existingImport.ImportPrice = updateImportDTO.ImportPrice;
-            existingImport.ImportLocation = $"{updateImportDTO.City}, {updateImportDTO.District}, {updateImportDTO.Ward}, {updateImportDTO.AddressDetail}";
+            existingImport.ImportLocation = $"{updateImportDTO.City}, {updateImportDTO.District}, {updateImportDTO.Ward}, {updateImportDTO.AddressDetail}"; //Gộp tất cả thành location
 
             db.Import.Update(existingImport);
             db.SaveChanges();

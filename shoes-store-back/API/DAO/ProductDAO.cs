@@ -21,16 +21,13 @@ namespace API.DAO
             this.env = env;
         }
 
-        /**
-         * Lấy danh sách sản phẩm và các bình luận liên quan.
-         * @return ResponseMessage: Kết quả chứa danh sách sản phẩm.
-         */
+        //Lấy cái list product thôi
         public ResponseMessage GetProducts()
         {
             // Lấy danh sách sản phẩm, bao gồm thông tin bình luận.
             var listProduct = db.Product.Include(x => x.Comments).ToList();
 
-            // Trả về kết quả thành công với danh sách sản phẩm.
+            // Trả về kết quả thành công
             return new ResponseMessage
             {
                 Success = true,
@@ -41,28 +38,17 @@ namespace API.DAO
         }
 
 
-        /**
-         * Thay đổi trạng thái kinh doanh của sản phẩm hoặc báo lỗi nếu không tìm thấy sản phẩm.
-         * @param productID: ID của sản phẩm cần xóa hoặc thay đổi trạng thái.
-         * @return ResponseMessage: Kết quả xử lý.
-         */
+        //Xóa product nhưng mà xóa mềm(Thật ra chỉ là update status thoi)
         public ResponseMessage DeleteProduct(int productID)
         {
             // Tìm sản phẩm theo ID.
             var getProduct = db.Product.FirstOrDefault(x => x.ProductID == productID);
             if (getProduct != null)
             {
-                // Thay đổi trạng thái sản phẩm giữa "Out of business" và "In business".
-                if (getProduct.ProductStatus.Equals("Out of business"))
-                {
-                    getProduct.ProductStatus = "In business";
-                }
-                else
-                {
-                    getProduct.ProductStatus = "Out of business";
-                }
+                //Chuyển status 
+                getProduct.ProductStatus = "Out of business";
 
-                // Cập nhật thay đổi trong cơ sở dữ liệu.
+                // Cập nhật thay đổi 
                 db.Product.Update(getProduct);
                 db.SaveChanges();
 
@@ -108,29 +94,25 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Thêm một sản phẩm mới vào cơ sở dữ liệu.
-         * @param Product: Thông tin sản phẩm cần thêm (AddProductDTO).
-         * @return ResponseMessage: Kết quả xử lý.
-         */
+        // doc ten ham cung du hieu
         public ResponseMessage AddProduct(AddProductDTO addProductDTO)
         {
-            // Kiểm tra dữ liệu sản phẩm đầu vào.
             if (addProductDTO == null)
             {
+            // Nếu rỗng => lỗi
                 return new ResponseMessage
                 {
                     Success = false,
-                    Message = "Bad Request",  // Dữ liệu không hợp lệ.
+                    Message = "Bad Request",
                     Data = addProductDTO,
                     StatusCode = (int)HttpStatusCode.BadRequest
                 };
             }
 
-            // Lưu hình ảnh sản phẩm và lấy đường dẫn.
+            // Lưu hình ảnh product và lấy đường dẫn.
             var imageUrl = Ultils.SaveImage(addProductDTO.ProductImg, env);
 
-            // Tạo đối tượng sản phẩm mới từ dữ liệu đầu vào.
+           //Tạo product mới
             Product addProduct = new Product
             {
                 ProductName = addProductDTO.ProductName,
@@ -141,7 +123,6 @@ namespace API.DAO
                 ProductImg = imageUrl
             };
 
-            // Thêm sản phẩm vào cơ sở dữ liệu và lưu thay đổi.
             db.Product.Add(addProduct);
             db.SaveChanges();
 
@@ -155,18 +136,13 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Cập nhật thông tin sản phẩm trong cơ sở dữ liệu.
-         * @param updateProductDTO: Dữ liệu cập nhật sản phẩm (UpdateProductDTO).
-         * @return ResponseMessage: Kết quả xử lý.
-         */
         public ResponseMessage UpdateProduct(UpdateProductDTO updateProductDTO)
         {
             // Tìm sản phẩm cần cập nhật thông qua ID.
             var getProduct = db.Product.FirstOrDefault(x => x.ProductID == updateProductDTO.ProductID);
             if (getProduct == null)
-            {
-                // Trả về lỗi nếu không tìm thấy sản phẩm.
+            {   
+                //Nếu rỗng => lỗi
                 return new ResponseMessage
                 {
                     Success = false,
@@ -176,7 +152,7 @@ namespace API.DAO
                 };
             }
 
-            // Cập nhật thông tin sản phẩm, bao gồm ảnh nếu có.
+            // Cập nhật thông tin sản phẩm, bao gồm cả ảnh 
             getProduct.ProductImg = updateProductDTO.ProductImg != null ? Ultils.SaveImage(updateProductDTO.ProductImg, env) : getProduct.ProductImg;
             getProduct.ProductName = updateProductDTO.ProductName ?? getProduct.ProductName;
             getProduct.ProductPrice = updateProductDTO.ProductPrice != 0 ? updateProductDTO.ProductPrice : getProduct.ProductPrice;
@@ -198,20 +174,16 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Lấy thông tin chi tiết sản phẩm, bao gồm các biến thể và bình luận liên quan.
-         * @return ResponseMessage: Thông tin chi tiết của sản phẩm.
-         * @param productId: ID của sản phẩm.
-         */
+        //Lấy 1 product cụ thể
         public ResponseMessage GetDetail(int productId)
         {
-            // Lấy sản phẩm và các thông tin liên quan như biến thể và bình luận.
+            // Lấy 1 product cụ thể
             var product = db.Product
                 .Include(x => x.ProductVariants)
                 .Include(x => x.Comments).ThenInclude(x => x.Account)
                 .FirstOrDefault(x => x.ProductID == productId);
 
-            // Trả về kết quả thành công với dữ liệu chi tiết sản phẩm.
+            // Trả về thành công
             return new ResponseMessage
             {
                 Success = true,
