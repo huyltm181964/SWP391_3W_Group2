@@ -39,6 +39,7 @@ axiosFormBody.interceptors.response.use(
 				AuthService.LOGOUT()
 				break
 			case 400:
+			case 404:
 			case 409:
 			case 500:
 				enqueueSnackbar(message, { variant: 'error' })

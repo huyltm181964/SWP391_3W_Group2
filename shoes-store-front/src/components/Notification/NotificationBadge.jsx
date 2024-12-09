@@ -1,5 +1,10 @@
 import { MinusCircleIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-import { BellAlertIcon, ChatBubbleBottomCenterIcon, CubeIcon } from '@heroicons/react/24/solid'
+import {
+	BellAlertIcon,
+	ChatBubbleBottomCenterIcon,
+	CubeIcon,
+	HomeIcon,
+} from '@heroicons/react/24/solid'
 import { Badge, Card, IconButton, List, ListItem, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import { NotificationService } from 'src/services/NotificationService'
@@ -91,14 +96,14 @@ const NotificationBadge = () => {
 								>
 									<Badge invisible={notification?.isRead}>
 										<IconButton className='w-8 h-8 rounded-full' ripple={false}>
-											{notification?.title?.toLowerCase().includes('order') && (
+											{notification?.title?.toLowerCase().includes('order') ? (
 												<CubeIcon className='w-full h-full' />
-											)}
-											{notification?.title?.toLowerCase().includes('comment') && (
+											) : notification?.title?.toLowerCase().includes('comment') ? (
 												<ChatBubbleBottomCenterIcon className='w-full h-full' />
-											)}
-											{notification?.title?.toLowerCase().includes('contact') && (
+											) : notification?.title?.toLowerCase().includes('contact') ? (
 												<QuestionMarkCircleIcon className='w-full h-full' />
+											) : (
+												<HomeIcon className='w-full h-full' />
 											)}
 										</IconButton>
 									</Badge>

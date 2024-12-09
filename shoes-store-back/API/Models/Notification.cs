@@ -8,7 +8,6 @@ namespace API.Models
         public int NotificationID { get; set; }
         [MaxLength(255)]
         public String Title { get; set; }
-        [MaxLength(500)]
         public String Description { get; set; }
         public bool IsRead { get; set; } = false;
         public int AccountID { get; set; }
