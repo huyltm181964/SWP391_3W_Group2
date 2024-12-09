@@ -106,13 +106,21 @@ namespace API.DAO
             };
         }
 
+        /**
+         * Lấy danh sách đơn hàng theo trạng thái.
+         * @param orderStatus: Trạng thái đơn hàng cần lọc.
+         * @return ResponseMessage: Kết quả chứa danh sách đơn hàng.
+         */
         public ResponseMessage GetOrderByStatus(string orderStatus)
         {
+            // Lấy danh sách đơn hàng theo trạng thái, bao gồm thông tin tài khoản, chi tiết và sản phẩm.
             var listOder = db.Order
                              .Include(x => x.Account)
                              .Where(x => x.OrderStatus == orderStatus)
                              .Include(x => x.OrderDetails).ThenInclude(x => x.Variant).ThenInclude(x => x.Product)
                              .ToList();
+
+            // Trả về kết quả thành công với danh sách đơn hàng.
             return new ResponseMessage
             {
                 Success = true,
@@ -122,11 +130,20 @@ namespace API.DAO
             };
         }
 
+        /**
+         * Cập nhật trạng thái đơn hàng và gửi thông báo.
+         * @param orderID: ID của đơn hàng cần cập nhật.
+         * @param orderStatus: Trạng thái mới của đơn hàng.
+         * @return ResponseMessage: Kết quả xử lý.
+         */
         public ResponseMessage UpdateOrderStatus(int orderID, string orderStatus)
         {
+            // Tìm đơn hàng theo ID.
             var getOrder = db.Order
-             .Include(x => x.Account)
-             .FirstOrDefault(o => o.OrderID == orderID);
+                             .Include(x => x.Account)
+                             .FirstOrDefault(o => o.OrderID == orderID);
+
+            // Nếu không tìm thấy, trả về lỗi.
             if (getOrder == null)
             {
                 return new ResponseMessage
@@ -138,9 +155,11 @@ namespace API.DAO
                 };
             }
 
+            // Cập nhật trạng thái đơn hàng.
             getOrder.OrderStatus = orderStatus;
             db.Order.Update(getOrder);
 
+            // Tạo thông báo cho tài khoản liên quan.
             var notification = new Notification()
             {
                 AccountID = getOrder.AccountID,
@@ -149,7 +168,10 @@ namespace API.DAO
             };
             db.Notification.Add(notification);
 
+            // Lưu thay đổi vào database.
             db.SaveChanges();
+
+            // Trả về kết quả thành công.
             return new ResponseMessage
             {
                 Success = true,
