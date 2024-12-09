@@ -93,11 +93,11 @@ function ReportCommentManagement() {
 		}
 		return pageNumbers
 	}
-	const handleBanComment = async (productId, accountId, reasonValue) => {
+	const handleBanComment = async (accountId, productId, reasonValue) => {
 		const formBody = {
 			commentIdDTO: {
-				productID: productId,
-				accountID: accountId,
+				accountId,
+				productId,
 			},
 			reason: reasonValue,
 		}
@@ -108,10 +108,10 @@ function ReportCommentManagement() {
 			setTableRows(updatedData)
 		}
 	}
-	const handleUnreportComment = async (productId, accountId) => {
+	const handleUnreportComment = async (accountId, productId) => {
 		const formBody = {
-			productID: productId,
 			accountID: accountId,
+			productID: productId,
 		}
 		await CommentManagementService.UNREPORT_COMMENT(formBody)
 

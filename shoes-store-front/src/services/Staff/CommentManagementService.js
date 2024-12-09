@@ -8,10 +8,10 @@ export const CommentManagementService = {
 	UNREPORT_COMMENT: async (formBody) =>
 		await axiosFormBody
 			.post(CommentManagementRequest.UNREPORT_COMMENT, formBody)
-			.then((response) => response.data),
+			.then((response) => response),
 
 	BAN_COMMENT: async (formBody) =>
 		await axiosFormBody
 			.post(CommentManagementRequest.BAN_COMMENT, formBody)
-			.then((response) => response.data),
+			.then((response) => response),
 }

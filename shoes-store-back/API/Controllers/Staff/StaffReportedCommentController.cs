@@ -1,6 +1,7 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Staff
@@ -8,14 +9,8 @@ namespace API.Controllers.Staff
     [Route("api/v1/staff/comment")]
     [ApiController]
     [Authorize(Roles = "Staff")]
-    public class StaffCommentController : ControllerBase
+    public class StaffReportedCommentController(CommentDAO commentDAO) : ControllerBase
     {
-        private readonly CommentDAO commentDAO;
-        public StaffCommentController(CommentDAO commentDAO)
-        {
-            this.commentDAO = commentDAO;
-        }
-
         [HttpGet]
         public IActionResult GetAllReportedComment()
         {
