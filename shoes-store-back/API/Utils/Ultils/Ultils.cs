@@ -46,8 +46,8 @@ namespace API.Utils.Ultils
         {
             string smtpServer = "smtp.gmail.com";
             int smtpPort = 587; 
-            string smtpUsername = "huynlnce181196@fpt.edu.vn";
-            string smtpPassword = "xtxqkakvmurdjxkv";
+            string smtpUsername = "huyltmce181964@fpt.edu.vn";
+            string smtpPassword = "ohvimlkbgwsshwrh";
             
             using (SmtpClient client = new SmtpClient(smtpServer, smtpPort))
             {

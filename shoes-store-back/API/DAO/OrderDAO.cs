@@ -207,7 +207,7 @@ namespace API.DAO
             return new ResponseMessage
             {
                 StatusCode = 200,
-                Data = $"https://img.vietqr.io/image/VCB-1018482628-compact.png?amount={amount}&addInfo={addInfo}&accountName=Nguyen%20Lu%20Nhat%20Huy",
+                Data = $"https://img.vietqr.io/image/VCB-0091000684276-compact.png?amount={amount}&addInfo={addInfo}&accountName=Lam%20Tran%20Minh%20Huy",
                 Success = true,
                 Message = "Get PaymentURL successfully"
             };
