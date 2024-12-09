@@ -6,10 +6,8 @@ using API.Utils;
 using API.Utils.Ultils;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using System.Linq.Expressions;
 using System.Net;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace API.DAO
 {
@@ -214,9 +212,17 @@ namespace API.DAO
 
             };
         }
+
+        /**
+         * Lấy danh sách tài khoản role là "User"
+         * @return ResponseMessage: Kết quả trả về gồm trạng thái, thông báo và dữ liệu.
+         */
         public ResponseMessage GetAllAccount()
         {
-            var listAccount = db.Account.Where(x => !x.Role.Equals("Admin") && !x.Role.Equals("Staff")).ToList();
+            // Lấy tài khoản với role là "User"
+            var listAccount = db.Account.Where(x => x.Role.Equals("User")).ToList();
+
+            // Nếu có tài khoản, trả về thành công.
             if (listAccount.Any())
             {
                 return new ResponseMessage
@@ -228,6 +234,7 @@ namespace API.DAO
                 };
             }
 
+            // Nếu không có tài khoản, trả về không tìm thấy.
             return new ResponseMessage
             {
                 Success = false,
@@ -237,9 +244,15 @@ namespace API.DAO
             };
         }
 
+        /**
+         * Lấy danh sách tài khoản có vai trò là "Staff".
+         * @return ResponseMessage: Kết quả trả về gồm trạng thái, thông báo và dữ liệu.
+         */
         public ResponseMessage GetAllStaff()
         {
-            var listAccount = db.Account.Where(x => !x.Role.Equals("Admin") && !x.Role.Equals("User")).ToList();
+            // Lấy tài khoản với role là "Staff"
+            var listAccount = db.Account.Where(x => x.Role.Equals("Staff")).ToList();
+            // Kiểm tra nếu danh sách không rỗng, trả về kết quả thành công.
             if (listAccount.Any())
             {
                 return new ResponseMessage
@@ -251,6 +264,7 @@ namespace API.DAO
                 };
             }
 
+            // Nếu không tìm thấy tài khoản nào, trả về lỗi "Không tìm thấy".
             return new ResponseMessage
             {
                 Success = false,
@@ -260,49 +274,60 @@ namespace API.DAO
             };
         }
 
+        /**
+         * Thêm tài khoản "Staff".
+         * @param addStaffDTO: Dữ liệu thông tin tài khoản cần thêm.
+         * @return ResponseMessage: Kết quả thêm mới.
+         */
         public ResponseMessage AddStaff(AddStaffDTO addStaffDTO)
         {
+            // Kiểm tra dữ liệu đầu vào có hợp lệ hay không.
             if (addStaffDTO == null)
             {
                 return new ResponseMessage
                 {
-                    Success = false,
-                    Message = "Bad Request",
-                    Data = addStaffDTO,
-                    StatusCode = (int)HttpStatusCode.BadRequest
+                    Success = false, // Trạng thái thất bại.
+                    Message = "Bad Request", // Yêu cầu không hợp lệ.
+                    Data = addStaffDTO, // Trả về dữ liệu đầu vào.
+                    StatusCode = (int)HttpStatusCode.BadRequest // Mã trạng thái HTTP.
                 };
             }
 
+            // Kiểm tra các trường email và mật khẩu có bị bỏ trống hay không.
             if (string.IsNullOrWhiteSpace(addStaffDTO.AccountEmail) || string.IsNullOrWhiteSpace(addStaffDTO.Password))
             {
                 return new ResponseMessage
                 {
-                    Success = false,
-                    Message = "Account email and password are required.",
-                    StatusCode = (int)HttpStatusCode.BadRequest
+                    Success = false, // Trạng thái thất bại.
+                    Message = "Account email and password are required.", // Thông báo lỗi.
+                    StatusCode = (int)HttpStatusCode.BadRequest // Mã trạng thái HTTP.
                 };
             }
 
+            // Kiểm tra email đã tồn tại trong hệ thống chưa.
             var existingAccount = db.Account.FirstOrDefault(x => x.AccountEmail == addStaffDTO.AccountEmail);
             if (existingAccount != null)
             {
                 return new ResponseMessage
                 {
-                    Success = false,
-                    Message = "Email already exists",
-                    Data = existingAccount.AccountEmail,
-                    StatusCode = (int)HttpStatusCode.Conflict
+                    Success = false, // Trạng thái thất bại.
+                    Message = "Email already exists", // Email đã tồn tại.
+                    Data = existingAccount.AccountEmail, // Trả về email đã tồn tại.
+                    StatusCode = (int)HttpStatusCode.Conflict // Mã trạng thái HTTP.
                 };
             }
 
+            // Tạo giỏ hàng cho tài khoản mới.
             var cart = new Cart
             {
-                TotalPrice = 0
+                TotalPrice = 0 // Thiết lập tổng giá trị giỏ hàng ban đầu là 0.
             };
-            db.Cart.Add(cart);
+            db.Cart.Add(cart); // Thêm giỏ hàng vào cơ sở dữ liệu.
 
+            // Lưu ảnh đại diện (nếu có).
             var imageUrl = Ultils.SaveImage(addStaffDTO.Avatar, env);
 
+            // Tạo tài khoản mới.
             var newAccount = new Account
             {
                 Avatar = imageUrl,
@@ -315,27 +340,34 @@ namespace API.DAO
                 Gender = addStaffDTO.Gender,
                 Role = addStaffDTO.Role,
                 Status = addStaffDTO.Status,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.Now, // Thời gian tạo tài khoản.
                 Cart = cart,
                 CartID = cart.CartID
             };
 
-            db.Account.Add(newAccount);
-            db.SaveChanges();
+            db.Account.Add(newAccount); // Thêm tài khoản mới vào cơ sở dữ liệu.
+            db.SaveChanges(); // Lưu thay đổi.
 
             return new ResponseMessage
             {
-                Success = true,
-                Message = "Success",
-                Data = map.Map<AccountResponse>(newAccount),
-                StatusCode = (int)HttpStatusCode.OK
+                Success = true, // Trạng thái thành công.
+                Message = "Success", // Thông báo.
+                Data = map.Map<AccountResponse>(newAccount), // Chuyển đổi dữ liệu sang kiểu AccountResponse.
+                StatusCode = (int)HttpStatusCode.OK // Mã trạng thái HTTP.
             };
         }
 
+        /**
+         * @param accountEmail: Email tài khoản cần cập nhật.
+         * Chuyển đổi trạng thái tài khoản giữa "Active" và "Blocked".
+         * @return ResponseMessage: Kết quả xử lý.
+         */
         public ResponseMessage UpdateAccountStatus(string accountEmail)
         {
+            // Tìm tài khoản theo email.
             var getAccount = db.Account.FirstOrDefault(x => x.AccountEmail.Equals(accountEmail));
 
+            // Nếu không tìm thấy, trả về lỗi.
             if (getAccount == null)
             {
                 return new ResponseMessage
@@ -343,57 +375,68 @@ namespace API.DAO
                     Success = false,
                     Message = "Data not found",
                     Data = Array.Empty<int>(),
-                    StatusCode = (int)HttpStatusCode.NotFound
+                    StatusCode = (int)HttpStatusCode.NotFound,
                 };
             }
 
+            // Đổi trạng thái tài khoản.
             getAccount.Status = getAccount.Status == "Active" ? "Blocked" : "Active";
-            db.Account.Update(getAccount);
-            db.SaveChanges();
+            db.Account.Update(getAccount);  // Cập nhật vào database.
+            db.SaveChanges();  // Lưu thay đổi.
 
+            // Trả về kết quả thành công.
             return new ResponseMessage
             {
                 Success = true,
                 Message = "Success",
                 Data = map.Map<AccountResponse>(getAccount),
-                StatusCode = (int)HttpStatusCode.OK
+                StatusCode = (int)HttpStatusCode.OK,
             };
         }
 
+
+        /**
+         * Cập nhật thông tin tài khoản "Staff".
+         * @param updateStaffDTO: Dữ liệu thông tin cần cập nhật.
+         * @return ResponseMessage: Kết quả xử lý.
+         */
         public ResponseMessage UpdateStaffInformation(UpdateStaffDTO updateStaffDTO)
         {
+            // Tìm tài khoản theo ID.
             var account = db.Account.FirstOrDefault(x => x.AccountID == updateStaffDTO.AccountID);
 
+            // Kiểm tra nếu không tìm thấy hoặc vai trò không phải "Staff".
             if (account == null || account.Role is "Admin" or "User")
             {
                 return new ResponseMessage
                 {
-                    Success = false,
-                    Message = "Data not found",
-                    Data = Array.Empty<int>(),
-                    StatusCode = (int)HttpStatusCode.NotFound
+                    Success = false, // Trạng thái thất bại.
+                    Message = "Data not found", // Thông báo.
+                    Data = Array.Empty<int>(), // Dữ liệu rỗng.
+                    StatusCode = (int)HttpStatusCode.NotFound // Mã trạng thái HTTP.
                 };
             }
 
+            // Cập nhật thông tin tài khoản.
             account.Avatar = updateStaffDTO.Avatar != null
-                ? Ultils.SaveImage(updateStaffDTO.Avatar, env)
-                : account.Avatar;
+                ? Ultils.SaveImage(updateStaffDTO.Avatar, env) // Lưu ảnh đại diện mới (nếu có).
+                : account.Avatar; // Giữ nguyên ảnh đại diện cũ nếu không thay đổi.
             account.AccountEmail = updateStaffDTO.AccountEmail;
             account.AccountName = updateStaffDTO.AccountName;
             account.Gender = updateStaffDTO.Gender;
-            account.BirthDay = updateStaffDTO.Birthday; 
+            account.BirthDay = updateStaffDTO.Birthday;
             account.Phone = updateStaffDTO.Phone;
             account.AccountAddress = updateStaffDTO.AccountAddress;
 
-            db.Account.Update(account);
-            db.SaveChanges();
+            db.Account.Update(account); // Cập nhật thông tin trong cơ sở dữ liệu.
+            db.SaveChanges(); // Lưu thay đổi.
 
             return new ResponseMessage
             {
-                Success = true,
-                Message = "Success",
-                Data = map.Map<AccountResponse>(account),
-                StatusCode = (int)HttpStatusCode.OK
+                Success = true, // Trạng thái thành công.
+                Message = "Success", // Thông báo.
+                Data = map.Map<AccountResponse>(account), // Chuyển đổi dữ liệu sang kiểu AccountResponse.
+                StatusCode = (int)HttpStatusCode.OK // Mã trạng thái HTTP.
             };
         }
     }

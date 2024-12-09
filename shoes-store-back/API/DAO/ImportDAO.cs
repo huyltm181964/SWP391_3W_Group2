@@ -18,28 +18,15 @@ namespace API.DAO
 
         public ResponseMessage GetProducts()
         {
-            try
+
+            var listProduct = db.Product.Include(x => x.Comments).ToList();
+            return new ResponseMessage
             {
-                var listProduct = db.Product.Include(x => x.Comments).ToList();
-                return new ResponseMessage
-                {
-                    Success = true,
-                    StatusCode = (int)HttpStatusCode.OK,
-                    Message = "Success",
-                    Data = listProduct,
-                };
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return new ResponseMessage
-                {
-                    Success = false,
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
-                    Message = "An error occurred: " + ex.Message,
-                    Data = null,
-                };
-            }
+                Success = true,
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Success",
+                Data = listProduct,
+            };
         }
 
         public ResponseMessage GetDetail(int productId)
@@ -136,10 +123,10 @@ namespace API.DAO
                 VariantID = importDTO.VariantID,
                 ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}"
             };
-            
+
             if (import != null)
             {
-               variant.VariantQuantity += importDTO.Quantity;
+                variant.VariantQuantity += importDTO.Quantity;
             }
 
             db.ProductVariant.Update(variant);

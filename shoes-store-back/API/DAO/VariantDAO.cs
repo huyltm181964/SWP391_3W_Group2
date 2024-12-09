@@ -1,4 +1,4 @@
-
+﻿
 using API.Data;
 using API.DTOs.RequestDTO;
 using API.DTOs.ResponseDTO;
@@ -26,14 +26,17 @@ namespace API.DAO
             this.dao = dao;
         }
 
-
+        /**
+         * Thêm biến thể sản phẩm.
+         * @param createVariant: Dữ liệu thông tin biến thể cần thêm.
+         * @return ResponseMessage: Kết quả thêm mới (thành công hoặc lỗi).
+         */
         public ResponseMessage CreateVariant(CreateVariantDTO createVariant)
         {
-
             var getProduct = db.Product.FirstOrDefault(x => x.ProductID == createVariant.ProductID);
             if (getProduct == null)
             {
-                return new ResponseMessage
+                return new ResponseMessage // Trả về nếu không tìm thấy sản phẩm
                 {
                     Success = false,
                     Message = "Product not found",
@@ -49,7 +52,7 @@ namespace API.DAO
 
             if (isExistedVariant)
             {
-                return new ResponseMessage
+                return new ResponseMessage // Trả về nếu biến thể đã tồn tại
                 {
                     Success = false,
                     Message = "Variant already existed",
@@ -58,7 +61,7 @@ namespace API.DAO
                 };
             }
 
-            var image = Ultils.SaveImage(createVariant.VariantImage!, env);
+            var image = Ultils.SaveImage(createVariant.VariantImage!, env); // Lưu hình ảnh biến thể
             ProductVariant addVariant = new ProductVariant
             {
                 Product = getProduct,
@@ -67,13 +70,13 @@ namespace API.DAO
                 VariantImg = image
             };
 
-            db.ProductVariant.Add(addVariant);
+            db.ProductVariant.Add(addVariant); // Thêm biến thể mới vào cơ sở dữ liệu
+            db.SaveChanges(); // Lưu thay đổi
 
-            db.SaveChanges();
-            return new ResponseMessage
+            return new ResponseMessage // Trả về kết quả thành công
             {
                 Success = true,
-                Message = "Sucess",
+                Message = "Success",
                 Data = null,
                 StatusCode = 200
             };
@@ -101,12 +104,18 @@ namespace API.DAO
             };
         }
 
+        /**
+          * Cập nhật thông tin biến thể sản phẩm.
+          * @param updateVariantDTO: Dữ liệu thông tin biến thể cần cập nhật.
+          * @return ResponseMessage: Kết quả cập nhật (thành công hoặc lỗi).
+          */
         public ResponseMessage UpdateVariant(UpdateVariantDTO updateVariantDTO)
         {
-            var getVariant = db.ProductVariant.Include(x => x.Product).FirstOrDefault(x => x.VariantID == updateVariantDTO.VariantID);
+            var getVariant = db.ProductVariant.Include(x => x.Product)
+                                              .FirstOrDefault(x => x.VariantID == updateVariantDTO.VariantID);
             if (getVariant == null)
             {
-                return new ResponseMessage
+                return new ResponseMessage // Trả về nếu không tìm thấy biến thể
                 {
                     Success = false,
                     Message = "Variant Not Found",
@@ -115,22 +124,28 @@ namespace API.DAO
                 };
             }
 
-            var image = Ultils.SaveImage(updateVariantDTO.VariantImage!, env);
+            var image = Ultils.SaveImage(updateVariantDTO.VariantImage!, env); // Lưu hình ảnh mới
             getVariant.VariantColor = updateVariantDTO.VariantColor ?? getVariant.VariantColor!;
             getVariant.VariantSize = updateVariantDTO.VariantSize ?? getVariant.VariantSize!;
             getVariant.VariantImg = image ?? getVariant.VariantImg;
 
-            db.ProductVariant.Update(getVariant);
-            db.SaveChanges();
-            return new ResponseMessage
+            db.ProductVariant.Update(getVariant); // Cập nhật biến thể trong cơ sở dữ liệu
+            db.SaveChanges(); // Lưu thay đổi
+
+            return new ResponseMessage // Trả về kết quả thành công
             {
                 Success = true,
-                Message = "Sucess",
+                Message = "Success",
                 Data = null,
                 StatusCode = 200
             };
         }
 
+        /**
+         * Dừng hoặc tiếp tục bán biến thể sản phẩm.
+         * @param variantID: ID của biến thể cần cập nhật.
+         * @return ResponseMessage: Kết quả cập nhật trạng thái (thành công hoặc lỗi).
+         */
         public ResponseMessage DeleteVariant(int variantID)
         {
             var checkDelete = db.ProductVariant
@@ -138,18 +153,12 @@ namespace API.DAO
                 .FirstOrDefault(x => x.VariantID == variantID);
             if (checkDelete != null)
             {
-                if (checkDelete.IsStopSelling.Equals(true))
-                {
-                    checkDelete.IsStopSelling = false;
-                }
-                else
-                {
-                    checkDelete.IsStopSelling = true;
-                }
+                // Đổi trạng thái dừng bán hoặc tiếp tục bán
+                checkDelete.IsStopSelling = !checkDelete.IsStopSelling;
 
-                db.ProductVariant.Update(checkDelete);
+                db.ProductVariant.Update(checkDelete); // Cập nhật trạng thái
+                db.SaveChanges(); // Lưu thay đổi
 
-                db.SaveChanges();
                 return new ResponseMessage
                 {
                     Success = true,
@@ -159,11 +168,11 @@ namespace API.DAO
                 };
             }
 
-            return new ResponseMessage
+            return new ResponseMessage // Trả về nếu không tìm thấy biến thể
             {
                 Success = false,
                 Message = "Variant Not Found",
-                Data = checkDelete,
+                Data = null,
                 StatusCode = 404
             };
         }
