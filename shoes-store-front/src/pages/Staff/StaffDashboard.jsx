@@ -1,4 +1,4 @@
-import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftStartOnRectangleIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import {
 	AdjustmentsVerticalIcon,
 	ArrowDownTrayIcon,
@@ -15,6 +15,7 @@ import { GetImage, GetLogo } from 'src/utils/GetImage'
 import OrderList from './ExportProduct/OrderList'
 import ProductList from './ImportProduct/ProductList'
 import ReportCommentManagement from './ReportCommentManagement/ReportCommentManagement'
+import ContactManagement from './ContactManagement.jsx/ContactManagement'
 
 const StaffDashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<ProductList />)
@@ -92,6 +93,16 @@ const StaffDashboard = () => {
 							<ChatBubbleLeftEllipsisIcon className='h-5 w-5' />
 						</ListItemPrefix>
 						Comment Management
+					</ListItem>
+					<ListItem
+						className={LIST_ITEM_STYLES}
+						selected={selectedPageKey === 'Contact'}
+						onClick={() => handleSelectPage(<ContactManagement />, 'Contact')}
+					>
+						<ListItemPrefix>
+							<QuestionMarkCircleIcon className='h-5 w-5' />
+						</ListItemPrefix>
+						Contact Management
 					</ListItem>
 				</List>
 

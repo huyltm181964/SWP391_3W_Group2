@@ -26,7 +26,7 @@ const HistoryContact = () => {
 				{historyContact.length !== 0 ? (
 					historyContact.map((contact) => (
 						<UserContactAccordion
-							open={open}
+							open={open === contact.contactID}
 							setOpen={handleOpen}
 							contact={contact}
 							key={contact}
