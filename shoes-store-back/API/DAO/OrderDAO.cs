@@ -106,11 +106,7 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Lấy danh sách đơn hàng theo trạng thái.
-         * @param orderStatus: Trạng thái đơn hàng cần lọc.
-         * @return ResponseMessage: Kết quả chứa danh sách đơn hàng.
-         */
+     //Lấy danh sách order bằng status kiểu như("Delivery", "Ordered")
         public ResponseMessage GetOrderByStatus(string orderStatus)
         {
             // Lấy danh sách đơn hàng theo trạng thái, bao gồm thông tin tài khoản, chi tiết và sản phẩm.
@@ -129,13 +125,7 @@ namespace API.DAO
                 StatusCode = 200
             };
         }
-
-        /**
-         * Cập nhật trạng thái đơn hàng và gửi thông báo.
-         * @param orderID: ID của đơn hàng cần cập nhật.
-         * @param orderStatus: Trạng thái mới của đơn hàng.
-         * @return ResponseMessage: Kết quả xử lý.
-         */
+        //Cập nhật order status tùy vào method nào vd: của staff là Ordered => Delivery. Còn của admin là Delivery sang Delivered
         public ResponseMessage UpdateOrderStatus(int orderID, string orderStatus)
         {
             // Tìm đơn hàng theo ID.
@@ -155,11 +145,11 @@ namespace API.DAO
                 };
             }
 
-            // Cập nhật trạng thái đơn hàng.
+            // Cập nhật Order status
             getOrder.OrderStatus = orderStatus;
             db.Order.Update(getOrder);
 
-            // Tạo thông báo cho tài khoản liên quan.
+            // Tạo thông báo cho tài khoản đã order product cho người ta biết tiến trình đơn hàng của họ.
             var notification = new Notification()
             {
                 AccountID = getOrder.AccountID,
@@ -168,7 +158,6 @@ namespace API.DAO
             };
             db.Notification.Add(notification);
 
-            // Lưu thay đổi vào database.
             db.SaveChanges();
 
             // Trả về kết quả thành công.

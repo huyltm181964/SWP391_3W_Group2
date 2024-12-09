@@ -51,6 +51,7 @@ namespace API.DAO
             };
         }
 
+        //Lấy contact nào mà chưa trả lời
         public ResponseMessage GetUnanswerContact()
         {
             var contacts = db.Contact.Where(c => !c.IsRejected && string.IsNullOrEmpty(c.Answer));
@@ -64,8 +65,10 @@ namespace API.DAO
             };
         }
 
+        //Trả lời tin nhắn của khách hàng
         public ResponseMessage AnswerContact(int contactID, string answer)
         {
+            //Lấy contact by id
             var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
 
             if (contact == null)
@@ -79,10 +82,12 @@ namespace API.DAO
                 };
             }
 
+            //Trả lời nè
             contact.Answer = answer;
             contact.AnswerDate = DateTime.Now;
             db.Contact.Update(contact);
 
+            //Thông báo cảm ơn
             var notification = new Notification()
             {
                 AccountID = contact.AccountID,
@@ -105,6 +110,7 @@ namespace API.DAO
             };
         }
 
+        //Doc ten ham
         public ResponseMessage RejectContact(int contactID)
         {
             var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
@@ -123,6 +129,7 @@ namespace API.DAO
             contact.IsRejected = true;
             db.Contact.Update(contact);
 
+            //Gui thong bao 
             var notification = new Notification()
             {
                 AccountID = contact.AccountID,

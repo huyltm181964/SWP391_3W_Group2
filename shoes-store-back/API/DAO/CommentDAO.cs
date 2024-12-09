@@ -32,6 +32,7 @@ namespace API.DAO
             };
         }
 
+        //Lấy tất cả comment nào bị báo cáo
         public ResponseMessage GetAllReportedComment()
         {
             var reportedComments = db.Comment.Where(comment => comment.IsReported).Include(x=>x.Account).ToList();
@@ -147,8 +148,10 @@ namespace API.DAO
             };
         }
 
+        //Quá tục tiểu vi phạm ch mực xã hội cho vào danh sách đen và xóa comment
         public ResponseMessage BanComment(int accountID, int productID, string reason)
         {
+            //Lấy comment bị báo cáo của user trong product 
             var getComment = db.Comment
                 .FirstOrDefault(c => c.AccountID == accountID
                                     && c.ProductID == productID
@@ -164,6 +167,7 @@ namespace API.DAO
                 };
             }
 
+            //Đưa vào danh sách daden
             var blacklistComment = new BlacklistComment
             {
                 AccountID = accountID,
@@ -171,6 +175,7 @@ namespace API.DAO
                 Reason = reason
             };
 
+            //Cho user biết anh ấy daden
             var notification = new Notification
             {
                 AccountID = accountID,
@@ -222,6 +227,7 @@ namespace API.DAO
             };
         }
 
+        //Gỡ cờ
         public ResponseMessage UnreportComment(int accountID, int productID)
         {
             var getComment = db.Comment

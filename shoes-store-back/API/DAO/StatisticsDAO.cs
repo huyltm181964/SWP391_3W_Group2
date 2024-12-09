@@ -12,35 +12,30 @@ namespace API.DAO
             this.db = db;
         }
 
-        /**
-             * Lấy tổng số bình luận và so sánh giữa tháng này và tháng trước.
-             * @return StatisticResponseDTO: Thống kê số lượng bình luận.
-             */
+        //Lấy tổng số bình luận và so sánh giữa tháng này và tháng trước.
         public StatisticResponseDTO TotalComments()
         {
-            var currentMonth = DateTime.Now.Month;
-            var previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
+            var currentMonth = DateTime.Now.Month; 
+            var previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;// Lấy tháng trước. Nếu tháng hiện tại là 1 thì lấy tháng 12. con khong thi lay thang hien tại trừ tháng trước là ra
             var currentYear = DateTime.Now.Year;
-            var previousYear = currentMonth == 1 ? currentYear - 1 : currentYear;
+            var previousYear = currentMonth == 1 ? currentYear - 1 : currentYear;//lấy năm. nếu tháng hiện tại là 1 thì lấy năm trước còn không thì lấy năm hiện tại
 
-            var totalComments = db.Comment.Count();
-            var commentsLastMonth = db.Comment.Count(x => x.CreatedDate.Month == previousMonth && x.CreatedDate.Year == previousYear);
-            var commentsThisMonth = db.Comment.Count(x => x.CreatedDate.Month == currentMonth && x.CreatedDate.Year == currentYear);
+            var totalComments = db.Comment.Count(); //Lấy tổng comment
+            var commentsLastMonth = db.Comment.Count(x => x.CreatedDate.Month == previousMonth && x.CreatedDate.Year == previousYear);// Lấy tổng comment của tháng trước
+            var commentsThisMonth = db.Comment.Count(x => x.CreatedDate.Month == currentMonth && x.CreatedDate.Year == currentYear); // Lấy tổng comment của tháng này
 
             return new()
             {
-                Count = totalComments,
-                Extra = commentsThisMonth - commentsLastMonth,
-                Percentage = commentsLastMonth > 0 ? (double)(commentsThisMonth - commentsLastMonth) / commentsLastMonth * 100 : 0
+                Count = totalComments, //Tổng comment
+                Extra = commentsThisMonth - commentsLastMonth, //Số liệu so với tháng trước
+                Percentage = commentsLastMonth > 0 ? (double)(commentsThisMonth - commentsLastMonth) / commentsLastMonth * 100 : 0 //Phần trăm so với tháng trước tăng hay giảm
             };
         }
 
-        /**
-         * Lấy tổng số người dùng và so sánh giữa tháng này và tháng trước.
-         * @return StatisticResponseDTO: Thống kê số lượng người dùng.
-         */
+        //Lấy tổng số người dùng và so sánh giữa tháng này và tháng trước.
         public StatisticResponseDTO TotalUsers()
         {
+            //Giống trên nhưng này là Account
             var currentMonth = DateTime.Now.Month;
             var previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
             var currentYear = DateTime.Now.Year;
@@ -58,12 +53,12 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Lấy tổng số đơn hàng và so sánh giữa tháng này và tháng trước.
-         * @return StatisticResponseDTO: Thống kê số lượng đơn hàng.
-         */
+        
+        // Lấy tổng số đơn hàng và so sánh giữa tháng này và tháng trước.
+     
         public StatisticResponseDTO TotalOrders()
         {
+            //Giống trên nhưng này là Order
             var currentMonth = DateTime.Now.Month;
             var previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
             var currentYear = DateTime.Now.Year;
@@ -81,12 +76,10 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Lấy tổng doanh thu và so sánh giữa tháng này và tháng trước.
-         * @return StatisticResponseDTO: Thống kê tổng doanh thu.
-         */
+         // Lấy tổng doanh thu và so sánh giữa tháng này và tháng trước.
         public StatisticResponseDTO TotalRevenues()
         {
+            //Giống trên nhưng này là doanh thu
             var currentMonth = DateTime.Now.Month;
             var previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
             var currentYear = DateTime.Now.Year;
@@ -104,18 +97,16 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Lấy doanh thu theo từng tháng trong năm hiện tại.
-         * @return List<decimal>: Danh sách doanh thu của từng tháng.
-         */
+         //Lấy doanh thu theo từng tháng trong năm hiện tại.
         public List<decimal> MonthlyRevenues()
         {
-            var currentYear = DateTime.Now.Year;
+            //Đây là line chart chart và sẽ có 12 tháng
+            var currentYear = DateTime.Now.Year;//Lấy năm hiện tại
             List<decimal> monthlyRevenues = new List<decimal>();
 
             for (int month = 1; month <= 12; month++)
             {
-                var revenue = db.Order.Where(x => x.OrderDate.Month == month && x.OrderDate.Year == currentYear).Sum(x => x.TotalPrice);
+                var revenue = db.Order.Where(x => x.OrderDate.Month == month && x.OrderDate.Year == currentYear).Sum(x => x.TotalPrice);// Tính tổng số tiền của các order nào cùng tháng cùng năm
                 monthlyRevenues.Add(revenue);
             }
 

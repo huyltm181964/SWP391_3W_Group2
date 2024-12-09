@@ -26,17 +26,15 @@ namespace API.DAO
             this.dao = dao;
         }
 
-        /**
-         * Thêm biến thể sản phẩm.
-         * @param createVariant: Dữ liệu thông tin biến thể cần thêm.
-         * @return ResponseMessage: Kết quả thêm mới (thành công hoặc lỗi).
-         */
+        //Tạo 1 variant cuar product lào đó
         public ResponseMessage CreateVariant(CreateVariantDTO createVariant)
         {
+            //Lấy product bằng id nè
             var getProduct = db.Product.FirstOrDefault(x => x.ProductID == createVariant.ProductID);
             if (getProduct == null)
             {
-                return new ResponseMessage // Trả về nếu không tìm thấy sản phẩm
+                //Bị lấy ko ra product nên not found nè
+                return new ResponseMessage
                 {
                     Success = false,
                     Message = "Product not found",
@@ -45,6 +43,7 @@ namespace API.DAO
                 };
             }
 
+            //Kiểm tra coi variant trong product đó có tồn tại cái nào ko nè, ko cho nó trùng đc
             var isExistedVariant =
                 db.ProductVariant.Any(x => x.VariantSize == createVariant.VariantSize
                 && x.ProductID == getProduct.ProductID
@@ -52,7 +51,8 @@ namespace API.DAO
 
             if (isExistedVariant)
             {
-                return new ResponseMessage // Trả về nếu biến thể đã tồn tại
+                //Trùng rồi thì cho nó về 409 nè
+                return new ResponseMessage
                 {
                     Success = false,
                     Message = "Variant already existed",
@@ -61,7 +61,7 @@ namespace API.DAO
                 };
             }
 
-            var image = Ultils.SaveImage(createVariant.VariantImage!, env); // Lưu hình ảnh biến thể
+            var image = Ultils.SaveImage(createVariant.VariantImage!, env); // Lưu hình ảnh của variant nè
             ProductVariant addVariant = new ProductVariant
             {
                 Product = getProduct,
@@ -70,10 +70,11 @@ namespace API.DAO
                 VariantImg = image
             };
 
-            db.ProductVariant.Add(addVariant); // Thêm biến thể mới vào cơ sở dữ liệu
-            db.SaveChanges(); // Lưu thay đổi
+            db.ProductVariant.Add(addVariant);
+            db.SaveChanges();
 
-            return new ResponseMessage // Trả về kết quả thành công
+            //Sau khi add thì là thành công nè
+            return new ResponseMessage
             {
                 Success = true,
                 Message = "Success",
@@ -82,11 +83,14 @@ namespace API.DAO
             };
         }
 
+        //Lấy list variant nè
         public ResponseMessage GetAll()
         {
+            //Đơn giản là lấy list variant thoi
             var getVariant = db.ProductVariant.ToList();
             if (getVariant != null)
             {
+                //Trường hợp ko rỗng thì mình sẽ trả về list
                 return new ResponseMessage
                 {
                     Success = true,
@@ -95,6 +99,7 @@ namespace API.DAO
                     StatusCode = 200
                 };
             }
+            //Còn nếu thì mình trả về empty array
             return new ResponseMessage
             {
                 Success = true,
@@ -104,18 +109,16 @@ namespace API.DAO
             };
         }
 
-        /**
-          * Cập nhật thông tin biến thể sản phẩm.
-          * @param updateVariantDTO: Dữ liệu thông tin biến thể cần cập nhật.
-          * @return ResponseMessage: Kết quả cập nhật (thành công hoặc lỗi).
-          */
+        //Doc ten ham
         public ResponseMessage UpdateVariant(UpdateVariantDTO updateVariantDTO)
         {
+            //Lấy variant by id
             var getVariant = db.ProductVariant.Include(x => x.Product)
                                               .FirstOrDefault(x => x.VariantID == updateVariantDTO.VariantID);
             if (getVariant == null)
             {
-                return new ResponseMessage // Trả về nếu không tìm thấy biến thể
+                //variant bị rỗng => not found
+                return new ResponseMessage
                 {
                     Success = false,
                     Message = "Variant Not Found",
@@ -124,15 +127,16 @@ namespace API.DAO
                 };
             }
 
-            var image = Ultils.SaveImage(updateVariantDTO.VariantImage!, env); // Lưu hình ảnh mới
+            var image = Ultils.SaveImage(updateVariantDTO.VariantImage!, env); // Lưu hình ảnh 
             getVariant.VariantColor = updateVariantDTO.VariantColor ?? getVariant.VariantColor!;
             getVariant.VariantSize = updateVariantDTO.VariantSize ?? getVariant.VariantSize!;
             getVariant.VariantImg = image ?? getVariant.VariantImg;
 
-            db.ProductVariant.Update(getVariant); // Cập nhật biến thể trong cơ sở dữ liệu
-            db.SaveChanges(); // Lưu thay đổi
+            db.ProductVariant.Update(getVariant);
+            db.SaveChanges();
 
-            return new ResponseMessage // Trả về kết quả thành công
+            // Trả về kết quả thành công
+            return new ResponseMessage
             {
                 Success = true,
                 Message = "Success",
@@ -141,23 +145,20 @@ namespace API.DAO
             };
         }
 
-        /**
-         * Dừng hoặc tiếp tục bán biến thể sản phẩm.
-         * @param variantID: ID của biến thể cần cập nhật.
-         * @return ResponseMessage: Kết quả cập nhật trạng thái (thành công hoặc lỗi).
-         */
+       //Xóa variant nhưng mà là xóa mềm
         public ResponseMessage DeleteVariant(int variantID)
         {
+            //Lấy cái variant by id
             var checkDelete = db.ProductVariant
                 .Include(x => x.Product).ThenInclude(x => x.ProductVariants)
                 .FirstOrDefault(x => x.VariantID == variantID);
             if (checkDelete != null)
             {
-                // Đổi trạng thái dừng bán hoặc tiếp tục bán
-                checkDelete.IsStopSelling = !checkDelete.IsStopSelling;
+                // Đổi trạng thái sang dừng bán
+                checkDelete.IsStopSelling = true;
 
-                db.ProductVariant.Update(checkDelete); // Cập nhật trạng thái
-                db.SaveChanges(); // Lưu thay đổi
+                db.ProductVariant.Update(checkDelete); 
+                db.SaveChanges(); 
 
                 return new ResponseMessage
                 {
@@ -168,7 +169,8 @@ namespace API.DAO
                 };
             }
 
-            return new ResponseMessage // Trả về nếu không tìm thấy biến thể
+            //variant bị rỗng => not found
+            return new ResponseMessage 
             {
                 Success = false,
                 Message = "Variant Not Found",

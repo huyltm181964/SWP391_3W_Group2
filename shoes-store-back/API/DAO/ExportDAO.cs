@@ -14,8 +14,10 @@ namespace API.DAO
             this.db = db;
         }
 
+        //1 lần nhấp là xuất
         public ResponseMessage ExportAllOrderDetailInOrder(int orderID)
         {
+            //lấy order by id
             var order = db.Order
                 .Include(o => o.OrderDetails)
                 .FirstOrDefault(o => o.OrderID == orderID);
@@ -30,11 +32,12 @@ namespace API.DAO
                 };
             }
 
+            //Lấy cái order detail nào mà chưa được xuất
             var unexportedOrderDetail = order.OrderDetails.Where(od => !od.IsExported).ToList();
             foreach (var orderDetail in unexportedOrderDetail)
             {
                 orderDetail.IsExported = true;
-
+                //rồi xuất từ từ qua bảng xuất
                 var export = new Export
                 {
                     VariantID = orderDetail.VariantID,
@@ -47,6 +50,8 @@ namespace API.DAO
                 var variant = db.ProductVariant.Include(v => v.Product).FirstOrDefault(v => v.VariantID == orderDetail.VariantID);
                 if (variant.VariantQuantity < orderDetail.Quantity)
                 {
+                    //Nếu variant quantity <1 thì báo cho staff là hết rồi
+                    //Còn variant quantity nhỏ hơn order quantity thì báo cho staff là hông đủ để xuất
                     return new ResponseMessage()
                     {
                         Data = null,
@@ -57,11 +62,13 @@ namespace API.DAO
                         Success = false,
                     };
                 }
+                //xuất rồi thì phảii giảm
                 variant.VariantQuantity -= orderDetail.Quantity;
                 db.ProductVariant.Update(variant);
 
                 if (variant.VariantQuantity <= 5)
                 {
+                    //Nếu variant quantity <5 thì báo cho staff là xuất gần hết rồi thêm vào đi
                     var staffs = db.Account.Where(a => a.Role == "Staff");
                     foreach (var staff in staffs)
                     {
@@ -89,8 +96,10 @@ namespace API.DAO
             };
         }
 
+        //Xuất từng cái
         public ResponseMessage ExportOrderDetail(int orderID, int variantID)
         {
+            //Lấy order by id
             var order = db.Order
                 .Include(o => o.OrderDetails)
                 .FirstOrDefault(o => o.OrderID == orderID);
@@ -104,7 +113,8 @@ namespace API.DAO
                     Success = false,
                 };
             }
-
+            
+            //Lấy variant by id
             var variant = db.ProductVariant.Include(v => v.Product).FirstOrDefault(v => v.VariantID == variantID);
             if (variant == null)
             {
@@ -116,7 +126,8 @@ namespace API.DAO
                     Success = false,
                 };
             }
-
+            
+            //lấy order detail
             var orderDetail = order.OrderDetails.FirstOrDefault(od => od.VariantID == variant.VariantID);
             if (orderDetail == null)
             {
@@ -129,11 +140,14 @@ namespace API.DAO
                 };
             }
 
+            //Vậy là order detail đã exported
             orderDetail.IsExported = true;
             db.OrderDetail.Update(orderDetail);
 
             if (variant.VariantQuantity < orderDetail.Quantity)
             {
+                //Nếu variant quantity <1 thì báo cho staff là hết rồi
+                //Còn variant quantity nhỏ hơn order quantity thì báo cho staff là hông đủ để xuất
                 return new ResponseMessage()
                 {
                     Data = null,
@@ -144,6 +158,8 @@ namespace API.DAO
                     Success = false,
                 };
             }
+
+            //Thành cong rồi
             variant.VariantQuantity -= orderDetail.Quantity;
             db.ProductVariant.Update(variant);
 
@@ -158,6 +174,7 @@ namespace API.DAO
 
             if (variant.VariantQuantity <= 5)
             {
+                //Nếu variant quantity <5 thì báo cho staff là xuất gần hết rồi thêm vào đi
                 var staffs = db.Account.Where(a => a.Role == "Staff");
                 foreach (var staff in staffs)
                 {
