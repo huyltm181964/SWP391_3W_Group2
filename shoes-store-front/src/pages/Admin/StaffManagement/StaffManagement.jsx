@@ -136,7 +136,7 @@ function StaffManagement() {
 							<Typography variant='h3' color='blue-gray'>
 								Staff Management
 							</Typography>
-							<Button onClick={() => setOpenAddPage(true)}>Add Product</Button>
+							<Button onClick={() => setOpenAddPage(true)}>Add Staff Account</Button>
 							{openAddPage && (
 								<AddStaff
 									open={openAddPage}
