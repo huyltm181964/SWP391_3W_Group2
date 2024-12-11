@@ -57,7 +57,7 @@ const Confirmation = ({ title, description, handleConfirm, children, reason }) =
 									rows={3}
 									className={`mt-1 block w-full rounded-md border ${
 										error ? 'border-red-500' : 'border-gray-300'
-									} shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
+									} p-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
 									required
 								/>
 								{error && (

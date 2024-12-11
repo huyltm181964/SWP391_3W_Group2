@@ -29,7 +29,7 @@ namespace API.DAO
 
             Order addOrder = new Order
             {
-                Account = getAccount,
+                AccountID = getAccount.AccountID,
                 OrderAddress = checkoutDTO.OrderAddress,
                 OrderDate = DateTime.Now,
                 OrderStatus = "Unpaid",
@@ -56,7 +56,6 @@ namespace API.DAO
                         Quantity = getCartItem.Quantity,
                         UnitPrice = getCartItem.Variant.Product.ProductPrice,
                         Variant = getVariant!,
-                        VariantID = variantID
                     };
 
                     db.OrderDetail.Add(addDetail);
@@ -85,8 +84,8 @@ namespace API.DAO
             return new ResponseMessage
             {
                 Success = true,
-                Data = m.Map<CheckOutReponse>(addOrder),
-                Message = "Checkout successfully. Please go to history order to pay for it before we can delivery it to you.",
+                Data = db.Order.OrderBy(x => x.OrderID).LastOrDefault(),
+                Message = "Checkout successfully. Please wait to get payment.",
                 StatusCode = 200
             };
         }
@@ -97,6 +96,7 @@ namespace API.DAO
                              .Include(x => x.Account)
                              .Include(x => x.OrderDetails).ThenInclude(x => x.Variant).ThenInclude(x => x.Product)
                              .Where(x => x.AccountID == accountID)
+                             .OrderByDescending(x => x.OrderID)
                              .ToList();
             return new ResponseMessage
             {

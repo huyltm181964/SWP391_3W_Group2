@@ -19,11 +19,10 @@ import Product from './pages/Guest/Product'
 import ProductDetail from './pages/Guest/ProductDetail'
 import StaffDashboard from './pages/Staff/StaffDashboard'
 import Cart from './pages/User/Cart'
-import HistoryOrder from './pages/User/HistoryOrder'
-import Payment from './pages/User/Payment'
-import { ProtectedRoute, RoleRedirect } from './utils/PrivateRoute'
 import HistoryContact from './pages/User/HistoryContact'
+import HistoryOrder from './pages/User/HistoryOrder'
 import OrderVerify from './pages/User/OrderVerify'
+import { ProtectedRoute, RoleRedirect } from './utils/PrivateRoute'
 
 function App() {
 	const location = useLocation()
@@ -63,7 +62,6 @@ function App() {
 						<Route path='/account/cart' element={<Cart />} />
 						<Route path='/account/history-order' element={<HistoryOrder />} />
 						<Route path='/account/history-contact' element={<HistoryContact />} />
-						<Route path='/account/payment/:id' element={<Payment />} />
 
 						<Route path='/order/verify' element={<OrderVerify />} />
 

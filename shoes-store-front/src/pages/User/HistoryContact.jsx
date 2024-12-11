@@ -22,7 +22,7 @@ const HistoryContact = () => {
 			<h2 className='text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl'>
 				History Contact
 			</h2>
-			<div className='ml-5'>
+			<div className='ml-5 flex flex-col gap-5'>
 				{historyContact.length !== 0 ? (
 					historyContact.map((contact) => (
 						<UserContactAccordion

@@ -42,7 +42,7 @@ const HistoryOrder = () => {
 			<h2 className='text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl'>
 				History Order
 			</h2>
-			<div className='ml-5'>
+			<div className='ml-5 flex flex-col gap-5'>
 				{historyOrder.length !== 0 ? (
 					historyOrder.map((order) => (
 						<OrderCard

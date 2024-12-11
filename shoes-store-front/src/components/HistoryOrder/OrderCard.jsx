@@ -1,5 +1,6 @@
 import { Accordion, AccordionBody, AccordionHeader } from '@material-tailwind/react'
 import { useNavigate } from 'react-router-dom'
+import { OrderService } from 'src/services/User/OrderService'
 import { formatDateWithLetterMonth, getDateFromDateTime } from 'src/utils/DateUtil'
 import { orderStatusEnum } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
@@ -13,6 +14,15 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 		delivery: 'orange',
 		deliveried: 'purple',
 		completed: 'green',
+	}
+
+	const getPaymentUrl = async (orderID) => {
+		const res = await OrderService.GET_PAYMENT_URL(orderID)
+		if (res?.success) {
+			window.location.href = res.data
+		} else {
+			navigate('/404')
+		}
 	}
 
 	return (
@@ -41,7 +51,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 					<div className='flex items-center gap-3 max-md:mt-5'>
 						{order?.orderStatus === orderStatusEnum.UNPAID && (
 							<button
-								onClick={() => navigate('/account/payment/' + order?.orderID)}
+								onClick={() => getPaymentUrl(order?.orderID)}
 								type='button'
 								className='pointer-events-auto cursor-pointer text-black px-7 py-3 shadow-sm shadow-transparent font-semibold transition-all duration-500 hover:underline'
 							>

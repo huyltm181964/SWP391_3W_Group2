@@ -18,14 +18,8 @@ const ProductCard = ({ product }) => {
 					<p>
 						<span class='text-3xl font-bold text-slate-900'>${product.productPrice}</span>
 					</p>
-					<span
-						className={`mr-2 ml-3 rounded px-2.5 py-0.5 text-xs font-semibold ${
-							product.productStatus.toLowerCase() === 'out of stock'
-								? 'bg-red-200'
-								: 'bg-yellow-200'
-						}`}
-					>
-						{product.productStatus}
+					<span className={`mr-2 ml-3 rounded px-2.5 py-0.5 text-sm font-semibold bg-yellow-200`}>
+						{product.productCategory}
 					</span>
 				</div>
 				<a

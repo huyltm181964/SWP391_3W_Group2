@@ -79,6 +79,15 @@ const Cart = () => {
 			setOrderAddress('')
 			setSelectedVariants([])
 			setIsEvent(!isEvent)
+
+			if (response.data?.orderID) {
+				setTimeout(async () => {
+					const res = await OrderService.GET_PAYMENT_URL(response.data?.orderID)
+					if (res?.success) {
+						window.location.href = res.data
+					}
+				}, 2000)
+			}
 		}
 	}
 

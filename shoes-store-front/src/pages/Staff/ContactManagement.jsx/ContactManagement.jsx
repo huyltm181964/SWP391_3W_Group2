@@ -52,20 +52,22 @@ const ContactManagement = () => {
 							</Typography>
 						</div>
 					</div>
-					{contacts.length !== 0 ? (
-						contacts.map((contact) => (
-							<StaffContactAccordion
-								open={open === contact.contactID}
-								setOpen={handleOpen}
-								contact={contact}
-								handleReject={handleReject}
-								handleAnswer={handleAnswer}
-								key={contact}
-							/>
-						))
-					) : (
-						<Typography variant='h5'>No contacts</Typography>
-					)}
+					<div className='flex flex-col gap-5'>
+						{contacts.length !== 0 ? (
+							contacts.map((contact) => (
+								<StaffContactAccordion
+									open={open === contact.contactID}
+									setOpen={handleOpen}
+									contact={contact}
+									handleReject={handleReject}
+									handleAnswer={handleAnswer}
+									key={contact}
+								/>
+							))
+						) : (
+							<Typography variant='h5'>No contacts</Typography>
+						)}
+					</div>
 				</CardBody>
 			</Card>
 		</section>

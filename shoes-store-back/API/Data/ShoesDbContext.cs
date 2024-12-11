@@ -8,14 +8,7 @@ namespace API.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Initial Catalog=ShoseStore;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Order>()
-                        .Property(o => o.OrderID)
-                        .ValueGeneratedOnAdd();
+            optionsBuilder.UseSqlServer("Server=localhost;Initial Catalog=ShoeStore;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
         }
 
         public DbSet<Account> Account { get; set; }
