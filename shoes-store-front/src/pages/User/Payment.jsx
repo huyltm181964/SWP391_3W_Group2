@@ -6,14 +6,13 @@ import { OrderService } from 'src/services/User/OrderService'
 
 const Payment = () => {
 	const { id } = useParams()
-	const [paymentURL, setPaymentURL] = useState('')
 
 	const navigate = useNavigate()
 	useEffect(() => {
 		const fetch = async () => {
 			const res = await OrderService.GET_PAYMENT_URL(id)
 			if (res?.success) {
-				setPaymentURL(res.data)
+				window.location.href = res.data
 			} else {
 				navigate('/404')
 			}
@@ -25,11 +24,7 @@ const Payment = () => {
 			<CardHeader className='flex flex-col items-center'>
 				<CheckCircleIcon color='green' height={'5rem'} />
 				<Typography variant='h4'>Thanks for placing your order</Typography>
-				<Typography>Please pay for your order using the QR code below</Typography>
 			</CardHeader>
-			<CardBody className='mx-auto'>
-				<img src={paymentURL} />
-			</CardBody>
 		</Card>
 	)
 }

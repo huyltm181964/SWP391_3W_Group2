@@ -11,9 +11,11 @@ namespace API.Controllers.User
     public class OrderController : Controller
     {
         private readonly OrderDAO dao;
-        public OrderController(OrderDAO dao)
+        private readonly IConfiguration configuration;
+        public OrderController(OrderDAO dao, IConfiguration configuration)
         {
             this.dao = dao;
+            this.configuration = configuration;
         }
 
         [HttpPost("check-out"), Authorize]
@@ -43,7 +45,15 @@ namespace API.Controllers.User
         [HttpGet("payment-url/{orderID}"), Authorize]
         public IActionResult GetPaymentURL(int orderID)
         {
-            var response = dao.GetPaymentURL(orderID);
+            var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
+            var response = dao.GetPaymentURL(orderID, ipAddress, configuration);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpGet("verify/{orderID}"), Authorize]
+        public IActionResult VerifyOrder(int orderID)
+        {
+            var response = dao.VerifyOrder(orderID);
             return StatusCode(response.StatusCode, response);
         }
 

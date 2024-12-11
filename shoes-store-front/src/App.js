@@ -23,6 +23,7 @@ import HistoryOrder from './pages/User/HistoryOrder'
 import Payment from './pages/User/Payment'
 import { ProtectedRoute, RoleRedirect } from './utils/PrivateRoute'
 import HistoryContact from './pages/User/HistoryContact'
+import OrderVerify from './pages/User/OrderVerify'
 
 function App() {
 	const location = useLocation()
@@ -63,6 +64,8 @@ function App() {
 						<Route path='/account/history-order' element={<HistoryOrder />} />
 						<Route path='/account/history-contact' element={<HistoryContact />} />
 						<Route path='/account/payment/:id' element={<Payment />} />
+
+						<Route path='/order/verify' element={<OrderVerify />} />
 
 						<Route
 							path='/dashboard'

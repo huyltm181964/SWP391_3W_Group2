@@ -7,13 +7,11 @@ export const OrderService = {
 	GET_HISTORY_ORDER: async () =>
 		await axiosFormBody.get(OrderRequest.GET_HISTORY_ORDER).then((response) => response.data),
 	CANCEL_ORDER: async (orderID) =>
-		await axiosFormBody
-			.delete(OrderRequest.CANCEL_ORDER + '/' + orderID)
-			.then((response) => response),
+		await axiosFormBody.delete(OrderRequest.CANCEL_ORDER + orderID).then((response) => response),
 	GET_PAYMENT_URL: async (orderID) =>
-		await axiosFormBody
-			.get(OrderRequest.GET_PAYMENT_URL + '/' + orderID)
-			.then((response) => response),
+		await axiosFormBody.get(OrderRequest.GET_PAYMENT_URL + orderID).then((response) => response),
 	CONFIRM_ORDER: async (orderID) =>
 		await axiosFormBody.post(OrderRequest.CONFIRM_ORDER, orderID).then((response) => response),
+	VERIFY_ORDER: async (orderID) =>
+		await axiosFormBody.get(OrderRequest.VERIFY_ORDER + orderID).then((response) => response),
 }
