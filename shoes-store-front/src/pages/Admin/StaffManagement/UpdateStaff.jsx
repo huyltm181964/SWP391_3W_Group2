@@ -30,13 +30,15 @@ const UpdateStaff = ({ open, handleClose, existingStaff, handleUpdateStaff }) =>
 
 	useEffect(() => {
 		if (existingStaff) {
+			const birthday = existingStaff.birthDay || ''
+			const formattedBirthday = birthday ? new Date(birthday).toISOString().split('T')[0] : ''
 			setValues({
 				accountID: existingStaff.accountID || '',
 				image: existingStaff.avatar || '',
 				accountName: existingStaff.accountName || '',
 				accountEmail: existingStaff.accountEmail || '',
 				gender: existingStaff.gender || '',
-				birthday: existingStaff.birthday || '',
+				birthday: formattedBirthday || '',
 				phone: existingStaff.phone || '',
 				accountAddress: existingStaff.accountAddress || '',
 			})
