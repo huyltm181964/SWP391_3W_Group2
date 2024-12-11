@@ -3,8 +3,10 @@ using API.DTOs;
 using API.DTOs.RequestDTO;
 using API.DTOs.ResponseDTO;
 using API.Models;
+using API.Utils;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace API.DAO
 {
@@ -31,7 +33,6 @@ namespace API.DAO
                 OrderAddress = checkoutDTO.OrderAddress,
                 OrderDate = DateTime.Now,
                 OrderStatus = "Unpaid",
-                PaymentDate = DateTime.Now,
                 TotalPrice = 0
             };
             db.Order.Add(addOrder);
@@ -106,7 +107,7 @@ namespace API.DAO
             };
         }
 
-     //Lấy danh sách order bằng status kiểu như("Delivery", "Ordered")
+        //Lấy danh sách order bằng status kiểu như("Delivery", "Ordered")
         public ResponseMessage GetOrderByStatus(string orderStatus)
         {
             // Lấy danh sách đơn hàng theo trạng thái, bao gồm thông tin tài khoản, chi tiết và sản phẩm.
@@ -125,7 +126,8 @@ namespace API.DAO
                 StatusCode = 200
             };
         }
-        //Cập nhật order status tùy vào method nào vd: của staff là Ordered => Delivery. Còn của admin là Delivery sang Delivered
+
+        //Cập nhật order status tùy vào method nào vd: của user là Unpaid => Ordered, của staff là Ordered => Delivery, của admin là Delivery => Deliveried
         public ResponseMessage UpdateOrderStatus(int orderID, string orderStatus)
         {
             // Tìm đơn hàng theo ID.
@@ -199,7 +201,7 @@ namespace API.DAO
             };
         }
 
-        public ResponseMessage GetPaymentURL(int orderID)
+        public ResponseMessage GetPaymentURL(int orderID, IPAddress ipAddress, IConfiguration configuration)
         {
             var order = db.Order.FirstOrDefault(x => x.OrderID == orderID);
             if (order == null)
@@ -213,14 +215,73 @@ namespace API.DAO
                 };
             }
 
-            var amount = order.TotalPrice * 20000;
-            var addInfo = $"Pay%20for%20order%20%23{orderID}";
+            order.PaymentDate = DateTime.Now;
+            db.Order.Update(order);
+            db.SaveChanges();
+
+#pragma warning disable
+            var vnp = new VNPay();
+            vnp.AddRequestData("vnp_Version", configuration["VNPayConfig:vnp_Version"]);
+            vnp.AddRequestData("vnp_Command", configuration["VNPayConfig:vnp_Command"]);
+            vnp.AddRequestData("vnp_TmnCode", configuration["VNPayConfig:vnp_TmnCode"]);
+            vnp.AddRequestData("vnp_Amount", ((long)(order.TotalPrice * 20000 * 100)).ToString());
+            vnp.AddRequestData("vnp_CreateDate", order.PaymentDate.ToString("yyyyMMddHHmmss"));
+            vnp.AddRequestData("vnp_CurrCode", configuration["VNPayConfig:vnp_CurrCode"]);
+            vnp.AddRequestData("vnp_IpAddr", "127.0.0.1");
+            vnp.AddRequestData("vnp_Locale", configuration["VNPayConfig:vnp_Locale"]);
+            vnp.AddRequestData("vnp_OrderInfo", $"Thanh toan hoa don #{order.OrderID}");
+            vnp.AddRequestData("vnp_OrderType", configuration["VNPayConfig:vnp_OrderType"]);
+            vnp.AddRequestData("vnp_ReturnUrl", configuration["VNPayConfig:vnp_ReturnUrl"]);
+            vnp.AddRequestData("vnp_ExpireDate", order.PaymentDate.AddMinutes(30).ToString("yyyyMMddHHmmss"));
+            vnp.AddRequestData("vnp_TxnRef", order.PaymentDate.Ticks.ToString());
+
+            var paymentURL = vnp.CreateRequestUrl(configuration["VNPayConfig:vnp_BaseUrl"], configuration["VNPayConfig:vnp_HashSecret"]);
+#pragma warning enable
+        
             return new ResponseMessage
             {
                 StatusCode = 200,
-                Data = $"https://img.vietqr.io/image/VCB-0091000684276-compact.png?amount={amount}&addInfo={addInfo}&accountName=Lam%20Tran%20Minh%20Huy",
+                Data = paymentURL,
                 Success = true,
                 Message = "Get PaymentURL successfully"
+            };
+        }
+
+        public ResponseMessage VerifyOrder(int orderID)
+        {
+            var order = db.Order.FirstOrDefault(x => x.OrderID == orderID);
+            if (order == null)
+            {
+                return new ResponseMessage
+                {
+                    StatusCode = 404,
+                    Data = null,
+                    Success = false,
+                    Message = "Order not found"
+                };
+            }
+
+            UpdateOrderStatus(orderID, "Ordered");
+            var staffs = db.Account.Where(a => a.Role == "Staff");
+            foreach (var staff in staffs)
+            {
+                var notification = new Notification
+                {
+                    AccountID = staff.AccountID,
+                    Title = "New order need to be exported",
+                    Description = $"Order #{orderID} has been paid and is waiting to be export."
+                };
+
+                db.Notification.Add(notification);
+            }
+            db.SaveChanges();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Data = null,
+                Message = "Verify successfully",
+                StatusCode = 200
             };
         }
     }
