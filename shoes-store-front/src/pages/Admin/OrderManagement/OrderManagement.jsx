@@ -32,16 +32,15 @@ function OrderManagement() {
 		}
 		fetchOrders()
 	}, [])
+	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '')) || 0
 
-	const sanitizeNumeric = (value) => parseFloat(value.replace(/[^0-9.-]+/g, '') || 0)
-
-	const sortedRows = [...tableRows].sort((a, b) => {
+	const sortedRows = tableRows.slice().sort((a, b) => {
 		if (!sortColumn) return 0
 
-		let valueA = a[sortColumn]
-		let valueB = b[sortColumn]
+		let valueA = a[sortColumn] ?? ''
+		let valueB = b[sortColumn] ?? ''
 
-		if (sortColumn === 'ae') {
+		if (['orderID', 'accountID', 'totalPrice'].includes(sortColumn)) {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -49,17 +48,8 @@ function OrderManagement() {
 			valueB = String(valueB).toLowerCase()
 		}
 
-		return sortDirection === 'asc'
-			? valueA > valueB
-				? 1
-				: valueA < valueB
-				? -1
-				: 0
-			: valueA < valueB
-			? 1
-			: valueA > valueB
-			? -1
-			: 0
+		if (sortDirection === 'asc') return valueA > valueB ? 1 : valueA < valueB ? -1 : 0
+		return valueA < valueB ? 1 : valueA > valueB ? -1 : 0
 	})
 
 	const totalPages = Math.ceil(sortedRows.length / rowsPerPage)

@@ -1,5 +1,5 @@
 import {
-	ArrowUturnLeftIcon,
+	ArrowRightIcon,
 	MagnifyingGlassIcon,
 	PencilIcon,
 	TrashIcon,
@@ -20,6 +20,7 @@ import { ProductManagementService } from 'src/services/Admin/ProductManagementSe
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
 import AddProduct from './AddProduct'
+import ProductVariant from './ProductVariant'
 import UpdateProduct from './UpdateProduct'
 
 const TABLE_HEAD = [
@@ -51,12 +52,12 @@ const TABLE_HEAD = [
 
 	{
 		head: 'Status',
-		customeStyle: 'text-center w-[10%]',
+		customeStyle: 'text-center w-[15%]',
 		key: 'productStatus',
 	},
 	{
 		head: 'Actions',
-		customeStyle: 'text-right w-[15%]',
+		customeStyle: 'text-center w-[10%]',
 		key: 'actions',
 	},
 ]
@@ -73,6 +74,8 @@ function ProductManagement() {
 	const [openAddPage, setOpenAddPage] = useState(false)
 	const [openUpdatePage, setOpenUpdatePage] = useState(false)
 	const [selectedProduct, setSelectedProduct] = useState(null)
+	const [openVariantPage, setOpenVariantPage] = useState(false)
+	const [product, setProduct] = useState([])
 
 	useEffect(() => {
 		async function fetchProducts() {
@@ -109,7 +112,7 @@ function ProductManagement() {
 		let valueA = a[sortColumn] ?? ''
 		let valueB = b[sortColumn] ?? ''
 
-		if (['price', 'variant'].includes(sortColumn)) {
+		if (['price', 'productID'].includes(sortColumn)) {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -179,6 +182,14 @@ function ProductManagement() {
 		const updatedData = await ProductManagementService.GET_ALL()
 		setTableRows(updatedData)
 	}
+	const handleOpenVariant = async (productId) => {
+		setSelectedProduct(productId)
+		const data = await ProductManagementService.GET_DETAIL(productId)
+		if (data) {
+			setProduct(data)
+		}
+		setOpenVariantPage(true)
+	}
 
 	return (
 		<section className='m-10'>
@@ -189,14 +200,14 @@ function ProductManagement() {
 							<Typography variant='h3' color='blue-gray'>
 								Product Management
 							</Typography>
-							<Button onClick={() => setOpenAddPage(true)}>Add Product</Button>
+							{/* <Button onClick={() => setOpenAddPage(true)}>Add Product</Button>
 							{openAddPage && (
 								<AddProduct
 									open={openAddPage}
 									handleClose={() => setOpenAddPage(false)}
 									handleAddProduct={handleAddProduct}
 								/>
-							)}
+							)} */}
 						</div>
 						<div className='flex items-center w-full shrink-0 gap-4 md:w-max'>
 							<Input
@@ -254,7 +265,7 @@ function ProductManagement() {
 										<td className='p-4 text-center'>{row.productPrice}</td>
 										<td className='p-4 text-center'>{row.productCategory}</td>
 										<td
-											className='p-4 text-right'
+											className='p-4 text-left'
 											style={{
 												color: row.productStatus === 'Out of business' ? 'red' : 'inherit',
 											}}
@@ -273,6 +284,7 @@ function ProductManagement() {
 														>
 															<PencilIcon className='h-5 w-5 text-gray-900' />
 														</IconButton>
+
 														<Confirmation
 															title='Are you sure?'
 															description='Do you really want to delete this item?'
@@ -289,6 +301,15 @@ function ProductManagement() {
 																</IconButton>
 															)}
 														</Confirmation>
+
+														<IconButton
+															variant='text'
+															size='sm'
+															title='Manage product variant'
+															onClick={() => handleOpenVariant(row.productID)}
+														>
+															<ArrowRightIcon className='h-5 w-5 text-gray-900' />
+														</IconButton>
 													</>
 												) : null}
 											</div>
@@ -305,6 +326,15 @@ function ProductManagement() {
 							handleClose={() => setOpenUpdatePage(false)}
 							existingProduct={selectedProduct}
 							handleUpdateProduct={handleUpdateProduct}
+						/>
+					)}
+
+					{openVariantPage && selectedProduct && (
+						<ProductVariant
+							open={openVariantPage}
+							handleClose={() => setOpenVariantPage(false)}
+							existingProduct={selectedProduct}
+							product={product}
 						/>
 					)}
 

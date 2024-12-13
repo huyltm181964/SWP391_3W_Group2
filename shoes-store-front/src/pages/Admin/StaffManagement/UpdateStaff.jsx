@@ -95,8 +95,8 @@ const UpdateStaff = ({ open, handleClose, existingStaff, handleUpdateStaff }) =>
 
 		if (!values.phone) {
 			newErrors.phone = 'Phone number is required.'
-		} else if (!/^\d{10,11}$/.test(values.phone)) {
-			newErrors.phone = 'Phone number must be 10 or 11 digits.'
+		} else if (!/^\d{10}$/.test(values.phone.trim())) {
+			newErrors.phone = 'Phone number must be 10 digits.'
 		}
 
 		if (!values.gender) {
