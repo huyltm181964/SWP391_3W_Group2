@@ -32,26 +32,26 @@ namespace API.Controllers.Staff
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("get-stock-history/{variantId}")]
-        public IActionResult GetProductStockHistory(int variantId)
+        [HttpGet("get-import-invoice/{variantId}")]
+        public IActionResult GetImportInvoice(int importId)
         {
-            var response = importDAO.GetProductHistory(variantId);
+            var response = importDAO.GetProductHistory(importId);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost("import-product")]
         public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
         {
-            var response = importDAO.AddImportProduct(importDTO);
+            var response = importDAO.ImportProduct(importDTO);
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("update-import-product")]
-        public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
-        {
-            var response = importDAO.UpdateImportProduct(updateImportDTO);
-            return StatusCode(response.StatusCode, response);
-        }
+        //[HttpPost("update-import-product")]
+        //public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
+        //{
+        //    var response = importDAO.UpdateImportProduct(updateImportDTO);
+        //    return StatusCode(response.StatusCode, response);
+        //}
     }
 }
 

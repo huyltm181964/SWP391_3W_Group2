@@ -91,46 +91,81 @@ namespace API.DAO
         }
 
         //Nhập kho
-        public ResponseMessage AddImportProduct(ImportDTO importDTO)
+        public ResponseMessage ImportProduct(ImportDTO importDTO)
         {
-            //Nhập vào variant cụ thể
-            var variant = db.ProductVariant
-                .Include(x => x.Product)
-                .ThenInclude(x => x.ProductVariants)
-                .FirstOrDefault(x => x.VariantID == importDTO.VariantID);
-
-            if (variant == null)
-            {
-                return new ResponseMessage
-                {
-                    Success = false,
-                    Message = "Variant not found.",
-                    Data = null,
-                    StatusCode = 404
-                };
-            }
-
             var import = new Import
             {
+                Supplier = importDTO.Supplier,
+                Phone = importDTO.Phone,
                 ImportDate = DateTime.Now,
-                Quantity = importDTO.Quantity,
-                ImportPrice = importDTO.ImportPrice,
-                VariantID = importDTO.VariantID,
-                ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}" //Gộp tất cả thành location
+                ImportLocation = $"{importDTO.City}, {importDTO.District}, {importDTO.Ward}, {importDTO.AddressDetail}",
+                ImportStaffID = importDTO.ImportStaffID
             };
 
-            //Sau khi nhập thì variant sẽ đc tăng quantity
-            variant.VariantQuantity += importDTO.Quantity;
-
-            db.ProductVariant.Update(variant);
             db.Import.Add(import);
+            db.SaveChanges(); 
+
+            var importDetails = new List<ImportDetail>();
+
+            foreach (var variantDTO in importDTO.VariantDetails)
+            {
+                var getProduct = db.Product.FirstOrDefault(x => x.ProductID == variantDTO.ProductID);
+                if (getProduct == null)
+                {
+                    return new ResponseMessage
+                    {
+                        Success = false,
+                        Message = $"Product with ID {variantDTO.ProductID} not found.",
+                        StatusCode = 404
+                    };
+                }
+
+                var variant = db.ProductVariant.FirstOrDefault(x => x.VariantSize == variantDTO.VariantSize
+                                                                     && x.ProductID == getProduct.ProductID
+                                                                     && x.VariantColor == variantDTO.VariantColor);
+
+                if (variant == null)
+                {
+                    variant = new ProductVariant
+                    {
+                        ProductID = getProduct.ProductID,
+                        VariantSize = variantDTO.VariantSize,
+                        VariantColor = variantDTO.VariantColor,
+                        VariantQuantity = variantDTO.Quantity
+                    };
+
+                    db.ProductVariant.Add(variant);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    variant.VariantQuantity += variantDTO.Quantity;
+                    db.ProductVariant.Update(variant);
+                }
+
+                var importDetail = new ImportDetail
+                {
+                    ImportID = import.ImportID,
+                    VariantID = variant.VariantID,
+                    Quantity = variantDTO.Quantity,
+                    UnitPrice = variantDTO.ImportPrice
+                };
+
+                importDetails.Add(importDetail);
+            }
+
+            db.ImportDetail.AddRange(importDetails);
             db.SaveChanges();
 
             return new ResponseMessage
             {
                 Success = true,
-                Message = "Import product added successfully.",
-                Data = import,
+                Message = "Products imported successfully.",
+                Data = new
+                {
+                    Import = import,
+                    Details = importDetails
+                },
                 StatusCode = 200
             };
         }
