@@ -5,13 +5,14 @@ import { OrderManagementService } from 'src/services/Admin/OrderManagementServic
 import { orderStatusEnum } from 'src/utils/EnumList'
 
 const TABLE_HEAD = [
-	{ head: 'OrderID', customeStyle: '!text-left w-[10%]', key: 'orderID' },
-	{ head: 'AccountID', customeStyle: '!text-left w-[20%]', key: 'accountID' },
-	{ head: 'OrderAddress', customeStyle: 'text-right w-[15%]', key: 'orderAddress' },
-	{ head: 'TotalPrice', customeStyle: 'text-right w-[15%]', key: 'totalPrice' },
-	{ head: 'OrderDate', customeStyle: 'text-right w-[15%]', key: 'orderDate' },
-	{ head: 'OrderStatus', customeStyle: 'text-right w-[10%]', key: 'orderStatus' },
-	{ head: 'Actions', customeStyle: 'text-right w-[20%]', key: 'actions' },
+	{ head: 'OrderID', customeStyle: '!text-center w-[10%]', key: 'orderID' },
+	{ head: 'AccountID', customeStyle: '!text-center w-[10%]', key: 'accountID' },
+	{ head: 'Email', customeStyle: '!text-center w-[17%]', key: 'accountEmail' },
+	{ head: 'Name', customeStyle: '!text-center w-[10%]', key: 'accountName' },
+	{ head: 'OrderAddress', customeStyle: 'text-center w-[13%]', key: 'orderAddress' },
+	{ head: 'TotalPrice', customeStyle: 'text-center w-[10%]', key: 'totalPrice' },
+	{ head: 'OrderDate', customeStyle: 'text-center w-[10%]', key: 'orderDate' },
+	{ head: 'OrderStatus', customeStyle: 'text-center w-[10%]', key: 'orderStatus' },
 ]
 
 function OrderManagement() {
@@ -26,6 +27,7 @@ function OrderManagement() {
 			const data = await OrderManagementService.GET_DELIVERY_ORDER()
 			if (data) {
 				setTableRows(data)
+				console.log(data)
 			}
 		}
 		fetchOrders()
@@ -39,7 +41,7 @@ function OrderManagement() {
 		let valueA = a[sortColumn]
 		let valueB = b[sortColumn]
 
-		if (sortColumn === 'totalPrice') {
+		if (sortColumn === 'ae') {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -94,12 +96,6 @@ function OrderManagement() {
 		return pageNumbers
 	}
 
-	const handleUpdateStatus = async (orderId, orderStatus) => {
-		await OrderManagementService.UPDATE_ORDER(orderId, orderStatus)
-		const updatedData = await OrderManagementService.GET_DELIVERY_ORDER()
-		setTableRows(updatedData)
-	}
-
 	return (
 		<section className='m-10'>
 			<Card className='h-full w-full'>
@@ -136,29 +132,20 @@ function OrderManagement() {
 							{paginatedRows.map((row) => {
 								return (
 									<tr>
-										<td className='p-4'>{row.orderID}</td>
-										<td className='p-4 break-words whitespace-normal'>{row.accountID}</td>
-										<td className='p-4 text-right'>{row.orderAddress}</td>
-										<td className='p-4 text-right'>{row.totalPrice}</td>
-										<td className='p-4 text-right'>{row.orderDate.split('T')[0]}</td>
-										<td className='p-4 text-right'>{row.orderStatus}</td>
-										<td className='p-4 text-right'>
-											<div className='flex justify-end gap-4'>
-												<Confirmation
-													title='Confirm deliveried order?'
-													description='Are you sure you want to confirm this order as deliveried?'
-													handleConfirm={() =>
-														handleUpdateStatus(row.orderID, orderStatusEnum.DELIVERIED)
-													}
-												>
-													{(handleOpen) => (
-														<Button onClick={handleOpen} color='green'>
-															Deliveried
-														</Button>
-													)}
-												</Confirmation>
-											</div>
+										<td className='p-4 text-center'>{row.orderID}</td>
+										<td className='p-4 text-center'>{row.accountID}</td>
+										<td className='p-4 text-left break-words whitespace-normal'>
+											{row.account.accountEmail}
 										</td>
+										<td className='p-4 text-left break-words whitespace-normal'>
+											{row.account.accountName}
+										</td>
+										<td className='p-4 text-left break-words whitespace-normal'>
+											{row.orderAddress}
+										</td>
+										<td className='p-4 text-right'>{row.totalPrice}</td>
+										<td className='p-4 text-left'>{row.orderDate.split('T')[0]}</td>
+										<td className='p-4 text-left'>{row.orderStatus}</td>
 									</tr>
 								)
 							})}

@@ -127,6 +127,22 @@ namespace API.DAO
             };
         }
 
+        public ResponseMessage GetAllOrder()
+        {
+            var listOder = db.Order
+                             .Include(x => x.Account)
+                             .Include(x => x.OrderDetails).ThenInclude(x => x.Variant).ThenInclude(x => x.Product)
+                             .ToList();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Success",
+                Data = listOder,
+                StatusCode = 200
+            };
+        }
+
         //Cập nhật order status tùy vào method nào vd: của user là Unpaid => Ordered, của staff là Ordered => Delivery, của admin là Delivery => Deliveried
         public ResponseMessage UpdateOrderStatus(int orderID, string orderStatus)
         {

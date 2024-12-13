@@ -7,11 +7,4 @@ export const OrderManagementService = {
 		await axiosFormBody
 			.get(OrderManagementRequest.GET_DELIVERY_ORDER)
 			.then((response) => response.data),
-
-	UPDATE_ORDER: async (orderId, orderStatus) => {
-		const requestBody = { orderId, orderStatus }
-		await axiosFormData
-			.post(OrderManagementRequest.UPDATE_ORDER, requestBody)
-			.then((response) => response.data)
-	},
 }
