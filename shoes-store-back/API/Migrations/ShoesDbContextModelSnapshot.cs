@@ -189,6 +189,10 @@ namespace API.Migrations
                     b.Property<DateTime?>("AnswerDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("AnsweredStaffName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -212,35 +216,6 @@ namespace API.Migrations
                     b.ToTable("Contact");
                 });
 
-            modelBuilder.Entity("API.Models.Export", b =>
-                {
-                    b.Property<int>("ExportID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExportID"));
-
-                    b.Property<DateTime>("ExportDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ExportLocation")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VariantID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExportID");
-
-                    b.HasIndex("VariantID");
-
-                    b.ToTable("Export");
-                });
-
             modelBuilder.Entity("API.Models.Import", b =>
                 {
                     b.Property<int>("ImportID")
@@ -257,20 +232,35 @@ namespace API.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<decimal>("ImportPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Supplier")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Quantity")
+                    b.HasKey("ImportID");
+
+                    b.ToTable("Import");
+                });
+
+            modelBuilder.Entity("API.Models.ImportDetail", b =>
+                {
+                    b.Property<int>("ImportID")
                         .HasColumnType("int");
 
                     b.Property<int>("VariantID")
                         .HasColumnType("int");
 
-                    b.HasKey("ImportID");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ImportID", "VariantID");
 
                     b.HasIndex("VariantID");
 
-                    b.ToTable("Import");
+                    b.ToTable("ImportDetail");
                 });
 
             modelBuilder.Entity("API.Models.Notification", b =>
@@ -348,9 +338,6 @@ namespace API.Migrations
                     b.Property<int>("VariantID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsExported")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -413,9 +400,6 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VariantID"));
 
-                    b.Property<bool>("IsStopSelling")
-                        .HasColumnType("bit");
-
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
 
@@ -423,10 +407,6 @@ namespace API.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("VariantImg")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VariantQuantity")
                         .HasColumnType("int");
@@ -522,26 +502,23 @@ namespace API.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("API.Models.Export", b =>
+            modelBuilder.Entity("API.Models.ImportDetail", b =>
                 {
-                    b.HasOne("API.Models.ProductVariant", "ProductVariant")
-                        .WithMany("Exports")
+                    b.HasOne("API.Models.Import", "Import")
+                        .WithMany("ImportDetails")
+                        .HasForeignKey("ImportID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.ProductVariant", "Variant")
+                        .WithMany("ImportDetails")
                         .HasForeignKey("VariantID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductVariant");
-                });
+                    b.Navigation("Import");
 
-            modelBuilder.Entity("API.Models.Import", b =>
-                {
-                    b.HasOne("API.Models.ProductVariant", "ProductVariant")
-                        .WithMany("Imports")
-                        .HasForeignKey("VariantID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductVariant");
+                    b.Navigation("Variant");
                 });
 
             modelBuilder.Entity("API.Models.Notification", b =>
@@ -614,6 +591,11 @@ namespace API.Migrations
                     b.Navigation("CartItems");
                 });
 
+            modelBuilder.Entity("API.Models.Import", b =>
+                {
+                    b.Navigation("ImportDetails");
+                });
+
             modelBuilder.Entity("API.Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
@@ -628,9 +610,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.ProductVariant", b =>
                 {
-                    b.Navigation("Exports");
-
-                    b.Navigation("Imports");
+                    b.Navigation("ImportDetails");
                 });
 #pragma warning restore 612, 618
         }
