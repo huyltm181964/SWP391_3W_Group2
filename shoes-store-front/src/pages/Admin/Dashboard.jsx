@@ -1,6 +1,5 @@
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import {
-	AdjustmentsVerticalIcon,
 	ChartBarIcon,
 	ShoppingCartIcon,
 	TicketIcon,
@@ -17,7 +16,6 @@ import OrderManagement from './OrderManagement/OrderManagement'
 import ProductManagement from './ProductManagement/ProductManagement'
 import StaffManagement from './StaffManagement/StaffManagement'
 import Statistics from './Statistics/Statistics'
-import VariantManagement from './VariantManagement/VariantManagement'
 
 const Dashboard = () => {
 	const [selectedPage, setSelectedPage] = useState(<Statistics />)
@@ -83,17 +81,6 @@ const Dashboard = () => {
 							<ShoppingCartIcon className='h-5 w-5' />
 						</ListItemPrefix>
 						Products
-					</ListItem>
-
-					<ListItem
-						className={LIST_ITEM_STYLES}
-						selected={selectedPageKey === 'Variants'}
-						onClick={() => handleSelectPage(<VariantManagement />, 'Variants')}
-					>
-						<ListItemPrefix>
-							<AdjustmentsVerticalIcon className='h-5 w-5' />
-						</ListItemPrefix>
-						Variants
 					</ListItem>
 
 					<ListItem
