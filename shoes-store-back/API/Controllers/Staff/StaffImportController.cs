@@ -25,20 +25,6 @@ namespace API.Controllers.Staff
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("detail/{productId}")]
-        public IActionResult ProductDetail(int productId)
-        {
-            var response = importDAO.GetDetail(productId);
-            return StatusCode(response.StatusCode, response);
-        }
-
-        [HttpGet("get-import-invoice/{variantId}")]
-        public IActionResult GetImportInvoice(int importId)
-        {
-            var response = importDAO.GetProductHistory(importId);
-            return StatusCode(response.StatusCode, response);
-        }
-
         [HttpPost("import-product")]
         public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
         {
