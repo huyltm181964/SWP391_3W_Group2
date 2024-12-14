@@ -21,12 +21,12 @@ namespace API.Controllers.Staff
         [HttpGet]
         public IActionResult GetALlImport()
         {
-            var response = importDAO.GetAllImport();
+            var response = importDAO.GetAllImports();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost("import-product")]
-        public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
+        public IActionResult ImportProduct(ImportDTO importDTO)
         {
             var response = importDAO.ImportProduct(importDTO);
             return StatusCode(response.StatusCode, response);
@@ -38,13 +38,6 @@ namespace API.Controllers.Staff
             var response = importDAO.GetImportDetails();
             return StatusCode(response.StatusCode, response);
         }
-
-        //[HttpPost("update-import-product")]
-        //public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
-        //{
-        //    var response = importDAO.UpdateImportProduct(updateImportDTO);
-        //    return StatusCode(response.StatusCode, response);
-        //}
     }
 }
 
