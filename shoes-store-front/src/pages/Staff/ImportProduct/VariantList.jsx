@@ -9,7 +9,6 @@ import {
 import { useEffect, useState } from 'react'
 import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { GetImage } from 'src/utils/GetImage'
-import StockHistory from './StockHistory'
 
 const TABLE_HEAD = [
 	{ head: 'VariantID', customeStyle: '!text-left w-[10%]', key: 'id' },
@@ -171,14 +170,7 @@ const VariantList = ({ open, handleClose, product }) => {
 						))}
 					</tbody>
 				</table>
-				{openStockHistoryPage && selectedVariant && (
-					<StockHistory
-						open={openStockHistoryPage}
-						handleClose={() => setOpenStockHistoryPage(false)}
-						existingVariantId={selectedVariant}
-						stockHistoryData={stockHistoryData}
-					/>
-				)}
+				
 				<div className='flex justify-between items-center mt-4'>
 					<Button
 						onClick={() => handleChangePage(page - 1)}

@@ -16,18 +16,24 @@ namespace API.DAO
             this.db = db;
         }
 
-        public ResponseMessage GetAllImport()
+        public ResponseMessage GetAllImports()
         {
-            var listImport = db.Import.ToList();
+            var importList = db.Import
+                .Include(i => i.ImportDetails)
+                    .ThenInclude(id => id.Variant)
+                        .ThenInclude(v => v.Product)
+                .Include(i => i.ImportStaff)
+                .ToList();
 
             return new ResponseMessage
             {
                 Success = true,
-                Message = "List Import Ok",
-                Data = listImport,
+                Message = "Import list fetched successfully",
+                Data = importList,
                 StatusCode = 200
             };
         }
+
 
         public ResponseMessage GetImportDetails()
         {

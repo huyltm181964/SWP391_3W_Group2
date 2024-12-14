@@ -14,6 +14,7 @@ import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
 import VariantList from './VariantList'
+import ImportProduct from './ImportProduct'
 
 const TABLE_HEAD = [
 	{
@@ -32,7 +33,7 @@ const TABLE_HEAD = [
 		key: 'supplier',
 	},
 	{
-		head: 'ImportLocation',
+		head: 'Import Location',
 		customeStyle: 'text-center w-[20%]',
 		key: 'importLocation',
 	},
@@ -53,9 +54,8 @@ const TABLE_HEAD = [
 	},
 ]
 
-function ImportInvoiceList() {
+function ImportInvoiceList(staffId) {
 	const [tableRows, setTableRows] = useState([])
-	const [searchTerm, setSearchTerm] = useState('')
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
@@ -63,12 +63,15 @@ function ImportInvoiceList() {
 	const [openVariantPage, setOpenVariantPage] = useState(false)
 	const [selectedProduct, setSelectedProduct] = useState(null)
 	const [product, setImportDetail] = useState([])
+	const [openAddPage, setOpenAddPage] = useState(false)
+	const [staffID, setStaffID] = useState(null)
 
 	useEffect(() => {
 		async function fetchImports() {
-			const data = await ImportProductService.GET_ALL_PRODUCT()
+			const data = await ImportProductService.GET_ALL_IMPORT()
 			if (data) {
 				setTableRows(data)
+				setStaffID(staffId)
 			}
 		}
 		fetchImports()
@@ -137,6 +140,14 @@ function ImportInvoiceList() {
 		setOpenVariantPage(true)
 	}
 
+	const handleImport = async (formBody) => {
+		await ImportProductService.IMPORT_PRODUCT(formBody)
+
+		const updatedData = await ImportProductService.GET_ALL_IMPORT()
+		setTableRows(updatedData)
+		setOpenAddPage(false)
+	}
+
 	return (
 		<section className='m-10'>
 			<Card className='h-full w-full'>
@@ -144,21 +155,18 @@ function ImportInvoiceList() {
 					<div className='rounded-none flex flex-wrap gap-4 justify-between mb-4'>
 						<div>
 							<Typography variant='h3' color='blue-gray'>
-								Product List
+								Import Invoice List
 							</Typography>
-						</div>
-						<div className='flex items-center w-full shrink-0 gap-4 md:w-max'>
-							<Input
-								size='lg'
-								label='Search'
-								icon={<MagnifyingGlassIcon className='h-5 w-5' />}
-								value={searchTerm}
-								s
-								onChange={(e) => setSearchTerm(e.target.value)}
-							/>
+							<Button onClick={() => setOpenAddPage(true)}>Import Product</Button>
+							{openAddPage && (
+								<ImportProduct
+									open={openAddPage}
+									handleClose={() => setOpenAddPage(false)}
+									handleImport={handleImport}
+								/>
+							)}
 						</div>
 					</div>
-
 					<table className='w-full table-fixed mt-4'>
 						<thead>
 							<tr>
@@ -184,47 +192,27 @@ function ImportInvoiceList() {
 								return (
 									<tr
 										key={row.productID}
-										className={`border-gray-300 ${
-											row.productStatus === 'Out of business' ? 'bg-red-100' : ''
-										}`}
+										className={`border-gray-300 
+										`}
 									>
-										<td className='p-4'>{row.productID}</td>
-										<td className='p-4'>
-											<img
-												style={{
-													width: '120px',
-													height: '100px',
-													objectFit: 'contain',
-												}}
-												src={GetImage(row.productImg)}
-												alt='Product Image'
-											/>
+										<td className='p-4 text-center'>{row.importID}</td>
+										<td className='p-4 text-center'>{row.importDate.split('T')[0]}</td>
+										<td className='p-4 text-right'>{row.supplier}</td>
+										<td className='p-4 text-right break-words whitespace-normal'>
+											{row.importLocation}
 										</td>
-										<td className='p-4 text-right'>{row.productName}</td>
-										<td className='p-4 text-right'>{row.productPrice}</td>
-										<td className='p-4 text-right'>{row.productCategory}</td>
-										<td className='p-4 break-words whitespace-normal'>{row.productDescription}</td>
-										<td
-											className='p-4 text-right'
-											style={{
-												color: row.productStatus === 'Out of business' ? 'red' : 'inherit',
-											}}
-										>
-											{row.productStatus}
-										</td>
-										<td className='p-4 text-right'>
-											{row.productStatus !== 'Out of business' && (
-												<div className='flex justify-end gap-4'>
-													<IconButton
-														variant='text'
-														size='sm'
-														title='Manage product variant'
-														onClick={() => handleOpenVariant(row.productID)}
-													>
-														<ArrowRightIcon className='h-5 w-5 text-gray-900' />
-													</IconButton>
-												</div>
-											)}
+										<td className='p-4 text-center'>{row.phone}</td>
+										<td className='p-4 text-center'>{row.importStaff.accountName}</td>
+
+										<td className='p-4 text-center'>
+											<Button
+												variant='contained'
+												size='sm'
+												title='Manage product variant'
+												onClick={() => handleOpenVariant(row.productID)}
+											>
+												View Detail
+											</Button>
 										</td>
 									</tr>
 								)
