@@ -67,9 +67,9 @@ function ImportInvoiceList(staffId) {
 
 	useEffect(() => {
 		async function fetchImports() {
-			const data = await ImportProductService.GET_ALL_IMPORT()
-			if (data) {
-				setTableRows(data)
+			const response = await ImportProductService.GET_ALL_IMPORT()
+			if (response) {
+				setTableRows(response)
 			}
 		}
 		fetchImports()
@@ -129,12 +129,8 @@ function ImportInvoiceList(staffId) {
 		return pageNumbers
 	}
 
-	const handleOpenVariant = async (productId) => {
-		setSelectedImport(productId)
-		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
-		if (data) {
-			setImportDetail(data)
-		}
+	const handleOpenVariant = async (row) => {
+		setImportDetail(row)
 		setOpenVariantPage(true)
 	}
 
@@ -207,7 +203,7 @@ function ImportInvoiceList(staffId) {
 												variant='contained'
 												size='sm'
 												title='Manage product variant'
-												onClick={() => handleOpenVariant(row.productID)}
+												onClick={() => handleOpenVariant(row)}
 											>
 												View Detail
 											</Button>

@@ -6,11 +6,6 @@ export const ImportProductService = {
 	GET_ALL_IMPORT: async () =>
 		await axiosFormBody.get(ImportProductRequest.GET_ALL_IMPORT).then((response) => response),
 
-	GET_PRODUCT_DETAIL: async (productId) =>
-		await axiosFormBody
-			.get(ImportProductRequest.GET_PRODUCT_DETAIL + productId)
-			.then((response) => response.data),
-
 	IMPORT_PRODUCT: async (formdata) =>
 		await axiosFormBody
 			.post(ImportProductRequest.IMPORT_PRODUCT, formdata)
