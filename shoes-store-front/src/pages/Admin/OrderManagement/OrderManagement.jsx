@@ -1,9 +1,4 @@
-import {
-	Button,
-	Card,
-	CardBody,
-	Typography
-} from '@material-tailwind/react'
+import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
 import React, { useEffect, useState } from 'react'
 import { OrderManagementService } from 'src/services/Admin/OrderManagementService'
 import { GetImage } from 'src/utils/GetImage'
@@ -122,91 +117,104 @@ function OrderManagement() {
 					)}
 
 					<div className='overflow-hidden rounded-lg shadow-md'>
-						<table className='w-full table-auto border-collapse'>
-							<thead>
-								<tr>
-									{TABLE_HEAD.map(({ head, customeStyle, key }) => (
-										<th
-											key={key}
-											className={`border-b border-gray-300 px-4 py-2 text-lg font-bold ${customeStyle}`}
-											onClick={() => handleSort(key)}
-										>
-											{head} {sortColumn === key ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-										</th>
-									))}
-								</tr>
-							</thead>
-							<tbody>
-								{paginatedRows.map((row) => (
-									<React.Fragment key={row.orderID}>
-										<tr
-											className='text-lg cursor-pointer hover:bg-gray-100 transition-all duration-300 px-4 py-2'
-											onClick={() => toggleAccordion(row.orderID)}
-										>
-											<td className='text-center px-4 py-2'>{row.orderID}</td>
-											<td className='text-center px-4 py-2'>{row.accountID}</td>
-											<td className='text-left break-words px-4 py-2'>
-												{row.account?.accountEmail || 'N/A'}
-											</td>
-											<td className='text-left break-words px-4 py-2'>
-												{row.account?.accountName || 'N/A'}
-											</td>
-											<td className='text-left break-words px-4 py-2'>
-												{row.orderAddress || 'N/A'}
-											</td>
-											<td className='text-left px-4 py-2'>
-												{row.orderDate?.split('T')[0] || 'N/A'}
-											</td>
-											<td className='text-left px-4 py-2'>{row.orderStatus || 'N/A'}</td>
-										</tr>
-										{openAccordion === row.orderID && (
-											<tr
-												className={`transition-all duration-300 ease-in-out ${
-													openAccordion === row.orderID
-														? 'max-h-[500px] opacity-100'
-														: 'max-h-0 opacity-0'
-												} overflow-hidden`}
+						{tableRows.length === 0 ? (
+							<div className='flex flex-col items-center justify-center py-10'>
+								<Typography variant='h5' color='gray' className='text-center'>
+									No orders available.
+								</Typography>
+								<Typography variant='small' color='gray' className='text-center mt-2'>
+									There are no orders to display at this moment. Please check back later.
+								</Typography>
+							</div>
+						) : (
+							<table className='w-full table-auto border-collapse'>
+								<thead>
+									<tr>
+										{TABLE_HEAD.map(({ head, customeStyle, key }) => (
+											<th
+												key={key}
+												className={`border-b border-gray-300 px-4 py-2 text-lg font-bold ${customeStyle}`}
+												onClick={() => handleSort(key)}
 											>
-												<td colSpan={TABLE_HEAD.length} className='bg-gray-50 px-6 py-4'>
-													{row?.orderDetails?.map((detail, index) => (
-														<div key={index} className='flex flex-wrap items-start gap-6 py-2'>
-															<img
-																src={GetImage(detail.variant?.variantImg)}
-																alt=''
-																className='object-cover w-24 h-24 rounded-md'
-															/>
-															<div className='flex-1'>
-																<Typography variant='h6' className='font-bold'>
-																	{detail.variant?.product?.productName}
-																</Typography>
-																<Typography variant='small' color='gray'>
-																	Category: {detail.variant?.product?.productCategory}
-																</Typography>
-																<Typography variant='small' color='gray'>
-																	Size: {detail.variant?.variantSize} | Color:
-																	{detail.variant?.variantColor}
-																</Typography>
-															</div>
-															<div className='text-right'>
-																<Typography variant='small'>Quantity: {detail.quantity}</Typography>
-																<Typography variant='small'>
-																	Price: ${detail.quantity * detail.unitPrice}
-																</Typography>
-															</div>
-														</div>
-													))}
-													<div className='mt-4 border-t-2 border-black pt-2 text-right'>
-														<Typography variant='h6' className='font-medium'>
-															Total Price: ${row.totalPrice}
-														</Typography>
-													</div>
+												{head} {sortColumn === key ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+											</th>
+										))}
+									</tr>
+								</thead>
+								<tbody>
+									{paginatedRows.map((row) => (
+										<React.Fragment key={row.orderID}>
+											<tr
+												className='text-lg cursor-pointer hover:bg-gray-100 transition-all duration-300 px-4 py-2'
+												onClick={() => toggleAccordion(row.orderID)}
+											>
+												<td className='text-center px-4 py-2'>{row.orderID}</td>
+												<td className='text-center px-4 py-2'>{row.accountID}</td>
+												<td className='text-left break-words px-4 py-2'>
+													{row.account?.accountEmail || 'N/A'}
 												</td>
+												<td className='text-left break-words px-4 py-2'>
+													{row.account?.accountName || 'N/A'}
+												</td>
+												<td className='text-left break-words px-4 py-2'>
+													{row.orderAddress || 'N/A'}
+												</td>
+												<td className='text-left px-4 py-2'>
+													{row.orderDate?.split('T')[0] || 'N/A'}
+												</td>
+												<td className='text-left px-4 py-2'>{row.orderStatus || 'N/A'}</td>
 											</tr>
-										)}
-									</React.Fragment>
-								))}
-							</tbody>
-						</table>
+											{openAccordion === row.orderID && (
+												<tr
+													className={`transition-all duration-300 ease-in-out ${
+														openAccordion === row.orderID
+															? 'max-h-[500px] opacity-100'
+															: 'max-h-0 opacity-0'
+													} overflow-hidden`}
+												>
+													<td colSpan={TABLE_HEAD.length} className='bg-gray-50 px-6 py-4'>
+														{row?.orderDetails?.map((detail, index) => (
+															<div key={index} className='flex flex-wrap items-start gap-6 py-2'>
+																<img
+																	src={GetImage(detail.variant?.variantImg)}
+																	alt=''
+																	className='object-cover w-24 h-24 rounded-md'
+																/>
+																<div className='flex-1'>
+																	<Typography variant='h6' className='font-bold'>
+																		{detail.variant?.product?.productName}
+																	</Typography>
+																	<Typography variant='small' color='gray'>
+																		Category: {detail.variant?.product?.productCategory}
+																	</Typography>
+																	<Typography variant='small' color='gray'>
+																		Size: {detail.variant?.variantSize} | Color:
+																		{detail.variant?.variantColor}
+																	</Typography>
+																</div>
+																<div className='text-right'>
+																	<Typography variant='small'>
+																		Quantity: {detail.quantity}
+																	</Typography>
+																	<Typography variant='small'>
+																		Price: ${detail.quantity * detail.unitPrice}
+																	</Typography>
+																</div>
+															</div>
+														))}
+														<div className='mt-4 border-t-2 border-black pt-2 text-right'>
+															<Typography variant='h6' className='font-medium'>
+																Total Price: ${row.totalPrice}
+															</Typography>
+														</div>
+													</td>
+												</tr>
+											)}
+										</React.Fragment>
+									))}
+								</tbody>
+							</table>
+						)}
 					</div>
 
 					<div className='flex justify-between items-center mt-6'>
