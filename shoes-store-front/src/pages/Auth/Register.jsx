@@ -62,9 +62,10 @@ function Register() {
 						<Typography variant='h1' color='blue-gray' className='mb-4 !text-3xl lg:text-4xl'>
 							Welcome to Shoes Store
 						</Typography>
-						<Typography className='!text-gray-600 text-[18px] font-normal md:max-w-sm'>
-							Step into style and comfort with the finest collection of shoes for every occasion.
+						<Typography className='!text-gray-600 text-[18px] font-normal md:max-w-sm text-center mx-auto'>
+  						  Step into style and comfort with the finest collection of shoes for every occasion.
 						</Typography>
+
 					</CardHeader>
 					<CardBody>
 						<form onSubmit={handleRegister} className='flex flex-col gap-4'>
