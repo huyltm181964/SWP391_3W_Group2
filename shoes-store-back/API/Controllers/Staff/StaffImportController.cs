@@ -18,10 +18,10 @@ namespace API.Controllers.Staff
             this.importDAO = importDAO;
         }
 
-        [HttpGet("get-products")]
-        public IActionResult GetProducts()
+        [HttpGet]
+        public IActionResult GetALlImport()
         {
-            var response = importDAO.GetProducts();
+            var response = importDAO.GetAllImport();
             return StatusCode(response.StatusCode, response);
         }
 
@@ -32,26 +32,33 @@ namespace API.Controllers.Staff
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("get-stock-history/{variantId}")]
-        public IActionResult GetProductStockHistory(int variantId)
+        [HttpGet("get-import-invoice/{variantId}")]
+        public IActionResult GetImportInvoice(int importId)
         {
-            var response = importDAO.GetProductHistory(variantId);
+            var response = importDAO.GetProductHistory(importId);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost("import-product")]
         public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
         {
-            var response = importDAO.AddImportProduct(importDTO);
+            var response = importDAO.ImportProduct(importDTO);
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("update-import-product")]
-        public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
+        [HttpGet("get-import-details")]
+        public IActionResult GetImportDetails()
         {
-            var response = importDAO.UpdateImportProduct(updateImportDTO);
+            var response = importDAO.GetImportDetails();
             return StatusCode(response.StatusCode, response);
         }
+
+        //[HttpPost("update-import-product")]
+        //public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
+        //{
+        //    var response = importDAO.UpdateImportProduct(updateImportDTO);
+        //    return StatusCode(response.StatusCode, response);
+        //}
     }
 }
 
