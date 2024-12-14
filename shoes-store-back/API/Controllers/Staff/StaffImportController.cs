@@ -46,6 +46,13 @@ namespace API.Controllers.Staff
             return StatusCode(response.StatusCode, response);
         }
 
+        [HttpGet("get-import-details")]
+        public IActionResult GetImportDetails()
+        {
+            var response = importDAO.GetImportDetails();
+            return StatusCode(response.StatusCode, response);
+        }
+
         //[HttpPost("update-import-product")]
         //public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
         //{

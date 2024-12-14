@@ -90,6 +90,32 @@ namespace API.DAO
             };
         }
 
+        
+        public ResponseMessage GetImportDetails()
+        {
+            var importDetails = db.ImportDetail
+                .Include(d => d.Variant)
+                .ThenInclude(v => v.Product)
+                .Select(detail => new
+                {
+                    ProductName = detail.Variant.Product.ProductName,
+                    Size = detail.Variant.VariantSize,
+                    Color = detail.Variant.VariantColor,
+                    Quantity = detail.Quantity,
+                    UnitPrice = detail.UnitPrice,
+                    TotalPrice = detail.Quantity * detail.UnitPrice
+                })
+                .ToList();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "Import details fetched successfully.",
+                Data = importDetails,
+                StatusCode = 200
+            };
+        }
+
         //Nhập kho
         public ResponseMessage ImportProduct(ImportDTO importDTO)
         {
@@ -103,7 +129,7 @@ namespace API.DAO
             };
 
             db.Import.Add(import);
-            db.SaveChanges(); 
+            db.SaveChanges();
 
             var importDetails = new List<ImportDetail>();
 
