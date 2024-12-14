@@ -13,6 +13,7 @@ import { ProductManagementService } from 'src/services/Admin/ProductManagementSe
 import { AccountService } from 'src/services/User/AccountService'
 import AddProduct from './AddProduct'
 import { ImportProductService } from 'src/services/Staff/ImportProductService'
+import { GetImage } from 'src/utils/GetImage'
 
 const ImportProduct = ({ open, handleClose, handleImport }) => {
 	const [profile, setProfile] = useState([])
@@ -27,6 +28,7 @@ const ImportProduct = ({ open, handleClose, handleImport }) => {
 		ward: '',
 		variantDetails: [],
 	})
+	const [dropdownOpen, setDropdownOpen] = useState(false)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -156,6 +158,11 @@ const ImportProduct = ({ open, handleClose, handleImport }) => {
 		setOpenAddPage(false)
 	}
 
+	const handleSelect = (item) => {
+		handleVariantChange({ target: { name: 'productId', value: item.productID } })
+		setDropdownOpen(false)
+	}
+
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
@@ -217,27 +224,37 @@ const ImportProduct = ({ open, handleClose, handleImport }) => {
 							)}
 						</div>
 
-						<div className='mb-6 border-black'>
+						<div className='mb-6 border-black relative'>
 							<label htmlFor='productId' className='block text-sm font-medium text-gray-700'>
 								Product Name
 							</label>
-							<select
-								id='productId'
-								name='productId'
-								value={newVariant.productId}
-								onChange={handleVariantChange}
-								className='block w-full border-gray-300 rounded p-2'
+							<div
+								className='block w-full border-gray-300 rounded p-2 bg-white cursor-pointer'
+								onClick={() => setDropdownOpen(!dropdownOpen)}
 							>
-								<option value='' disabled>
-									Select a product
-								</option>
-								{product &&
-									product.map((item) => (
-										<option key={item.id} value={item.productID}>
-											{item.productName}
-										</option>
+								{newVariant.productId
+									? product.find((item) => item.productID === newVariant.productId)?.productName ||
+									  'Select a product'
+									: 'Select a product'}
+							</div>
+							{dropdownOpen && (
+								<ul className='absolute z-10 w-full border border-gray-300 rounded bg-white max-h-60 overflow-auto'>
+									{product.map((item) => (
+										<li
+											key={item.productID}
+											className='p-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer'
+											onClick={() => handleSelect(item)}
+										>
+											<img
+												className='w-8 h-8 object-cover rounded'
+												src={GetImage(item.productImg)}
+												alt={item.productName}
+											/>
+											<span>{item.productName}</span>
+										</li>
 									))}
-							</select>
+								</ul>
+							)}
 						</div>
 
 						<div className='flex gap-6 p-4 bg-gray-50 rounded-lg shadow-md'>
