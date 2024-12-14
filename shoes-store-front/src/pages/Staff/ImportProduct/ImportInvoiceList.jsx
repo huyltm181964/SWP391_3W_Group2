@@ -82,7 +82,7 @@ function ImportInvoiceList(staffId) {
 		let valueA = a[sortColumn] ?? ''
 		let valueB = b[sortColumn] ?? ''
 
-		if (['price', 'variant'].includes(sortColumn)) {
+		if (['importID', 'variant'].includes(sortColumn)) {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -193,8 +193,8 @@ function ImportInvoiceList(staffId) {
 									>
 										<td className='p-4 text-center'>{row.importID}</td>
 										<td className='p-4 text-center'>{row.importDate.split('T')[0]}</td>
-										<td className='p-4 text-right'>{row.supplier}</td>
-										<td className='p-4 text-right break-words whitespace-normal'>
+										<td className='p-4 text-left'>{row.supplier}</td>
+										<td className='p-4 text-left break-words whitespace-normal'>
 											{row.importLocation}
 										</td>
 										<td className='p-4 text-center'>{row.phone}</td>
