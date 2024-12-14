@@ -11,30 +11,30 @@ import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { GetImage } from 'src/utils/GetImage'
 
 const TABLE_HEAD = [
-	{ head: 'VariantID', customeStyle: '!text-left w-[10%]', key: 'id' },
-	{ head: 'Image', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Size', customeStyle: 'text-right w-[10%]', key: 'size' },
-	{ head: 'Color', customeStyle: 'text-right w-[10%]', key: 'color' },
-	{ head: 'Quantity', customeStyle: 'text-right w-[10%]', key: 'quantity' },
-	{ head: 'Actions', customeStyle: 'text-center w-[10%]', key: 'actions' },
+	{ head: 'Product ID', customeStyle: 'text-center w-[10%]', key: 'productID' },
+	{ head: 'Image', customeStyle: 'text-center w-[20%]', key: 'productImg' },
+	{ head: 'Product Name', customeStyle: 'text-center w-[20%]', key: 'productName' },
+	{ head: 'Size', customeStyle: 'text-center w-[10%]', key: 'size' },
+	{ head: 'Color', customeStyle: 'text-center w-[10%]', key: 'color' },
+	{ head: 'Quantity', customeStyle: 'text-center w-[10%]', key: 'quantity' },
+	{ head: 'Unit Price', customeStyle: 'text-center w-[10%]', key: 'unitPrice' },
+	{ head: 'Total Price', customeStyle: 'text-center w-[10%]', key: 'totalPrice' },
 ]
 
-const VariantList = ({ open, handleClose, product }) => {
+const ImportInvoice = ({ open, handleClose, existingImport }) => {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [tableRows, setTableRows] = useState([])
-	const [productId, setProductId] = useState()
-	const [selectedVariant, setSelectedVariant] = useState(null)
-	const [openStockHistoryPage, setOpenStockHistoryPage] = useState(null)
-	const [stockHistoryData, setStockHistoryData] = useState([])
 
 	useEffect(() => {
-		setTableRows(product.productVariants)
+		setTableRows(existingImport)
 	}, [open])
-
 	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '') || 0)
+	const importID = tableRows[0]?.importID || 'N/A'
+	const staffID = tableRows[0]?.staffID || 'N/A'
+	const staffName = tableRows[0]?.staffName || 'N/A'
 
 	const sortedRows = [...tableRows].sort((a, b) => {
 		if (!sortColumn) return 0
@@ -95,20 +95,12 @@ const VariantList = ({ open, handleClose, product }) => {
 		return pageNumbers
 	}
 
-	const handleOpenStockHistory = async (variantId) => {
-		setSelectedVariant(variantId)
-		const data = await ImportProductService.GET_STOCK_HISTORY(variantId)
-		if (data) {
-			setStockHistoryData(data)
-		}
-
-		setOpenStockHistoryPage(true)
-	}
-
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
-				<Typography variant='h4'>Variant List of {product.productName}</Typography>
+				<Typography variant='h4'>
+					Import Invoice of {importID} | Staff ID: {staffID} | Staff Name: {staffName}
+				</Typography>
 			</DialogHeader>
 			<DialogBody divider className=' max-h-[80vh] overflow-auto'>
 				<table className='w-full table-fixed mt-4'>
@@ -116,7 +108,7 @@ const VariantList = ({ open, handleClose, product }) => {
 						<tr>
 							{TABLE_HEAD.map(({ head, customeStyle, key }) => (
 								<th
-									key={head}
+									key={key}
 									className={`border-b border-gray-300 !p-4 pb-8 ${customeStyle}`}
 									onClick={() => handleSort(key)}
 								>
@@ -132,44 +124,27 @@ const VariantList = ({ open, handleClose, product }) => {
 						</tr>
 					</thead>
 					<tbody>
-						{paginatedRows.map((row) => (
-							<tr className={`border-gray-300 `}>
-								<td className='p-4'>{row.variantID}</td>
-								<td className='p-4 '>
+						{paginatedRows.map((row, rowIndex) => (
+							<tr key={rowIndex} className={`border-gray-300`}>
+								<td className='p-4 text-center w-[10%]'>{row.productID}</td>
+								<td className='p-4 text-center w-[10%]'>
 									<img
 										className='aspect-square object-cover'
-										src={GetImage(row.variantImg)}
-										alt='row.variantImg'
+										src={GetImage(row.productImg)}
+										alt='row.productImg'
 									/>
 								</td>
-								<td className='p-4 text-right'>{row.variantSize}</td>
-								<td className='p-4 text-right'>{row.variantColor}</td>
-								<td
-									className='p-4 text-right'
-									style={{
-										color: row.variantQuantity === 0 ? 'red' : 'inherit',
-									}}
-								>
-									{row.variantQuantity}
-								</td>
-
-								<td className='p-4 text-center'>
-									<div className='flex justify-center gap-4'>
-										<Button
-											variant='contained'
-											onClick={() => handleOpenStockHistory(row.variantID)}
-										>
-											View Stock
-											<br />
-											History
-										</Button>
-									</div>
-								</td>
+								<td className='p-4 text-center w-[10%]'>{row.productName}</td>
+								<td className='p-4 text-center w-[10%]'>{row.size}</td>
+								<td className='p-4 text-center w-[10%]'>{row.color}</td>
+								<td className='p-4 text-center w-[10%]'>{row.quantity}</td>
+								<td className='p-4 text-center w-[10%]'>{row.unitPrice}</td>
+								<td className='p-4 text-center w-[10%]'>{row.totalPrice}</td>
 							</tr>
 						))}
 					</tbody>
 				</table>
-				
+
 				<div className='flex justify-between items-center mt-4'>
 					<Button
 						onClick={() => handleChangePage(page - 1)}
@@ -203,4 +178,4 @@ const VariantList = ({ open, handleClose, product }) => {
 	)
 }
 
-export default VariantList
+export default ImportInvoice

@@ -13,7 +13,7 @@ import CrudTabs from 'src/components/CrudTabs/CrudTabs'
 import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
-import VariantList from './VariantList'
+import ImportInvoice from './ImportInvoice'
 import ImportProduct from './ImportProduct'
 
 const TABLE_HEAD = [
@@ -43,7 +43,7 @@ const TABLE_HEAD = [
 		key: 'phone',
 	},
 	{
-		head: 'Staff Name',
+		head: 'Staff ID',
 		customeStyle: 'text-center w-[15%]',
 		key: 'productDescription',
 	},
@@ -61,15 +61,14 @@ function ImportInvoiceList(staffId) {
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [openVariantPage, setOpenVariantPage] = useState(false)
-	const [selectedImport, setSelectedImport] = useState(null)
-	const [product, setImportDetail] = useState([])
+	const [importDetail, setImportDetail] = useState([])
 	const [openAddPage, setOpenAddPage] = useState(false)
 
 	useEffect(() => {
 		async function fetchImports() {
-			const response = await ImportProductService.GET_ALL_IMPORT()
-			if (response) {
-				setTableRows(response)
+			const data = await ImportProductService.GET_ALL_IMPORT()
+			if (data) {
+				setTableRows(data)
 			}
 		}
 		fetchImports()
@@ -83,7 +82,7 @@ function ImportInvoiceList(staffId) {
 		let valueA = a[sortColumn] ?? ''
 		let valueB = b[sortColumn] ?? ''
 
-		if (['price', 'variant'].includes(sortColumn)) {
+		if (['importID', 'variant'].includes(sortColumn)) {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -129,8 +128,11 @@ function ImportInvoiceList(staffId) {
 		return pageNumbers
 	}
 
-	const handleOpenVariant = async (row) => {
-		setImportDetail(row)
+	const handleOpenImportDetail = async (importId) => {
+		const data = await ImportProductService.GET_IMPORT_DETAIL(importId)
+		if (data) {
+			setImportDetail(data)
+		}
 		setOpenVariantPage(true)
 	}
 
@@ -191,19 +193,19 @@ function ImportInvoiceList(staffId) {
 									>
 										<td className='p-4 text-center'>{row.importID}</td>
 										<td className='p-4 text-center'>{row.importDate.split('T')[0]}</td>
-										<td className='p-4 text-right'>{row.supplier}</td>
-										<td className='p-4 text-right break-words whitespace-normal'>
+										<td className='p-4 text-left'>{row.supplier}</td>
+										<td className='p-4 text-left break-words whitespace-normal'>
 											{row.importLocation}
 										</td>
 										<td className='p-4 text-center'>{row.phone}</td>
-										<td className='p-4 text-center'>{row.importStaff.accountName}</td>
+										<td className='p-4 text-center'>{row.importStaffID}</td>
 
 										<td className='p-4 text-center'>
 											<Button
 												variant='contained'
 												size='sm'
 												title='Manage product variant'
-												onClick={() => handleOpenVariant(row)}
+												onClick={() => handleOpenImportDetail(row.importID)}
 											>
 												View Detail
 											</Button>
@@ -213,12 +215,11 @@ function ImportInvoiceList(staffId) {
 							})}
 						</tbody>
 					</table>
-					{openVariantPage && selectedImport && (
-						<VariantList
+					{openVariantPage && importDetail && (
+						<ImportInvoice
 							open={openVariantPage}
 							handleClose={() => setOpenVariantPage(false)}
-							existingImport={selectedImport}
-							product={product}
+							existingImport={importDetail}
 						/>
 					)}
 					<div className='flex justify-between items-center mt-4'>

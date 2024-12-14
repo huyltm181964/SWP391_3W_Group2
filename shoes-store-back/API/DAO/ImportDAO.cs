@@ -18,12 +18,7 @@ namespace API.DAO
 
         public ResponseMessage GetAllImports()
         {
-            var importList = db.Import
-                .Include(i => i.ImportDetails)
-                    .ThenInclude(id => id.Variant)
-                        .ThenInclude(v => v.Product)
-                .Include(i => i.ImportStaff)
-                .ToList();
+            var importList = db.Import.ToList();
 
             return new ResponseMessage
             {
@@ -34,20 +29,27 @@ namespace API.DAO
             };
         }
 
-
-        public ResponseMessage GetImportDetails()
+        public ResponseMessage GetImportDetails(int importId)
         {
             var importDetails = db.ImportDetail
+                .Where(d => d.ImportID == importId)
                 .Include(d => d.Variant)
-                .ThenInclude(v => v.Product)
+                    .ThenInclude(v => v.Product)
+                .Include(d => d.Import)
+                    .ThenInclude(i => i.ImportStaff)
                 .Select(detail => new
                 {
+                    ImportID = detail.ImportID, 
+                    ProductID = detail.Variant.Product.ProductID,
                     ProductName = detail.Variant.Product.ProductName,
+                    ProductImg = detail.Variant.Product.ProductImg,
                     Size = detail.Variant.VariantSize,
                     Color = detail.Variant.VariantColor,
                     Quantity = detail.Quantity,
                     UnitPrice = detail.UnitPrice,
-                    TotalPrice = detail.Quantity * detail.UnitPrice
+                    TotalPrice = detail.Quantity * detail.UnitPrice,
+                    StaffID = detail.Import.ImportStaff.AccountID,
+                    StaffName = detail.Import.ImportStaff.AccountName
                 })
                 .ToList();
 
