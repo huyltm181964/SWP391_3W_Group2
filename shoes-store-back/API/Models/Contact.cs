@@ -11,6 +11,9 @@ namespace API.Models
         [MaxLength(500)]
         public String Description { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        [MaxLength(255)]
+        public String? AnsweredStaffName { get; set; }
         [MaxLength(500)]
         public String? Answer { get; set; }
         public DateTime? AnswerDate { get; set; }

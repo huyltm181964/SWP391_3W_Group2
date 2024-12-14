@@ -13,102 +13,76 @@ import CrudTabs from 'src/components/CrudTabs/CrudTabs'
 import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { categoriesTab } from 'src/utils/EnumList'
 import { GetImage } from 'src/utils/GetImage'
-import VariantList from './VariantList'
+import ImportInvoice from './ImportInvoice'
+import ImportProduct from './ImportProduct'
 
 const TABLE_HEAD = [
 	{
-		head: 'ID',
-		customeStyle: '!text-left w-[7%]',
-		key: 'productID',
+		head: 'ImportID',
+		customeStyle: '!text-center w-[10%]',
+		key: 'importID',
 	},
 	{
-		head: 'Image',
-		customeStyle: '!text-left w-[13%]',
-		key: 'productImg',
+		head: 'ImportDate',
+		customeStyle: '!text-center w-[10%]',
+		key: 'importDate',
 	},
 	{
-		head: 'Name',
-		customeStyle: '!text-right w-[20%]',
-		key: 'productName',
+		head: 'Supplier',
+		customeStyle: '!text-center w-[15%]',
+		key: 'supplier',
 	},
 	{
-		head: 'Price',
-		customeStyle: 'text-right w-[15%]',
-		key: 'productPrice',
+		head: 'Import Location',
+		customeStyle: 'text-center w-[20%]',
+		key: 'importLocation',
 	},
 	{
-		head: 'Category',
-		customeStyle: 'text-right w-[15%]',
-		key: 'productCategory',
+		head: 'Supplier Phone',
+		customeStyle: 'text-center w-[15%]',
+		key: 'phone',
 	},
 	{
-		head: 'Description',
-		customeStyle: 'text-left w-[15%]',
+		head: 'Staff ID',
+		customeStyle: 'text-center w-[15%]',
 		key: 'productDescription',
 	},
 	{
-		head: 'Status',
-		customeStyle: 'text-right w-[10%]',
-		key: 'productStatus',
-	},
-	{
-		head: 'Actions',
-		customeStyle: 'text-right w-[15%]',
-		key: 'actions',
+		head: 'Action',
+		customeStyle: 'text-center w-[15%]',
+		key: 'viewDetail',
 	},
 ]
 
-function ProductList() {
+function ImportInvoiceList(staffId) {
 	const [tableRows, setTableRows] = useState([])
-	const [categoryTab, setCategoryTab] = useState(0)
-	const [filteredRows, setFilteredRows] = useState([...tableRows])
-	const [searchTerm, setSearchTerm] = useState('')
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [openVariantPage, setOpenVariantPage] = useState(false)
-	const [selectedProduct, setSelectedProduct] = useState(null)
-	const [product, setProduct] = useState([])
+	const [importDetail, setImportDetail] = useState([])
+	const [openAddPage, setOpenAddPage] = useState(false)
 
 	useEffect(() => {
-		async function fetchProducts() {
-			const data = await ImportProductService.GET_ALL_PRODUCT()
+		async function fetchImports() {
+			const data = await ImportProductService.GET_ALL_IMPORT()
 			if (data) {
-				const filteredData = data.filter((product) => product.productStatus !== 'Out of business')
-				setTableRows(filteredData)
+				setTableRows(data)
 			}
 		}
-		fetchProducts()
+		fetchImports()
 	}, [openVariantPage])
-
-	useEffect(() => {
-		let filteredData = tableRows
-
-		if (categoriesTab[categoryTab] !== 'All') {
-			filteredData = filteredData.filter(
-				(row) => row.productCategory === categoriesTab[categoryTab]
-			)
-		}
-
-		if (searchTerm) {
-			filteredData = filteredData.filter((row) =>
-				row.productName.toLowerCase().includes(searchTerm.toLowerCase())
-			)
-		}
-
-		setFilteredRows(filteredData)
-	}, [searchTerm, categoryTab, tableRows])
 
 	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '')) || 0
 
-	const sortedRows = filteredRows.slice().sort((a, b) => {
+	const sortedRows = tableRows.slice().sort((a, b) => {
 		if (!sortColumn) return 0
 
 		let valueA = a[sortColumn] ?? ''
 		let valueB = b[sortColumn] ?? ''
 
-		if (['price', 'variant'].includes(sortColumn)) {
+		if (['importID', 'variant'].includes(sortColumn)) {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -154,13 +128,20 @@ function ProductList() {
 		return pageNumbers
 	}
 
-	const handleOpenVariant = async (productId) => {
-		setSelectedProduct(productId)
-		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
+	const handleOpenImportDetail = async (importId) => {
+		const data = await ImportProductService.GET_IMPORT_DETAIL(importId)
 		if (data) {
-			setProduct(data)
+			setImportDetail(data)
 		}
 		setOpenVariantPage(true)
+	}
+
+	const handleImport = async (formBody) => {
+		await ImportProductService.IMPORT_PRODUCT(formBody)
+
+		const updatedData = await ImportProductService.GET_ALL_IMPORT()
+		setTableRows(updatedData)
+		setOpenAddPage(false)
 	}
 
 	return (
@@ -170,26 +151,18 @@ function ProductList() {
 					<div className='rounded-none flex flex-wrap gap-4 justify-between mb-4'>
 						<div>
 							<Typography variant='h3' color='blue-gray'>
-								Product List
+								Import Invoice List
 							</Typography>
-						</div>
-						<div className='flex items-center w-full shrink-0 gap-4 md:w-max'>
-							<Input
-								size='lg'
-								label='Search'
-								icon={<MagnifyingGlassIcon className='h-5 w-5' />}
-								value={searchTerm}
-								s
-								onChange={(e) => setSearchTerm(e.target.value)}
-							/>
+							<Button onClick={() => setOpenAddPage(true)}>Import Product</Button>
+							{openAddPage && (
+								<ImportProduct
+									open={openAddPage}
+									handleClose={() => setOpenAddPage(false)}
+									handleImport={handleImport}
+								/>
+							)}
 						</div>
 					</div>
-					<CrudTabs value={categoryTab} handleChange={setCategoryTab}>
-						{categoriesTab.map((category, index) => (
-							<Tab key={index} label={category}></Tab>
-						))}
-					</CrudTabs>
-
 					<table className='w-full table-fixed mt-4'>
 						<thead>
 							<tr>
@@ -215,59 +188,38 @@ function ProductList() {
 								return (
 									<tr
 										key={row.productID}
-										className={`border-gray-300 ${
-											row.productStatus === 'Out of business' ? 'bg-red-100' : ''
-										}`}
+										className={`border-gray-300 
+										`}
 									>
-										<td className='p-4'>{row.productID}</td>
-										<td className='p-4'>
-											<img
-												style={{
-													width: '120px',
-													height: '100px',
-													objectFit: 'contain',
-												}}
-												src={GetImage(row.productImg)}
-												alt='Product Image'
-											/>
+										<td className='p-4 text-center'>{row.importID}</td>
+										<td className='p-4 text-center'>{row.importDate.split('T')[0]}</td>
+										<td className='p-4 text-left'>{row.supplier}</td>
+										<td className='p-4 text-left break-words whitespace-normal'>
+											{row.importLocation}
 										</td>
-										<td className='p-4 text-right'>{row.productName}</td>
-										<td className='p-4 text-right'>{row.productPrice}</td>
-										<td className='p-4 text-right'>{row.productCategory}</td>
-										<td className='p-4 break-words whitespace-normal'>{row.productDescription}</td>
-										<td
-											className='p-4 text-right'
-											style={{
-												color: row.productStatus === 'Out of business' ? 'red' : 'inherit',
-											}}
-										>
-											{row.productStatus}
-										</td>
-										<td className='p-4 text-right'>
-											{row.productStatus !== 'Out of business' && (
-												<div className='flex justify-end gap-4'>
-													<IconButton
-														variant='text'
-														size='sm'
-														title='Manage product variant'
-														onClick={() => handleOpenVariant(row.productID)}
-													>
-														<ArrowRightIcon className='h-5 w-5 text-gray-900' />
-													</IconButton>
-												</div>
-											)}
+										<td className='p-4 text-center'>{row.phone}</td>
+										<td className='p-4 text-center'>{row.importStaffID}</td>
+
+										<td className='p-4 text-center'>
+											<Button
+												variant='contained'
+												size='sm'
+												title='Manage product variant'
+												onClick={() => handleOpenImportDetail(row.importID)}
+											>
+												View Detail
+											</Button>
 										</td>
 									</tr>
 								)
 							})}
 						</tbody>
 					</table>
-					{openVariantPage && selectedProduct && (
-						<VariantList
+					{openVariantPage && importDetail && (
+						<ImportInvoice
 							open={openVariantPage}
 							handleClose={() => setOpenVariantPage(false)}
-							existingProduct={selectedProduct}
-							product={product}
+							existingImport={importDetail}
 						/>
 					)}
 					<div className='flex justify-between items-center mt-4'>
@@ -312,4 +264,4 @@ function ProductList() {
 	)
 }
 
-export default ProductList
+export default ImportInvoiceList

@@ -6,36 +6,29 @@ import {
 	DialogBody,
 	DialogFooter,
 	DialogHeader,
+	IconButton,
 	Input,
 	Typography,
 } from '@material-tailwind/react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { categoriesList } from 'src/utils/EnumList'
 
-const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
+const AddProduct = ({ open, handleClose, handleAddProduct }) => {
 	const fileRef = useRef(null)
 	const [imagePresentation, setImagePresentation] = useState('')
 	const [imageFile, setImageFile] = useState(null)
-	const [idValue, setIdValue] = useState({
-		id: '',
-	})
-
-	useEffect(() => {
-		if (idProduct) {
-			setIdValue({
-				id: idProduct || '',
-			})
-		}
-	}, [idProduct])
-
 	const [values, setValues] = useState({
 		image: '',
-		size: '',
-		color: '',
+		name: '',
+		price: '',
+		description: '',
+		category: '',
 	})
-
 	const [errors, setErrors] = useState({
-		size: '',
-		color: '',
+		name: '',
+		price: '',
+		description: '',
+		category: '',
 		image: '',
 	})
 
@@ -70,8 +63,11 @@ const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
 
 	const validate = () => {
 		const newErrors = {}
-		if (!values.size) newErrors.size = 'Size is required.'
-		if (!values.color) newErrors.color = 'Color is required.'
+		if (!values.name) newErrors.name = 'Name is required.'
+		if (!values.price) newErrors.price = 'Price is required.'
+		else if (values.price <= 0) newErrors.price = 'Price must be greater than zero.'
+		if (!values.description) newErrors.description = 'Description is required.'
+		if (!values.category) newErrors.category = 'Category is required.'
 		if (!imageFile) newErrors.image = 'Image is required.'
 
 		setErrors(newErrors)
@@ -81,11 +77,12 @@ const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
 	const handleAdd = () => {
 		if (validate()) {
 			const formData = new FormData()
-			formData.append('ProductID', idValue.id)
-			formData.append('VariantImage', imageFile)
-			formData.append('VariantSize', values.size)
-			formData.append('VariantColor', values.color)
-			handleAddVariant(formData)
+			formData.append('ProductImg', imageFile)
+			formData.append('ProductName', values.name)
+			formData.append('ProductDescription', values.description)
+			formData.append('ProductPrice', parseFloat(values.price))
+			formData.append('ProductCategory', values.category)
+			handleAddProduct(formData)
 			handleClose()
 		}
 	}
@@ -94,8 +91,11 @@ const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
 		<Dialog open={open} handler={handleClose} size='lg' className='rounded-md'>
 			<DialogHeader className='flex justify-between items-center'>
 				<Typography variant='h5' className='font-semibold'>
-					Add Variant
+					Add Product
 				</Typography>
+				<IconButton size='sm' onClick={handleClose}>
+					<XMarkIcon className='h-5 w-5 text-gray-700' />
+				</IconButton>
 			</DialogHeader>
 			<DialogBody className='space-y-4 flex flex-col'>
 				<div className='flex flex-col gap-4'>
@@ -129,26 +129,65 @@ const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
 				</div>
 				<div>
 					<Input
-						label='Size'
-						name='size'
-						value={values.size}
+						label='Name'
+						name='name'
+						value={values.name}
 						onChange={handleValueChange}
 						className='focus:ring focus:ring-gray-300'
 						required
-						error={!!errors.size}
+						error={!!errors.name}
 					/>
-					{errors.size && <Typography color='red'>{errors.size}</Typography>}
+					{errors.name && <Typography color='red'>{errors.name}</Typography>}
 				</div>
 				<div>
 					<Input
-						label='Color'
-						name='color'
-						value={values.color}
+						label='Price'
+						name='price'
+						type='number'
+						value={values.price}
 						onChange={handleValueChange}
 						required
-						error={!!errors.color}
+						error={!!errors.price}
 					/>
-					{errors.color && <Typography color='red'>{errors.color}</Typography>}
+					{errors.price && <Typography color='red'>{errors.price}</Typography>}
+				</div>
+				<div>
+					<select
+						className='w-full border border-gray-300 rounded-md px-3 py-2'
+						name='category'
+						value={values.category}
+						onChange={handleValueChange}
+						required
+					>
+						<option value=''>Select Category</option>
+						{categoriesList.map((category, index) => (
+							<option key={index} value={category}>
+								{category}
+							</option>
+						))}
+					</select>
+					{errors.category && <Typography color='red'>{errors.category}</Typography>}
+				</div>
+				<div className="border">
+					<label htmlFor='description'>Description</label>
+					<textarea
+						id='description'
+						name='description'
+						value={values.description}
+						onChange={handleValueChange}
+						rows={3}
+						style={{
+							whiteSpace: 'pre-wrap',
+							overflowWrap: 'break-word',
+							width: '100%',
+						}}
+						required
+					/>
+					{errors.description && (
+						<Typography color='red' style={{ marginTop: '5px' }}>
+							{errors.description}
+						</Typography>
+					)}
 				</div>
 			</DialogBody>
 			<DialogFooter className='space-x-4'>
@@ -163,4 +202,4 @@ const AddVariant = ({ open, handleClose, handleAddVariant, idProduct }) => {
 	)
 }
 
-export default AddVariant
+export default AddProduct

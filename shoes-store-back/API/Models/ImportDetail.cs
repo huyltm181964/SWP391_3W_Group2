@@ -2,11 +2,11 @@
 
 namespace API.Models
 {
-    [PrimaryKey(nameof(OrderID), nameof(VariantID))]
-    public class OrderDetail
+    [PrimaryKey(nameof(ImportID), nameof(VariantID))]
+    public class ImportDetail
     {
-        public int OrderID { get; set; }
-        public virtual Order? Order { get; set; }
+        public int ImportID { get; set; }
+        public virtual Import? Import { get; set; }
 
         public int VariantID { get; set; }
         public virtual ProductVariant? Variant { get; set; }

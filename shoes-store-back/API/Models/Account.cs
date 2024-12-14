@@ -18,7 +18,7 @@ namespace API.Models
         [MaxLength(10)]
         public String? Gender { get; set; }
         public DateTime? BirthDay { get; set; }
-        [MaxLength(10)]
+        [MaxLength(11)]
         public String? Phone { get; set; }
         [MaxLength(255)]
         public String? AccountAddress { get; set; }
@@ -37,5 +37,6 @@ namespace API.Models
         public virtual ICollection<Contact> Contacts { get; set; } = [];
         public virtual ICollection<Notification> Notifications { get; set; } = [];
         public virtual ICollection<Order> Orders { get; set; } = [];
+        public virtual ICollection<Import> Imports { get; set; } = [];
     }
 }

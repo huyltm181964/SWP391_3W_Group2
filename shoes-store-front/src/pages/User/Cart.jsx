@@ -112,7 +112,11 @@ const Cart = () => {
 											className='w-6 h-6 md:order-1'
 										/>
 										<div className='w-1/6'>
-											<img alt='' className='w-full' src={GetImage(cartItem.variant?.variantImg)} />
+											<img
+												alt=''
+												className='w-full'
+												src={GetImage(cartItem.variant?.product.productImg)}
+											/>
 										</div>
 
 										<div className='flex items-center justify-between w-2/6 md:order-3 md:justify-end gap-3'>
@@ -187,8 +191,15 @@ const Cart = () => {
 										<div className='w-3/6 min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md'>
 											<p className='text-base font-medium text-gray-900 '>
 												{cartItem.variant?.product?.productName}{' '}
-												{`(Size: ${cartItem.variant?.variantSize} | Color: ${cartItem.variant?.variantColor})`}
 											</p>
+											<div className='flex gap-5'>
+												<p className='text-base font-medium text-gray-900 '>
+													{`Size: ${cartItem.variant?.variantSize}`}
+												</p>
+												<p className='text-base font-medium text-gray-900 '>
+													{`Color: ${cartItem.variant?.variantColor}`}
+												</p>
+											</div>
 
 											<div className='flex items-center gap-4'>
 												<button

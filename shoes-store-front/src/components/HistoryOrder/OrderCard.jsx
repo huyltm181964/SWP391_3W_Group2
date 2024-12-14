@@ -11,8 +11,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 	const statusColors = {
 		unpaid: 'red',
 		ordered: 'royalblue',
-		delivery: 'orange',
-		deliveried: 'purple',
+		confirmed: 'darkgoldenrod',
 		completed: 'green',
 	}
 
@@ -67,15 +66,6 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 								Cancel order
 							</button>
 						)}
-						{order?.orderStatus === orderStatusEnum.DELIVERIED && (
-							<button
-								onClick={() => handleConfirm(order?.orderID)}
-								type='button'
-								className='rounded-full pointer-events-auto cursor-pointer px-7 py-3 bg-green-800 shadow-sm shadow-transparent text-white font-semibold text-sm transition-all duration-500 hover:shadow-green-400 hover:bg-green-900'
-							>
-								Confirm ordered
-							</button>
-						)}
 						<button
 							onClick={() => setOpen(order?.orderID)}
 							type='button'
@@ -93,7 +83,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 							<div className='grid grid-cols-4 w-full'>
 								<div className='col-span-4 sm:col-span-1'>
 									<img
-										src={GetImage(detail.variant?.variantImg)}
+										src={GetImage(detail.variant?.product.productImg)}
 										alt=''
 										className='max-sm:mx-auto object-cover'
 									/>

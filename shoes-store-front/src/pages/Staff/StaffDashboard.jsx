@@ -1,10 +1,8 @@
 import { ArrowLeftStartOnRectangleIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import {
-	AdjustmentsVerticalIcon,
+	ArchiveBoxIcon,
 	ArrowDownTrayIcon,
-	ArrowUpTrayIcon,
 	ChatBubbleLeftEllipsisIcon,
-	ShoppingCartIcon,
 } from '@heroicons/react/24/solid'
 import { Avatar, Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
@@ -12,13 +10,13 @@ import NotificationBadge from 'src/components/Notification/NotificationBadge'
 import { AccountService } from 'src/services/User/AccountService'
 import { AuthService } from 'src/services/User/AuthService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
-import OrderList from './ExportProduct/OrderList'
-import ProductList from './ImportProduct/ProductList'
+import ContactManagement from './ContactManagement/ContactManagement'
+import ImportInvoiceList from './ImportProduct/ImportInvoiceList'
 import ReportCommentManagement from './ReportCommentManagement/ReportCommentManagement'
-import ContactManagement from './ContactManagement.jsx/ContactManagement'
+import OrderList from './StaffOrderManagement/OrderList'
 
 const StaffDashboard = () => {
-	const [selectedPage, setSelectedPage] = useState(<ProductList />)
+	const [selectedPage, setSelectedPage] = useState(<ImportInvoiceList />)
 	const [selectedPageKey, setSelectedPageKey] = useState('ImportProduct')
 	const [profile, setProfile] = useState({})
 
@@ -65,7 +63,7 @@ const StaffDashboard = () => {
 					<ListItem
 						className={LIST_ITEM_STYLES}
 						selected={selectedPageKey === 'ImportProduct'}
-						onClick={() => handleSelectPage(<ProductList />, 'ImportProduct')}
+						onClick={() => handleSelectPage(<ImportInvoiceList />, 'ImportProduct')}
 					>
 						<ListItemPrefix>
 							<ArrowDownTrayIcon className='h-5 w-5' />
@@ -75,13 +73,13 @@ const StaffDashboard = () => {
 
 					<ListItem
 						className={LIST_ITEM_STYLES}
-						selected={selectedPageKey === 'ExportProduct'}
-						onClick={() => handleSelectPage(<OrderList />, 'ExportProduct')}
+						selected={selectedPageKey === 'OrderManagement'}
+						onClick={() => handleSelectPage(<OrderList />, 'OrderManagement')}
 					>
 						<ListItemPrefix>
-							<ArrowUpTrayIcon className='h-5 w-5' />
+							<ArchiveBoxIcon className='h-5 w-5' />
 						</ListItemPrefix>
-						Export Product
+						Order Management
 					</ListItem>
 
 					<ListItem

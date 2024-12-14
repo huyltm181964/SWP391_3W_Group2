@@ -18,6 +18,7 @@ namespace API.DAO
 
         public ResponseMessage AddContact(int accountID, ContactUsDTO contactUsDTO)
         {
+
             var contact = new Contact
             {
                 AccountID = accountID,
@@ -51,14 +52,12 @@ namespace API.DAO
             };
         }
 
-        //Lấy contact nào mà chưa trả lời
-        public ResponseMessage GetUnanswerContact()
+        //Lấy all contact
+        public ResponseMessage GetAllContact()
         {
-            var contacts = db.Contact.Where(c => !c.IsRejected && string.IsNullOrEmpty(c.Answer));
-
             return new ResponseMessage
             {
-                Data = contacts,
+                Data = db.Contact.ToList(),
                 Message = "Success",
                 StatusCode = 200,
                 Success = true,
@@ -66,7 +65,7 @@ namespace API.DAO
         }
 
         //Trả lời tin nhắn của khách hàng
-        public ResponseMessage AnswerContact(int contactID, string answer)
+        public ResponseMessage AnswerContact(int contactID, string answer, int staffID)
         {
             //Lấy contact by id
             var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
@@ -82,9 +81,12 @@ namespace API.DAO
                 };
             }
 
+            var staff = db.Account.FirstOrDefault(s => s.AccountID == staffID)!;
+
             //Trả lời nè
             contact.Answer = answer;
             contact.AnswerDate = DateTime.Now;
+            contact.AnsweredStaffName = staff.AccountName;
             db.Contact.Update(contact);
 
             //Thông báo cảm ơn
@@ -110,11 +112,10 @@ namespace API.DAO
             };
         }
 
-        //Doc ten ham
-        public ResponseMessage RejectContact(int contactID)
+        // Từ chối nhận contact vì quá tục tĩu hoặc khó để trả lời
+        public ResponseMessage RejectContact(int contactID, int staffID)
         {
             var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
-
             if (contact == null)
             {
                 return new ResponseMessage
@@ -126,6 +127,10 @@ namespace API.DAO
                 };
             }
 
+            var staff = db.Account.FirstOrDefault(a => a.AccountID == staffID)!;
+
+            contact.AnswerDate = DateTime.Now;
+            contact.AnsweredStaffName = staff.AccountName;
             contact.IsRejected = true;
             db.Contact.Update(contact);
 
@@ -135,7 +140,7 @@ namespace API.DAO
                 AccountID = contact.AccountID,
                 Title = $"Rejected contact #{contactID}",
                 Description = $"Dear {contact.Account!.AccountName}," +
-                $"\r\n\r\nThank you for reaching out to us. We appreciate your interest; however, we regret to inform you that we are unable to proceed with your request {contactID} at this time. If there is anything else we can assist you with, please don’t hesitate to let us know." +
+                $"\r\n\r\nThank you for reaching out to us. We appreciate your interest; however, we regret to inform you that we are unable to proceed with your request #{contactID} at this time. If there is anything else we can assist you with, please don’t hesitate to let us know." +
                 $"\r\n\r\nBest regards," +
                 $"\r\nShoes store's staff"
             };

@@ -3,26 +3,30 @@ import axiosFormBody from '../../utils/axiosFormBody'
 import axiosFormData from 'src/utils/axiosFormData'
 
 export const ImportProductService = {
-	GET_ALL_PRODUCT: async () =>
-		await axiosFormBody.get(ImportProductRequest.GET_ALL_PRODUCT).then((response) => response.data),
+	GET_ALL_IMPORT: async () =>
+		await axiosFormBody.get(ImportProductRequest.GET_ALL_IMPORT).then((response) => response.data),
 
-	GET_PRODUCT_DETAIL: async (productId) =>
+	GET_IMPORT_DETAIL: async (importId) =>
 		await axiosFormBody
-			.get(ImportProductRequest.GET_PRODUCT_DETAIL + productId)
-			.then((response) => response.data),
-
-	GET_STOCK_HISTORY: async (variantId) =>
-		await axiosFormBody
-			.get(ImportProductRequest.GET_STOCK_HISTORY + variantId)
+			.get(ImportProductRequest.GET_IMPORT_DETAIL + importId)
 			.then((response) => response.data),
 
 	IMPORT_PRODUCT: async (formdata) =>
-		await axiosFormData
+		await axiosFormBody
 			.post(ImportProductRequest.IMPORT_PRODUCT, formdata)
 			.then((response) => response.data),
 
 	UPDATE_IMPORT_PRODUCT: async (formdata) =>
 		await axiosFormData
 			.post(ImportProductRequest.UPDATE_IMPORT_PRODUCT, formdata)
+			.then((response) => response.data),
+
+	ADD_PRODUCT: async (product) =>
+		await axiosFormData
+			.post(ImportProductRequest.ADD_PRODUCT, product)
+			.then((response) => response.data),
+	GET_ALL_PRODUCTS: async () =>
+		await axiosFormBody
+			.get(ImportProductRequest.GET_ALL_PRODUCTS)
 			.then((response) => response.data),
 }

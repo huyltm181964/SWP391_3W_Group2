@@ -17,8 +17,8 @@ namespace API.Data
         public DbSet<CartItem> CartItem { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Contact> Contact { get; set; }
-        public DbSet<Export> Export { get; set; }
         public DbSet<Import> Import { get; set; }
+        public DbSet<ImportDetail> ImportDetail { get; set; }
         public DbSet<Notification> Notification { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }

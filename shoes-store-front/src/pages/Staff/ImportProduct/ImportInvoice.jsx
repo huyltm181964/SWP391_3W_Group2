@@ -7,21 +7,21 @@ import {
 	Typography,
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
-import Confirmation from 'src/components/Confirmation/Confirmation'
-import { ExportProductService } from 'src/services/Staff/ExportProductService'
+import { ImportProductService } from 'src/services/Staff/ImportProductService'
 import { GetImage } from 'src/utils/GetImage'
 
 const TABLE_HEAD = [
-	{ head: 'Variant ID', customeStyle: '!text-left w-[10%]', key: 'variantID' },
-	{ head: 'Image', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Variant Size', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Variant Color', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Quantity', customeStyle: 'text-right w-[15%]', key: 'quantity' },
-	{ head: 'Unit Price', customeStyle: 'text-right w-[15%]', key: 'color' },
-	{ head: 'Actions', customeStyle: 'text-center w-[20%]', key: 'actions' },
+	{ head: 'Product ID', customeStyle: 'text-center w-[10%]', key: 'productID' },
+	{ head: 'Image', customeStyle: 'text-center w-[20%]', key: 'productImg' },
+	{ head: 'Product Name', customeStyle: 'text-center w-[20%]', key: 'productName' },
+	{ head: 'Size', customeStyle: 'text-center w-[10%]', key: 'size' },
+	{ head: 'Color', customeStyle: 'text-center w-[10%]', key: 'color' },
+	{ head: 'Quantity', customeStyle: 'text-center w-[10%]', key: 'quantity' },
+	{ head: 'Unit Price', customeStyle: 'text-center w-[10%]', key: 'unitPrice' },
+	{ head: 'Total Price', customeStyle: 'text-center w-[10%]', key: 'totalPrice' },
 ]
 
-const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) => {
+const ImportInvoice = ({ open, handleClose, existingImport }) => {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
@@ -29,16 +29,12 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 	const [tableRows, setTableRows] = useState([])
 
 	useEffect(() => {
-		setTableRows(orderDetailData)
-	}, [open, orderDetailData])
-
-	useEffect(() => {
-		if (tableRows.length > 0 && tableRows.every((row) => row.isExported)) {
-			handleClose()
-		}
-	}, [tableRows, handleClose])
-
-	const sanitizeNumeric = (value) => parseFloat(value.replace(/[^0-9.-]+/g, '') || 0)
+		setTableRows(existingImport)
+	}, [open])
+	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '') || 0)
+	const importID = tableRows[0]?.importID || 'N/A'
+	const staffID = tableRows[0]?.staffID || 'N/A'
+	const staffName = tableRows[0]?.staffName || 'N/A'
 
 	const sortedRows = [...tableRows].sort((a, b) => {
 		if (!sortColumn) return 0
@@ -46,7 +42,7 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 		let valueA = a[sortColumn]
 		let valueB = b[sortColumn]
 
-		if (sortColumn === 'price' || sortColumn === 'quantity') {
+		if (sortColumn === 'quantity') {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -99,24 +95,12 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 		return pageNumbers
 	}
 
-	const handleExportProduct = async (orderId, variantId) => {
-		const formBody = { orderID: orderId, variantID: variantId }
-		console.log(formBody)
-		await ExportProductService.EXPORT_PRODUCT(formBody)
-		setTableRows((prevRows) =>
-			prevRows.map((row) => (row.variantID === variantId ? { ...row, isExported: true } : row))
-		)
-	}
-
-	const handleExportAllProduct = async (orderId) => {
-		await ExportProductService.EXPORT_ALL_PRODUCT(orderId)
-		handleClose()
-	}
-
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
-				<Typography variant='h4'>Order Detail of Order ID: {existingOrderId}</Typography>
+				<Typography variant='h4'>
+					Import Invoice of {importID} | Staff ID: {staffID} | Staff Name: {staffName}
+				</Typography>
 			</DialogHeader>
 			<DialogBody divider className=' max-h-[80vh] overflow-auto'>
 				<table className='w-full table-fixed mt-4'>
@@ -124,7 +108,7 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 						<tr>
 							{TABLE_HEAD.map(({ head, customeStyle, key }) => (
 								<th
-									key={head}
+									key={key}
 									className={`border-b border-gray-300 !p-4 pb-8 ${customeStyle}`}
 									onClick={() => handleSort(key)}
 								>
@@ -140,47 +124,26 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 						</tr>
 					</thead>
 					<tbody>
-						{paginatedRows.map((row) =>
-							!row.isExported ? (
-								<tr className='border-gray-300' key={row.variantID}>
-									<td className='p-4'>{row.variantID}</td>
-									<td className='p-4'>
-										<img
-											className='aspect-square object-cover'
-											src={GetImage(row.variant.variantImg)}
-											alt={row.variant.variantImg}
-										/>
-									</td>
-									<td className='p-4 text-right'>{row.variant.variantSize}</td>
-									<td className='p-4 text-right'>{row.variant.variantColor}</td>
-									<td className='p-4 text-right'>{row.quantity}</td>
-									<td className='p-4 text-right'>{row.unitPrice}</td>
-									<td className='p-4 text-center'>
-										<div className='flex justify-center gap-4'>
-											<Button
-												variant='contained'
-												onClick={() => handleExportProduct(existingOrderId, row.variantID)}
-											>
-												Export
-											</Button>
-										</div>
-									</td>
-								</tr>
-							) : null
-						)}
+						{paginatedRows.map((row, rowIndex) => (
+							<tr key={rowIndex} className={`border-gray-300`}>
+								<td className='p-4 text-center w-[10%]'>{row.productID}</td>
+								<td className='p-4 text-center w-[10%]'>
+									<img
+										className='aspect-square object-cover'
+										src={GetImage(row.productImg)}
+										alt='row.productImg'
+									/>
+								</td>
+								<td className='p-4 text-center w-[10%]'>{row.productName}</td>
+								<td className='p-4 text-center w-[10%]'>{row.size}</td>
+								<td className='p-4 text-center w-[10%]'>{row.color}</td>
+								<td className='p-4 text-center w-[10%]'>{row.quantity}</td>
+								<td className='p-4 text-center w-[10%]'>{row.unitPrice}</td>
+								<td className='p-4 text-center w-[10%]'>{row.totalPrice}</td>
+							</tr>
+						))}
 					</tbody>
 				</table>
-				<Confirmation
-					title='Are you sure?'
-					description='Do you really want to export all variant?'
-					handleConfirm={() => handleExportAllProduct(existingOrderId)}
-				>
-					{(handleOpen) => (
-						<Button className='w-full' onClick={handleOpen} variant='contained'>
-							Export All
-						</Button>
-					)}
-				</Confirmation>
 
 				<div className='flex justify-between items-center mt-4'>
 					<Button
@@ -215,4 +178,4 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 	)
 }
 
-export default OrderDetail
+export default ImportInvoice

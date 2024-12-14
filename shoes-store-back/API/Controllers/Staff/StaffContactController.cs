@@ -1,5 +1,6 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
+using API.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,21 +21,23 @@ namespace API.Controllers.Staff
         [HttpGet]
         public IActionResult GetAllContact()
         {
-            var response = contactDAO.GetUnanswerContact();
+            var response = contactDAO.GetAllContact();
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost("answer")]
         public IActionResult AnswerContact([FromBody] ContactAnswerDTO contactAnswerDTO)
         {
-            var response = contactDAO.AnswerContact(contactAnswerDTO.ContactID, contactAnswerDTO.Answer);
+            var staffID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
+            var response = contactDAO.AnswerContact(contactAnswerDTO.ContactID, contactAnswerDTO.Answer, staffID);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("reject/{contactID}")]
         public IActionResult RejectContact(int contactID)
         {
-            var response = contactDAO.RejectContact(contactID);
+            var staffID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
+            var response = contactDAO.RejectContact(contactID, staffID);
             return StatusCode(response.StatusCode, response);
         }
     }

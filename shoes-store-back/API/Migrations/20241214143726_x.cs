@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class x : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,7 @@ namespace API.Migrations
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     BirthDay = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
                     AccountAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Role = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -78,11 +78,9 @@ namespace API.Migrations
                 {
                     VariantID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VariantImg = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VariantSize = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     VariantColor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     VariantQuantity = table.Column<int>(type: "int", nullable: false),
-                    IsStopSelling = table.Column<bool>(type: "bit", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -158,6 +156,7 @@ namespace API.Migrations
                     Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AnsweredStaffName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Answer = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     AnswerDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsRejected = table.Column<bool>(type: "bit", nullable: false),
@@ -169,6 +168,29 @@ namespace API.Migrations
                     table.ForeignKey(
                         name: "FK_Contact_Account_AccountID",
                         column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Import",
+                columns: table => new
+                {
+                    ImportID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Supplier = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ImportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ImportStaffID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Import", x => x.ImportID);
+                    table.ForeignKey(
+                        name: "FK_Import_Account_ImportStaffID",
+                        column: x => x.ImportStaffID,
                         principalTable: "Account",
                         principalColumn: "AccountID",
                         onDelete: ReferentialAction.Cascade);
@@ -247,44 +269,25 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Export",
+                name: "ImportDetail",
                 columns: table => new
                 {
-                    ExportID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImportID = table.Column<int>(type: "int", nullable: false),
+                    VariantID = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    ExportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    VariantID = table.Column<int>(type: "int", nullable: false)
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Export", x => x.ExportID);
+                    table.PrimaryKey("PK_ImportDetail", x => new { x.ImportID, x.VariantID });
                     table.ForeignKey(
-                        name: "FK_Export_ProductVariant_VariantID",
-                        column: x => x.VariantID,
-                        principalTable: "ProductVariant",
-                        principalColumn: "VariantID",
+                        name: "FK_ImportDetail_Import_ImportID",
+                        column: x => x.ImportID,
+                        principalTable: "Import",
+                        principalColumn: "ImportID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Import",
-                columns: table => new
-                {
-                    ImportID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    VariantID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Import", x => x.ImportID);
                     table.ForeignKey(
-                        name: "FK_Import_ProductVariant_VariantID",
+                        name: "FK_ImportDetail_ProductVariant_VariantID",
                         column: x => x.VariantID,
                         principalTable: "ProductVariant",
                         principalColumn: "VariantID",
@@ -298,8 +301,7 @@ namespace API.Migrations
                     OrderID = table.Column<int>(type: "int", nullable: false),
                     VariantID = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsExported = table.Column<bool>(type: "bit", nullable: false)
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -344,13 +346,13 @@ namespace API.Migrations
                 column: "AccountID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Export_VariantID",
-                table: "Export",
-                column: "VariantID");
+                name: "IX_Import_ImportStaffID",
+                table: "Import",
+                column: "ImportStaffID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Import_VariantID",
-                table: "Import",
+                name: "IX_ImportDetail_VariantID",
+                table: "ImportDetail",
                 column: "VariantID");
 
             migrationBuilder.CreateIndex(
@@ -390,16 +392,16 @@ namespace API.Migrations
                 name: "Contact");
 
             migrationBuilder.DropTable(
-                name: "Export");
-
-            migrationBuilder.DropTable(
-                name: "Import");
+                name: "ImportDetail");
 
             migrationBuilder.DropTable(
                 name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "OrderDetail");
+
+            migrationBuilder.DropTable(
+                name: "Import");
 
             migrationBuilder.DropTable(
                 name: "Order");

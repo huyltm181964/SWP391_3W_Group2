@@ -12,46 +12,47 @@ namespace API.Controllers.Staff
     public class StaffImportController : ControllerBase
     {
         private readonly ImportDAO importDAO;
-
-        public StaffImportController(ImportDAO importDAO)
+        private readonly ProductDAO productDAO;
+        public StaffImportController(ImportDAO importDAO, ProductDAO productDAO)
         {
             this.importDAO = importDAO;
+            this.productDAO = productDAO;
+        }
+
+        [HttpGet]
+        public IActionResult GetALlImport()
+        {
+            var response = importDAO.GetAllImports();
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("get-products")]
         public IActionResult GetProducts()
         {
-            var response = importDAO.GetProducts();
+            var response = productDAO.GetProducts();
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("detail/{productId}")]
-        public IActionResult ProductDetail(int productId)
+        [HttpPost("add-product")]
+        public IActionResult AddProduct([FromForm] AddProductDTO product)
         {
-            var response = importDAO.GetDetail(productId);
-            return StatusCode(response.StatusCode, response);
-        }
-
-        [HttpGet("get-stock-history/{variantId}")]
-        public IActionResult GetProductStockHistory(int variantId)
-        {
-            var response = importDAO.GetProductHistory(variantId);
+            var response = productDAO.AddProduct(product);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost("import-product")]
-        public IActionResult ImportProduct([FromForm] ImportDTO importDTO)
+        public IActionResult ImportProduct(ImportDTO importDTO)
         {
-            var response = importDAO.AddImportProduct(importDTO);
+            var response = importDAO.ImportProduct(importDTO);
+            return StatusCode(response.StatusCode, response);
+        }
+        [HttpGet("get-import-detail/{importId}")]
+        public IActionResult GetImportDetails(int importId)
+        {
+            var response = importDAO.GetImportDetails(importId);
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost("update-import-product")]
-        public IActionResult UpdateImportProduct([FromForm] UpdateImportDTO updateImportDTO)
-        {
-            var response = importDAO.UpdateImportProduct(updateImportDTO);
-            return StatusCode(response.StatusCode, response);
-        }
     }
 }
 

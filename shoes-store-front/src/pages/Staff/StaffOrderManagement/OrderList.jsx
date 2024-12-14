@@ -1,35 +1,43 @@
 import { Button, Card, CardBody, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
-import { ExportProductService } from 'src/services/Staff/ExportProductService'
+import { ExportProductService, StaffOrderService } from 'src/services/Staff/StaffOrderService'
 import OrderDetail from './OrderDetail'
 
 const TABLE_HEAD = [
 	{ head: 'OrderID', customeStyle: '!text-left w-[10%]', key: 'orderID' },
 	{ head: 'Email', customeStyle: '!text-center w-[20%]', key: 'account.accountEmail' },
 	{ head: 'Phone', customeStyle: 'text-center w-[15%]', key: 'account.phone' },
-	{ head: 'Address', customeStyle: 'text-center w-[35%]', key: 'orderAddress' },
-	{ head: 'Actions', customeStyle: 'text-center w-[20%]', key: 'actions' },
+	{ head: 'Address', customeStyle: 'text-center w-[20%]', key: 'orderAddress' },
+	{ head: 'Status', customeStyle: 'text-center w-[15%]', key: 'orderStatus' },
+	{ head: '', customeStyle: 'text-center w-[20%]', key: 'actions' },
 ]
 
 function OrderList() {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
-	const [sortColumn, setSortColumn] = useState(null)
-	const [sortDirection, setSortDirection] = useState('asc')
+	const [sortColumn, setSortColumn] = useState('orderID')
+	const [sortDirection, setSortDirection] = useState('desc')
 	const [tableRows, setTableRows] = useState([])
-	const [selectedOrderId, setSelectedOrderId] = useState(null)
+	const [selectedOrder, setSelectedOrder] = useState(null)
 	const [openOrderDetailPage, setOpenOrderDetailPage] = useState(null)
 	const [orderDetailData, setOrderDetailData] = useState([])
 
 	useEffect(() => {
 		async function fetchOrders() {
-			const data = await ExportProductService.GET_ORDERED_ORDER()
+			const data = await StaffOrderService.GET_ALL_ORDER()
 			if (data) {
 				setTableRows(data)
 			}
 		}
 		fetchOrders()
 	}, [openOrderDetailPage])
+
+	const statusColors = {
+		unpaid: 'red',
+		ordered: 'royalblue',
+		confirmed: 'darkgoldenrod',
+		completed: 'green',
+	}
 
 	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '') || 0)
 
@@ -39,7 +47,7 @@ function OrderList() {
 		let valueA = a[sortColumn]
 		let valueB = b[sortColumn]
 
-		if (sortColumn === 'totalPrice') {
+		if (sortColumn === 'totalPrice' || sortColumn === 'orderID') {
 			valueA = sanitizeNumeric(valueA)
 			valueB = sanitizeNumeric(valueB)
 		} else {
@@ -94,7 +102,7 @@ function OrderList() {
 		return pageNumbers
 	}
 	const handleOpenOrderDetail = async (order) => {
-		setSelectedOrderId(order.orderID)
+		setSelectedOrder(order)
 		setOrderDetailData(order.orderDetails)
 		setOpenOrderDetailPage(true)
 	}
@@ -139,9 +147,17 @@ function OrderList() {
 										<td className='p-4 text-left break-words whitespace-normal'>
 											{row.account.accountEmail}
 										</td>
-										<td className='p-4 text-center'>{row.phone || 'N/A'}</td>
+										<td className='p-4 text-center'>{row.account.phone || 'N/A'}</td>
 										<td className='p-4 text-left break-words whitespace-normal'>
 											{row.orderAddress}
+										</td>
+										<td
+											className='p-4 text-center font-bold uppercase break-words whitespace-normal'
+											style={{
+												color: statusColors[row.orderStatus.toLowerCase()] || 'royalblue',
+											}}
+										>
+											{row.orderStatus}
 										</td>
 										<td className='p-4 text-right'>
 											<div className='flex justify-center gap-4'>
@@ -156,11 +172,11 @@ function OrderList() {
 						</tbody>
 					</table>
 
-					{openOrderDetailPage && selectedOrderId && (
+					{openOrderDetailPage && selectedOrder && (
 						<OrderDetail
 							open={openOrderDetailPage}
 							handleClose={() => setOpenOrderDetailPage(false)}
-							existingOrderId={selectedOrderId}
+							order={selectedOrder}
 							orderDetailData={orderDetailData}
 						/>
 					)}

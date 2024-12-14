@@ -7,26 +7,52 @@ import {
 	Input,
 	Typography,
 } from '@material-tailwind/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LocationSelector from 'src/components/LocationSelector/LocationSelector '
+import { ProductManagementService } from 'src/services/Admin/ProductManagementService'
+import { AccountService } from 'src/services/User/AccountService'
+import AddProduct from './AddProduct'
+import { ImportProductService } from 'src/services/Staff/ImportProductService'
+import { GetImage } from 'src/utils/GetImage'
 
-const ImportProduct = ({ open, handleClose, handleImport, existingVariantId }) => {
+const ImportProduct = ({ open, handleClose, handleImport }) => {
+	const [profile, setProfile] = useState([])
+	const [openAddPage, setOpenAddPage] = useState(false)
+	const [product, setProduct] = useState()
 	const [values, setValues] = useState({
-		quantity: '',
-		importPrice: '',
+		supplier: '',
+		phone: '',
 		addressDetail: '',
 		city: '',
 		district: '',
 		ward: '',
+		variantDetails: [],
 	})
+	const [dropdownOpen, setDropdownOpen] = useState(false)
 
-	const [errors, setErrors] = useState({
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await AccountService.GET_PROFILE()
+			if (data) {
+				setProfile(data)
+				console.log(data)
+			}
+			const productData = await ImportProductService.GET_ALL_PRODUCTS()
+			if (productData) {
+				setProduct(productData)
+				console.log(productData)
+			}
+		}
+		fetchData()
+	}, [])
+
+	const [errors, setErrors] = useState({})
+	const [newVariant, setNewVariant] = useState({
+		productId: '',
+		variantSize: '',
+		variantColor: '',
 		quantity: '',
 		importPrice: '',
-		addressDetail: '',
-		city: '',
-		district: '',
-		ward: '',
 	})
 
 	const handleValueChange = (e) => {
@@ -35,120 +61,287 @@ const ImportProduct = ({ open, handleClose, handleImport, existingVariantId }) =
 		setErrors((prev) => ({ ...prev, [name]: '' }))
 	}
 
+	const handleVariantChange = (e) => {
+		const { name, value } = e.target
+		setNewVariant((prev) => ({ ...prev, [name]: value }))
+	}
+
+	const addVariantDetail = () => {
+		if (
+			!newVariant.productId ||
+			!newVariant.quantity ||
+			isNaN(newVariant.quantity) ||
+			Number(newVariant.quantity) <= 0 ||
+			!newVariant.importPrice ||
+			isNaN(newVariant.importPrice) ||
+			Number(newVariant.importPrice) <= 0
+		) {
+			alert('Please fill in all required variant fields with valid data.')
+			return
+		}
+
+		setValues((prev) => ({
+			...prev,
+			variantDetails: [...prev.variantDetails, { ...newVariant }],
+		}))
+
+		setNewVariant({
+			productId: '',
+			variantSize: '',
+			variantColor: '',
+			quantity: '',
+			importPrice: '',
+		})
+	}
+
 	const validate = () => {
 		const newErrors = {}
-
-		if (!values.quantity) {
-			newErrors.quantity = 'Quantity is required.'
-		} else if (!Number.isInteger(Number(values.quantity))) {
-			newErrors.quantity = 'Quantity must be an integer.'
-		} else if (Number(values.quantity) <= 0) {
-			newErrors.quantity = 'Quantity must be a positive integer.'
+		if (!values.supplier) {
+			newErrors.supplier = 'Supplier name is required. Please enter the supplier name.'
 		}
-
-		if (!values.importPrice) {
-			newErrors.importPrice = 'Price is required.'
-		} else if (Number(values.importPrice) <= 0) {
-			newErrors.importPrice = 'Price must be a positive number.'
+		if (!values.phone) {
+			newErrors.phone = 'Phone number is required. Please provide a valid phone number.'
+		} else if (!/^\d{10}$/.test(values.phone)) {
+			newErrors.phone = 'Phone number must be exactly 10 digits.'
 		}
-
 		if (!values.addressDetail) {
-			newErrors.addressDetail = 'Address detail is required.'
+			newErrors.addressDetail = 'Address detail is required. Please fill in the address.'
 		}
-
 		if (!values.city) {
-			newErrors.city = 'City is required.'
+			newErrors.city = 'City is required. Please select a city.'
 		}
-
 		if (!values.district) {
-			newErrors.district = 'District is required.'
+			newErrors.district = 'District is required. Please select a district.'
 		}
-
 		if (!values.ward) {
-			newErrors.ward = 'Ward is required.'
+			newErrors.ward = 'Ward is required. Please select a ward.'
+		}
+		if (values.variantDetails.length === 0) {
+			newErrors.variantDetails = 'At least one variant detail is required. Add a product variant.'
 		}
 
 		setErrors(newErrors)
 		return Object.keys(newErrors).length === 0
 	}
 
-	const handleAdd = () => {
-		if (validate()) {
-			const formData = new FormData()
-			formData.append('VariantID', existingVariantId)
-			formData.append('Quantity', values.quantity)
-			formData.append('ImportPrice', values.importPrice)
-			formData.append('AddressDetail', values.addressDetail)
-			formData.append('City', values.city)
-			formData.append('District', values.district)
-			formData.append('Ward', values.ward)
+	const handleAdd = async () => {
+		if (!validate()) return
 
-			handleImport(formData)
-			handleClose()
+		const formBody = {
+			supplier: values.supplier,
+			phone: values.phone,
+			addressDetail: values.addressDetail,
+			city: values.city,
+			district: values.district,
+			ward: values.ward,
+			importStaffID: profile.accountID,
+			variantDetails: values.variantDetails.map((variant) => ({
+				productID: Number(variant.productId),
+				variantSize: variant.variantSize,
+				variantColor: variant.variantColor,
+				quantity: Number(variant.quantity),
+				importPrice: Number(variant.importPrice),
+			})),
 		}
+
+		handleImport(formBody)
+
+		handleClose()
+	}
+	const handleAddProduct = async (formData) => {
+		await ImportProductService.ADD_PRODUCT(formData)
+		const data = await ImportProductService.GET_ALL_PRODUCTS()
+		if (data) {
+			setProduct(data)
+		}
+
+		setOpenAddPage(false)
+	}
+
+	const handleSelect = (item) => {
+		handleVariantChange({ target: { name: 'productId', value: item.productID } })
+		setDropdownOpen(false)
 	}
 
 	return (
-		<Dialog open={open} handler={handleClose} size='lg' className='rounded-md'>
-			<DialogHeader className='flex justify-between items-center'>
-				<Typography variant='h5' className='font-semibold'>
-					Import Product
-				</Typography>
+		<Dialog open={open} handler={handleClose} size='lg'>
+			<DialogHeader>
+				<Typography variant='h5'>Import Product</Typography>
 			</DialogHeader>
-			<DialogBody className='space-y-4 flex flex-col'>
-				<div className='flex justify-between'>
-					<div className='w-full pr-4'>
+			<DialogBody className='space-y-4'>
+				<Input
+					label='Supplier'
+					name='supplier'
+					value={values.supplier}
+					onChange={handleValueChange}
+					error={!!errors.supplier}
+				/>
+				{errors.supplier && <div className='text-red-500 text-sm'>{errors.supplier}</div>}
+
+				<Input
+					label='Phone'
+					name='phone'
+					value={values.phone}
+					onChange={handleValueChange}
+					error={!!errors.phone}
+				/>
+				{errors.phone && <div className='text-red-500 text-sm'>{errors.phone}</div>}
+				<div className='flex gap-4'>
+					<div className='flex-1 flex flex-col'>
 						<Input
-							label='Quantity'
-							name='quantity'
-							type='number'
-							value={values.quantity}
+							label='Address Detail'
+							name='addressDetail'
+							value={values.addressDetail}
 							onChange={handleValueChange}
-							required
-							error={!!errors.quantity}
+							error={!!errors.addressDetail}
 						/>
-						{errors.quantity && (
-							<Typography variant='small' color='red'>
-								{errors.quantity}
-							</Typography>
+						{errors.addressDetail && (
+							<div className='text-red-500 text-sm mt-1'>{errors.addressDetail}</div>
 						)}
 					</div>
-					<div className='w-full'>
-						<Input
-							label='Import Price'
-							name='importPrice'
-							type='number'
-							value={values.importPrice}
-							onChange={handleValueChange}
-							required
-							error={!!errors.importPrice}
-						/>
-						{errors.importPrice && (
-							<Typography variant='small' color='red'>
-								{errors.importPrice}
-							</Typography>
-						)}
+
+					<div className='flex-1'>
+						<LocationSelector values={values} setValues={setValues} errors={errors} />
 					</div>
 				</div>
+
 				<div>
-					<Input
-						label='Address Detail'
-						name='addressDetail'
-						value={values.addressDetail}
-						onChange={handleValueChange}
-						required
-						error={!!errors.addressDetail}
-					/>
-					{errors.addressDetail && (
+					<Typography variant='h6'>Variant Details:</Typography>
+					<div className='p-6 bg-gray-50 rounded-lg shadow-md'>
+						<div className='mb-6'>
+							<Button
+								className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
+								onClick={() => setOpenAddPage(true)}
+							>
+								Add Product
+							</Button>
+							{openAddPage && (
+								<AddProduct
+									open={openAddPage}
+									handleClose={() => setOpenAddPage(false)}
+									handleAddProduct={handleAddProduct}
+								/>
+							)}
+						</div>
+
+						<div className='mb-6 border-black relative'>
+							<label htmlFor='productId' className='block text-sm font-medium text-gray-700'>
+								Product Name
+							</label>
+							<div
+								className='block w-full border-gray-300 rounded p-2 bg-white cursor-pointer'
+								onClick={() => setDropdownOpen(!dropdownOpen)}
+							>
+								{newVariant.productId
+									? product.find((item) => item.productID === newVariant.productId)?.productName ||
+									  'Select a product'
+									: 'Select a product'}
+							</div>
+							{dropdownOpen && (
+								<ul className='absolute z-10 w-full border border-gray-300 rounded bg-white max-h-60 overflow-auto'>
+									{product.map((item) => (
+										<li
+											key={item.productID}
+											className='p-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer'
+											onClick={() => handleSelect(item)}
+										>
+											<img
+												className='w-8 h-8 object-cover rounded'
+												src={GetImage(item.productImg)}
+												alt={item.productName}
+											/>
+											<span>{item.productName}</span>
+										</li>
+									))}
+								</ul>
+							)}
+						</div>
+
+						<div className='flex gap-6 p-4 bg-gray-50 rounded-lg shadow-md'>
+							<div className='w-full flex flex-col gap-4'>
+								<Input
+									label='Variant Size'
+									name='variantSize'
+									value={newVariant.variantSize}
+									onChange={handleVariantChange}
+									className='w-full border-gray-300 rounded p-2'
+								/>
+								<Input
+									label='Variant Color'
+									name='variantColor'
+									value={newVariant.variantColor}
+									onChange={handleVariantChange}
+									className='w-full border-gray-300 rounded p-2'
+								/>
+							</div>
+
+							<div className='w-full flex flex-col gap-4'>
+								<Input
+									label='Quantity'
+									name='quantity'
+									type='number'
+									value={newVariant.quantity}
+									onChange={handleVariantChange}
+									className='w-full border-gray-300 rounded p-2'
+								/>
+								<Input
+									label='Import Price'
+									name='importPrice'
+									type='number'
+									value={newVariant.importPrice}
+									onChange={handleVariantChange}
+									className='w-full border-gray-300 rounded p-2'
+								/>
+							</div>
+						</div>
+
+						<Button
+							className='w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'
+							onClick={addVariantDetail}
+						>
+							Add Variant
+						</Button>
+					</div>
+
+					{values.variantDetails.length > 0 && (
+						<div className='mt-4'>
+							<Typography variant='subtitle1'>Variants Added:</Typography>
+							<div className='overflow-x-auto'>
+								<table className='table-auto w-full border-collapse border border-gray-200 mt-2'>
+									<thead>
+										<tr className='bg-gray-100'>
+											<th className='border border-gray-300 px-4 py-2 text-left'>Product ID</th>
+											<th className='border border-gray-300 px-4 py-2 text-left'>Size</th>
+											<th className='border border-gray-300 px-4 py-2 text-left'>Color</th>
+											<th className='border border-gray-300 px-4 py-2 text-left'>Quantity</th>
+											<th className='border border-gray-300 px-4 py-2 text-left'>Import Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										{values.variantDetails.map((variant, index) => (
+											<tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+												<td className='border border-gray-300 px-4 py-2'>{variant.productId}</td>
+												<td className='border border-gray-300 px-4 py-2'>{variant.variantSize}</td>
+												<td className='border border-gray-300 px-4 py-2'>{variant.variantColor}</td>
+												<td className='border border-gray-300 px-4 py-2'>
+													{variant.quantity} units
+												</td>
+												<td className='border border-gray-300 px-4 py-2'>${variant.importPrice}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					)}
+					{errors.variantDetails && (
 						<Typography variant='small' color='red'>
-							{errors.addressDetail}
+							{errors.variantDetails}
 						</Typography>
 					)}
 				</div>
-
-				<LocationSelector values={values} setValues={setValues} errors={errors} />
 			</DialogBody>
-			<DialogFooter className='space-x-4'>
+			<DialogFooter>
 				<Button variant='text' color='gray' onClick={handleClose}>
 					Cancel
 				</Button>
