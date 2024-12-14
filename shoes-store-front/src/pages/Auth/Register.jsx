@@ -63,7 +63,7 @@ function Register() {
 							Welcome to Shoes Store
 						</Typography>
 						<Typography className='!text-gray-600 text-[18px] font-normal md:max-w-sm text-center mx-auto'>
-  						  Step into style and comfort with the finest collection of shoes for every occasion.
+						Embrace style and comfort with our exclusive collection of shoes for every moment in life.
 						</Typography>
 
 					</CardHeader>
