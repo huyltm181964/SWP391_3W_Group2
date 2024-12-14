@@ -13,7 +13,7 @@ namespace API.Models
         public DateTime CreatedDate { get; set; }
 
         [MaxLength(255)]
-        public required String? AnsweredStaffName { get; set; }
+        public String? AnsweredStaffName { get; set; }
         [MaxLength(500)]
         public String? Answer { get; set; }
         public DateTime? AnswerDate { get; set; }

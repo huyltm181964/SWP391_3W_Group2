@@ -26,16 +26,15 @@ namespace API.Controllers
             var notifyDescription = "";
 
             var variants = db.ProductVariant
-                .Include(v => v.Imports)
+                .Include(v => v.ImportDetails).ThenInclude(id => id.Import)
                 .Include(v => v.Product)
-                .Where(v => !v.IsStopSelling)
                 .ToList();
 
             variants.ForEach(variant =>
             {
-                var lastImport = variant.Imports.LastOrDefault();
+                var lastImport = variant.ImportDetails.LastOrDefault();
                 double totalDays = 0;
-                if (variant.VariantQuantity <= 5 && (lastImport == null || (totalDays = (DateTime.Now - lastImport.ImportDate).TotalDays) >= 30))
+                if (variant.VariantQuantity <= 5 && (lastImport == null || (totalDays = (DateTime.Now - lastImport.Import!.ImportDate).TotalDays) >= 30))
                 {
                     if (lastImport != null)
                     {
