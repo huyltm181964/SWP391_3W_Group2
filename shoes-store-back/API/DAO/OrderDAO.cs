@@ -4,6 +4,7 @@ using API.DTOs.RequestDTO;
 using API.DTOs.ResponseDTO;
 using API.Models;
 using API.Utils;
+using API.Utils.Ultils;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -253,7 +254,7 @@ namespace API.DAO
 
             var paymentURL = vnp.CreateRequestUrl(configuration["VNPayConfig:vnp_BaseUrl"], configuration["VNPayConfig:vnp_HashSecret"]);
 #pragma warning enable
-        
+
             return new ResponseMessage
             {
                 StatusCode = 200,
@@ -306,7 +307,8 @@ namespace API.DAO
         {
             //lấy order by id
             var order = db.Order
-                .Include(o => o.OrderDetails)
+                .Include(o => o.OrderDetails).ThenInclude(od => od.Variant).ThenInclude(v => v.Product)
+                .Include(o => o.Account)
                 .FirstOrDefault(o => o.OrderID == orderID);
             if (order == null)
             {
@@ -361,6 +363,8 @@ namespace API.DAO
 
             UpdateOrderStatus(orderID, "Confirmed");
 
+            SendBillToMail(order);
+
             return new ResponseMessage()
             {
                 Data = null,
@@ -393,6 +397,66 @@ namespace API.DAO
                 Message = "Verify successfully",
                 StatusCode = 200
             };
+        }
+
+        private void SendBillToMail(Order order)
+        {
+            string body = "";
+            body += "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">";
+            body += "<div style=\"width: 100%; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f9f9f9;\">";
+            body += "<div style=\"text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;\">";
+            body += $"<h1 style=\"margin: 0; font-size: 24px; color: #555;\">Invoice from Shoes Store</h1>";
+            body += "</div>";
+
+            body += "<div style=\"margin-bottom: 20px;\">";
+            body += "<h2 style=\"font-size: 18px; margin-bottom: 10px;\">Customer Information</h2>";
+            body += $"<p style=\"margin: 5px 0;\"><strong>Name:</strong> {order.Account.AccountName}</p>";
+            body += $"<p style=\"margin: 5px 0;\"><strong>Phone:</strong> {order.Account.Phone}</p>";
+            body += $"<p style=\"margin: 5px 0;\"><strong>Shipping Address:</strong> {order.OrderAddress}</p>";
+            body += "</div>";
+
+            body += "<div>";
+            body += "<h2 style=\"font-size: 18px; margin-bottom: 10px;\">Order Details</h2>";
+            body += "<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 20px;\">";
+            body += "<thead>";
+            body += "<tr>";
+            body += "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f3f3f3; text-align: left;\">Product Name</th>";
+            body += "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f3f3f3; text-align: left;\">Variant (Color/Size)</th>";
+            body += "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f3f3f3; text-align: left;\">Quantity</th>";
+            body += "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f3f3f3; text-align: left;\">Unit Price</th>";
+            body += "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f3f3f3; text-align: left;\">Total</th>";
+            body += "</tr>";
+            body += "</thead>";
+            body += "<tbody>";
+
+            foreach (var detail in order.OrderDetails)
+            {
+                body += "<tr>";
+                body += $"<td style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">{detail.Variant?.Product?.ProductName}</td>";
+                body += $"<td style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">{detail.Variant?.VariantColor} / {detail.Variant?.VariantSize}</td>";
+                body += $"<td style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">{detail.Quantity}</td>";
+                body += $"<td style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">{detail.UnitPrice:C}</td>";
+                body += $"<td style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">{detail.Quantity * detail.UnitPrice:C}</td>";
+                body += "</tr>";
+            }
+
+            body += "</tbody>";
+            body += "</table>";
+            body += "</div>";
+
+            body += "<div>";
+            body += "<h2 style=\"font-size: 18px; margin-bottom: 10px;\">Summary</h2>";
+            body += $"<p style=\"margin: 5px 0;\"><strong>Total Quantity:</strong> {order.OrderDetails.Sum(d => d.Quantity)}</p>";
+            body += $"<p style=\"margin: 5px 0;\"><strong>Total Price:</strong> {order.TotalPrice:C}</p>";
+            body += "</div>";
+
+            body += "<div style=\"text-align: center; font-size: 14px; color: #777;\">";
+            body += "<p>Thank you for shopping with us!</p>";
+            body += "</div>";
+            body += "</div>";
+            body += "</body>";
+
+            _ = Task.Run(() => Ultils.sendMail(order.Account.AccountEmail, "", body));
         }
     }
 }

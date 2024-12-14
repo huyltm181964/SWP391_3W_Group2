@@ -57,6 +57,7 @@ namespace API.Utils.Ultils
 
                 using (MailMessage mailMessage = new MailMessage())
                 {
+                    mailMessage.IsBodyHtml = true;
                     mailMessage.From = new MailAddress(smtpUsername);
                     mailMessage.To.Add(toEmail);
                     mailMessage.Subject = "Shoes Store";
