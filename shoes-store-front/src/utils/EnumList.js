@@ -5,8 +5,7 @@ const categoriesTab = ['All', ...categoriesList]
 const orderStatusEnum = {
 	UNPAID: 'Unpaid',
 	ORDERED: 'Ordered',
-	DELIVERY: 'Delivery',
-	DELIVERIED: 'Deliveried',
+	CONFIRMED: 'Confirmed',
 	COMPLETED: 'Completed',
 }
 
