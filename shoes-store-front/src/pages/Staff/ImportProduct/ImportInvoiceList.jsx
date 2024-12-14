@@ -17,51 +17,44 @@ import VariantList from './VariantList'
 
 const TABLE_HEAD = [
 	{
-		head: 'ID',
-		customeStyle: '!text-left w-[7%]',
-		key: 'productID',
+		head: 'ImportID',
+		customeStyle: '!text-center w-[10%]',
+		key: 'importID',
 	},
 	{
-		head: 'Image',
-		customeStyle: '!text-left w-[13%]',
-		key: 'productImg',
+		head: 'ImportDate',
+		customeStyle: '!text-center w-[10%]',
+		key: 'importDate',
 	},
 	{
-		head: 'Name',
-		customeStyle: '!text-right w-[20%]',
-		key: 'productName',
+		head: 'Supplier',
+		customeStyle: '!text-center w-[15%]',
+		key: 'supplier',
 	},
 	{
-		head: 'Price',
-		customeStyle: 'text-right w-[15%]',
-		key: 'productPrice',
+		head: 'ImportLocation',
+		customeStyle: 'text-center w-[20%]',
+		key: 'importLocation',
 	},
 	{
-		head: 'Category',
-		customeStyle: 'text-right w-[15%]',
-		key: 'productCategory',
+		head: 'Supplier Phone',
+		customeStyle: 'text-center w-[15%]',
+		key: 'phone',
 	},
 	{
-		head: 'Description',
-		customeStyle: 'text-left w-[15%]',
+		head: 'Staff Name',
+		customeStyle: 'text-center w-[15%]',
 		key: 'productDescription',
 	},
 	{
-		head: 'Status',
-		customeStyle: 'text-right w-[10%]',
-		key: 'productStatus',
-	},
-	{
-		head: 'Actions',
-		customeStyle: 'text-right w-[15%]',
-		key: 'actions',
+		head: 'Action',
+		customeStyle: 'text-center w-[15%]',
+		key: 'viewDetail',
 	},
 ]
 
-function ProductList() {
+function ImportInvoiceList() {
 	const [tableRows, setTableRows] = useState([])
-	const [categoryTab, setCategoryTab] = useState(0)
-	const [filteredRows, setFilteredRows] = useState([...tableRows])
 	const [searchTerm, setSearchTerm] = useState('')
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -69,40 +62,21 @@ function ProductList() {
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [openVariantPage, setOpenVariantPage] = useState(false)
 	const [selectedProduct, setSelectedProduct] = useState(null)
-	const [product, setProduct] = useState([])
+	const [product, setImportDetail] = useState([])
 
 	useEffect(() => {
-		async function fetchProducts() {
+		async function fetchImports() {
 			const data = await ImportProductService.GET_ALL_PRODUCT()
 			if (data) {
-				const filteredData = data.filter((product) => product.productStatus !== 'Out of business')
-				setTableRows(filteredData)
+				setTableRows(data)
 			}
 		}
-		fetchProducts()
+		fetchImports()
 	}, [openVariantPage])
-
-	useEffect(() => {
-		let filteredData = tableRows
-
-		if (categoriesTab[categoryTab] !== 'All') {
-			filteredData = filteredData.filter(
-				(row) => row.productCategory === categoriesTab[categoryTab]
-			)
-		}
-
-		if (searchTerm) {
-			filteredData = filteredData.filter((row) =>
-				row.productName.toLowerCase().includes(searchTerm.toLowerCase())
-			)
-		}
-
-		setFilteredRows(filteredData)
-	}, [searchTerm, categoryTab, tableRows])
 
 	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '')) || 0
 
-	const sortedRows = filteredRows.slice().sort((a, b) => {
+	const sortedRows = tableRows.slice().sort((a, b) => {
 		if (!sortColumn) return 0
 
 		let valueA = a[sortColumn] ?? ''
@@ -158,7 +132,7 @@ function ProductList() {
 		setSelectedProduct(productId)
 		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
 		if (data) {
-			setProduct(data)
+			setImportDetail(data)
 		}
 		setOpenVariantPage(true)
 	}
@@ -184,11 +158,6 @@ function ProductList() {
 							/>
 						</div>
 					</div>
-					<CrudTabs value={categoryTab} handleChange={setCategoryTab}>
-						{categoriesTab.map((category, index) => (
-							<Tab key={index} label={category}></Tab>
-						))}
-					</CrudTabs>
 
 					<table className='w-full table-fixed mt-4'>
 						<thead>
@@ -312,4 +281,4 @@ function ProductList() {
 	)
 }
 
-export default ProductList
+export default ImportInvoiceList

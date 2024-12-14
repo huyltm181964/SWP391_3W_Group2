@@ -13,12 +13,12 @@ import { AccountService } from 'src/services/User/AccountService'
 import { AuthService } from 'src/services/User/AuthService'
 import { GetImage, GetLogo } from 'src/utils/GetImage'
 import OrderList from './ExportProduct/OrderList'
-import ProductList from './ImportProduct/ProductList'
+import ImportInvoiceList from './ImportProduct/ImportInvoiceList'
 import ReportCommentManagement from './ReportCommentManagement/ReportCommentManagement'
 import ContactManagement from './ContactManagement.jsx/ContactManagement'
 
 const StaffDashboard = () => {
-	const [selectedPage, setSelectedPage] = useState(<ProductList />)
+	const [selectedPage, setSelectedPage] = useState(<ImportInvoiceList />)
 	const [selectedPageKey, setSelectedPageKey] = useState('ImportProduct')
 	const [profile, setProfile] = useState({})
 
@@ -65,7 +65,7 @@ const StaffDashboard = () => {
 					<ListItem
 						className={LIST_ITEM_STYLES}
 						selected={selectedPageKey === 'ImportProduct'}
-						onClick={() => handleSelectPage(<ProductList />, 'ImportProduct')}
+						onClick={() => handleSelectPage(<ImportInvoiceList />, 'ImportProduct')}
 					>
 						<ListItemPrefix>
 							<ArrowDownTrayIcon className='h-5 w-5' />

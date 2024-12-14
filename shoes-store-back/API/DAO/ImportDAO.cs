@@ -90,8 +90,20 @@ namespace API.DAO
             };
         }
 
-        
-        public ResponseMessage GetImportDetails()
+        public ResponseMessage GetAllImport()
+        {
+            var listImport = db.Import.ToList();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Message = "List Import Ok",
+                Data = listImport,
+                StatusCode = 200
+            };
+        }
+
+            public ResponseMessage GetImportDetails()
         {
             var importDetails = db.ImportDetail
                 .Include(d => d.Variant)

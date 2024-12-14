@@ -18,10 +18,10 @@ namespace API.Controllers.Staff
             this.importDAO = importDAO;
         }
 
-        [HttpGet("get-products")]
-        public IActionResult GetProducts()
+        [HttpGet]
+        public IActionResult GetALlImport()
         {
-            var response = importDAO.GetProducts();
+            var response = importDAO.GetAllImport();
             return StatusCode(response.StatusCode, response);
         }
 
