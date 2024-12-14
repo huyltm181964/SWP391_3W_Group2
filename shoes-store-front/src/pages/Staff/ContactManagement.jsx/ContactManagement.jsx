@@ -1,4 +1,4 @@
-import { Card, CardBody, Typography } from '@material-tailwind/react'
+import { Card, CardBody, Option, Select, Typography } from '@material-tailwind/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import StaffContactAccordion from 'src/components/ContactAccordion/StaffContactAccordion'
@@ -8,6 +8,7 @@ import { ContactManagementService } from 'src/services/Staff/ContactManagementSe
 const ContactManagement = () => {
 	const [contacts, setContacts] = useState([])
 	const [open, setOpen] = useState(0)
+	const [contactStatus, setContactStatus] = useState('')
 	const [isEvent, setIsEvent] = useState(false)
 
 	useEffect(() => {
@@ -41,20 +42,38 @@ const ContactManagement = () => {
 	}
 
 	const handleOpen = (value) => setOpen(open === value ? 0 : value)
+
+	const filteredContacts = (() => {
+		switch (contactStatus) {
+			case 'awaiting':
+				return contacts.filter((c) => !c.answer && !c.isRejected)
+			case 'completed':
+				return contacts.filter((c) => !!c.answer)
+			case 'rejected':
+				return contacts.filter((c) => c.isRejected)
+			default:
+				return contacts
+		}
+	})()
+
 	return (
 		<section className='m-10'>
 			<Card className='h-full w-full'>
-				<CardBody>
-					<div className='rounded-none flex flex-wrap gap-4 justify-between mb-4'>
-						<div>
-							<Typography variant='h3' color='blue-gray'>
-								Contact Management
-							</Typography>
-						</div>
-					</div>
+				<CardBody className='flex flex-col gap-5'>
+					<Typography variant='h3' color='blue-gray'>
+						Contact Management
+					</Typography>
+					<Select label='Contact status' value={contactStatus} onChange={setContactStatus}>
+						<Option value='' defaultChecked>
+							All contact
+						</Option>
+						<Option value='awaiting'>Awaiting</Option>
+						<Option value='completed'>Completed</Option>
+						<Option value='rejected'>Rejected</Option>
+					</Select>
 					<div className='flex flex-col gap-5'>
-						{contacts.length !== 0 ? (
-							contacts.map((contact) => (
+						{filteredContacts.length !== 0 ? (
+							filteredContacts.map((contact) => (
 								<StaffContactAccordion
 									open={open === contact.contactID}
 									setOpen={handleOpen}
