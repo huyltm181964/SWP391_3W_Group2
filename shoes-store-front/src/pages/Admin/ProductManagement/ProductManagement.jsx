@@ -200,14 +200,14 @@ function ProductManagement() {
 							<Typography variant='h3' color='blue-gray'>
 								Product Management
 							</Typography>
-							{/* <Button onClick={() => setOpenAddPage(true)}>Add Product</Button>
+							<Button onClick={() => setOpenAddPage(true)}>Add Product</Button>
 							{openAddPage && (
 								<AddProduct
 									open={openAddPage}
 									handleClose={() => setOpenAddPage(false)}
 									handleAddProduct={handleAddProduct}
 								/>
-							)} */}
+							)}
 						</div>
 						<div className='flex items-center w-full shrink-0 gap-4 md:w-max'>
 							<Input

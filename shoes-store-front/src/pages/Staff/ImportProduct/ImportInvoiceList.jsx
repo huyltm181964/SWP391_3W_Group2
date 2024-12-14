@@ -61,17 +61,15 @@ function ImportInvoiceList(staffId) {
 	const [sortColumn, setSortColumn] = useState(null)
 	const [sortDirection, setSortDirection] = useState('asc')
 	const [openVariantPage, setOpenVariantPage] = useState(false)
-	const [selectedProduct, setSelectedProduct] = useState(null)
+	const [selectedImport, setSelectedImport] = useState(null)
 	const [product, setImportDetail] = useState([])
 	const [openAddPage, setOpenAddPage] = useState(false)
-	const [staffID, setStaffID] = useState(null)
 
 	useEffect(() => {
 		async function fetchImports() {
 			const data = await ImportProductService.GET_ALL_IMPORT()
 			if (data) {
 				setTableRows(data)
-				setStaffID(staffId)
 			}
 		}
 		fetchImports()
@@ -132,7 +130,7 @@ function ImportInvoiceList(staffId) {
 	}
 
 	const handleOpenVariant = async (productId) => {
-		setSelectedProduct(productId)
+		setSelectedImport(productId)
 		const data = await ImportProductService.GET_PRODUCT_DETAIL(productId)
 		if (data) {
 			setImportDetail(data)
@@ -219,11 +217,11 @@ function ImportInvoiceList(staffId) {
 							})}
 						</tbody>
 					</table>
-					{openVariantPage && selectedProduct && (
+					{openVariantPage && selectedImport && (
 						<VariantList
 							open={openVariantPage}
 							handleClose={() => setOpenVariantPage(false)}
-							existingProduct={selectedProduct}
+							existingImport={selectedImport}
 							product={product}
 						/>
 					)}

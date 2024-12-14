@@ -32,7 +32,6 @@ const VariantList = ({ open, handleClose, product }) => {
 
 	useEffect(() => {
 		setTableRows(product.productVariants)
-		setProductId(product)
 	}, [open])
 
 	const sanitizeNumeric = (value) => parseFloat(String(value).replace(/[^0-9.-]+/g, '') || 0)
