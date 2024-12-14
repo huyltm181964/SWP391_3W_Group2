@@ -46,13 +46,13 @@ namespace API.Controllers.Staff
             var response = importDAO.ImportProduct(importDTO);
             return StatusCode(response.StatusCode, response);
         }
-
-        [HttpGet("get-import-details")]
-        public IActionResult GetImportDetails()
+        [HttpGet("get-import-detail/{importId}")]
+        public IActionResult GetImportDetails(int importId)
         {
-            var response = importDAO.GetImportDetails();
+            var response = importDAO.GetImportDetails(importId);
             return StatusCode(response.StatusCode, response);
         }
+
     }
 }
 
