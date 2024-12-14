@@ -17,10 +17,10 @@ namespace API.Controllers.Staff
             this.orderDAO = orderDAO;
         }
 
-        [HttpGet("get-export-order")]
-        public IActionResult GetOrderedOrder()
+        [HttpGet]
+        public IActionResult GetAllOrder()
         {
-            var response = orderDAO.GetOrderByStatus("Ordered");
+            var response = orderDAO.GetAllOrder();
             return StatusCode(response.StatusCode, response);
         }
 

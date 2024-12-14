@@ -8,20 +8,20 @@ import {
 } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import Confirmation from 'src/components/Confirmation/Confirmation'
-import { ExportProductService } from 'src/services/Staff/ExportProductService'
+import { ExportProductService, StaffOrderService } from 'src/services/Staff/StaffOrderService'
 import { GetImage } from 'src/utils/GetImage'
 
 const TABLE_HEAD = [
-	{ head: 'Variant ID', customeStyle: '!text-left w-[10%]', key: 'variantID' },
-	{ head: 'Image', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Variant Size', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Variant Color', customeStyle: 'text-left w-[10%]', key: 'image' },
-	{ head: 'Quantity', customeStyle: 'text-right w-[15%]', key: 'quantity' },
-	{ head: 'Unit Price', customeStyle: 'text-right w-[15%]', key: 'color' },
-	{ head: 'Actions', customeStyle: 'text-center w-[20%]', key: 'actions' },
+	{ head: 'Variant ID', customeStyle: '!text-left w-[12.5%]', key: 'variantID' },
+	{ head: 'Product', customeStyle: 'text-left w-[25%]', key: 'image' },
+	{ head: 'Variant Size', customeStyle: 'text-left w-[12.5%]', key: 'image' },
+	{ head: 'Variant Color', customeStyle: 'text-left w-[12.5%]', key: 'image' },
+	{ head: 'Quantity', customeStyle: 'text-right w-[12.5%]', key: 'quantity' },
+	{ head: 'Unit Price', customeStyle: 'text-right w-[12.5%]', key: 'color' },
+	{ head: 'Total Price', customeStyle: 'text-right w-[12.5%]', key: 'color' },
 ]
 
-const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) => {
+const OrderDetail = ({ open, handleClose, order, orderDetailData }) => {
 	const [page, setPage] = useState(0)
 	const [rowsPerPage, setRowsPerPage] = useState(5)
 	const [sortColumn, setSortColumn] = useState(null)
@@ -99,24 +99,20 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 		return pageNumbers
 	}
 
-	const handleExportProduct = async (orderId, variantId) => {
-		const formBody = { orderID: orderId, variantID: variantId }
-		console.log(formBody)
-		await ExportProductService.EXPORT_PRODUCT(formBody)
-		setTableRows((prevRows) =>
-			prevRows.map((row) => (row.variantID === variantId ? { ...row, isExported: true } : row))
-		)
+	const handleConfirmOrder = async (orderID) => {
+		await StaffOrderService.CONFIRM_ORDER(orderID)
+		handleClose()
 	}
 
-	const handleExportAllProduct = async (orderId) => {
-		await ExportProductService.EXPORT_ALL_PRODUCT(orderId)
+	const handleCompleteOrder = async (orderID) => {
+		await StaffOrderService.COMPLETE_ORDER(orderID)
 		handleClose()
 	}
 
 	return (
 		<Dialog open={open} handler={handleClose} size='lg'>
 			<DialogHeader>
-				<Typography variant='h4'>Order Detail of Order ID: {existingOrderId}</Typography>
+				<Typography variant='h4'>Order Detail of Order ID: {order.orderID}</Typography>
 			</DialogHeader>
 			<DialogBody divider className=' max-h-[80vh] overflow-auto'>
 				<table className='w-full table-fixed mt-4'>
@@ -144,43 +140,50 @@ const OrderDetail = ({ open, handleClose, existingOrderId, orderDetailData }) =>
 							!row.isExported ? (
 								<tr className='border-gray-300' key={row.variantID}>
 									<td className='p-4'>{row.variantID}</td>
-									<td className='p-4'>
+									<td className='p-4 flex gap-2'>
 										<img
-											className='aspect-square object-cover'
-											src={GetImage(row.variant.variantImg)}
+											className='aspect-square object-cover w-[25%]'
+											src={GetImage(row.variant.product.productImg)}
 											alt={row.variant.variantImg}
 										/>
+										<p>{row.variant.product.productName}</p>
 									</td>
 									<td className='p-4 text-right'>{row.variant.variantSize}</td>
 									<td className='p-4 text-right'>{row.variant.variantColor}</td>
 									<td className='p-4 text-right'>{row.quantity}</td>
-									<td className='p-4 text-right'>{row.unitPrice}</td>
-									<td className='p-4 text-center'>
-										<div className='flex justify-center gap-4'>
-											<Button
-												variant='contained'
-												onClick={() => handleExportProduct(existingOrderId, row.variantID)}
-											>
-												Export
-											</Button>
-										</div>
-									</td>
+									<td className='p-4 text-right'>${row.unitPrice}</td>
+									<td className='p-4 text-right'>${row.unitPrice * row.quantity}</td>
 								</tr>
 							) : null
 						)}
 					</tbody>
 				</table>
-				<Confirmation
-					title='Are you sure?'
-					description='Do you really want to export all variant?'
-					handleConfirm={() => handleExportAllProduct(existingOrderId)}
-				>
-					{(handleOpen) => (
-						<Button className='w-full' onClick={handleOpen} variant='contained'>
-							Export All
-						</Button>
-					)}
-				</Confirmation>
+
+				{order.orderStatus.toLowerCase() === 'ordered' ? (
+					<Confirmation
+						title='Are you sure?'
+						description='Do you really want to confirm this order?'
+						handleConfirm={() => handleConfirmOrder(order.orderID)}
+					>
+						{(handleOpen) => (
+							<Button className='w-full' color='blue' onClick={handleOpen} variant='contained'>
+								Confirm order
+							</Button>
+						)}
+					</Confirmation>
+				) : order.orderStatus.toLowerCase() === 'confirmed' ? (
+					<Confirmation
+						title='Are you sure?'
+						description='Do you really want to set this order as completed?'
+						handleConfirm={() => handleCompleteOrder(order.orderID)}
+					>
+						{(handleOpen) => (
+							<Button className='w-full' color='green' onClick={handleOpen} variant='contained'>
+								Set as completed
+							</Button>
+						)}
+					</Confirmation>
+				) : null}
 
 				<div className='flex justify-between items-center mt-4'>
 					<Button

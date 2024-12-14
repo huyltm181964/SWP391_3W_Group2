@@ -11,8 +11,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 	const statusColors = {
 		unpaid: 'red',
 		ordered: 'royalblue',
-		delivery: 'orange',
-		deliveried: 'purple',
+		confirmed: 'darkgoldenrod',
 		completed: 'green',
 	}
 
@@ -65,15 +64,6 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 								className='rounded-full pointer-events-auto cursor-pointer px-7 py-3 bg-red-700 shadow-sm shadow-transparent text-white font-semibold text-sm transition-all duration-500 hover:shadow-red-400 hover:bg-red-900'
 							>
 								Cancel order
-							</button>
-						)}
-						{order?.orderStatus === orderStatusEnum.DELIVERIED && (
-							<button
-								onClick={() => handleConfirm(order?.orderID)}
-								type='button'
-								className='rounded-full pointer-events-auto cursor-pointer px-7 py-3 bg-green-800 shadow-sm shadow-transparent text-white font-semibold text-sm transition-all duration-500 hover:shadow-green-400 hover:bg-green-900'
-							>
-								Confirm ordered
 							</button>
 						)}
 						<button
