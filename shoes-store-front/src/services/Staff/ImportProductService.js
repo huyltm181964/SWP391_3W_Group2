@@ -4,7 +4,7 @@ import axiosFormData from 'src/utils/axiosFormData'
 
 export const ImportProductService = {
 	GET_ALL_IMPORT: async () =>
-		await axiosFormBody.get(ImportProductRequest.GET_ALL_IMPORT).then((response) => response),
+		await axiosFormBody.get(ImportProductRequest.GET_ALL_IMPORT).then((response) => response.data),
 
 	GET_PRODUCT_DETAIL: async (productId) =>
 		await axiosFormBody
