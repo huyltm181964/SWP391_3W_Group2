@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class x : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,21 +22,6 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cart", x => x.CartID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Import",
-                columns: table => new
-                {
-                    ImportID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Supplier = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ImportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Import", x => x.ImportID);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +54,7 @@ namespace API.Migrations
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     BirthDay = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
                     AccountAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Role = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -183,6 +168,29 @@ namespace API.Migrations
                     table.ForeignKey(
                         name: "FK_Contact_Account_AccountID",
                         column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Import",
+                columns: table => new
+                {
+                    ImportID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Supplier = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ImportLocation = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ImportStaffID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Import", x => x.ImportID);
+                    table.ForeignKey(
+                        name: "FK_Import_Account_ImportStaffID",
+                        column: x => x.ImportStaffID,
                         principalTable: "Account",
                         principalColumn: "AccountID",
                         onDelete: ReferentialAction.Cascade);
@@ -336,6 +344,11 @@ namespace API.Migrations
                 name: "IX_Contact_AccountID",
                 table: "Contact",
                 column: "AccountID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Import_ImportStaffID",
+                table: "Import",
+                column: "ImportStaffID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImportDetail_VariantID",

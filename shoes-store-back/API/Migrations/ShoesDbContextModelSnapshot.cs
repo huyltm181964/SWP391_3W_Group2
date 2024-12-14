@@ -65,8 +65,8 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Phone")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -232,12 +232,22 @@ namespace API.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("ImportStaffID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
                     b.Property<string>("Supplier")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ImportID");
+
+                    b.HasIndex("ImportStaffID");
 
                     b.ToTable("Import");
                 });
@@ -502,6 +512,17 @@ namespace API.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("API.Models.Import", b =>
+                {
+                    b.HasOne("API.Models.Account", "ImportStaff")
+                        .WithMany("Imports")
+                        .HasForeignKey("ImportStaffID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ImportStaff");
+                });
+
             modelBuilder.Entity("API.Models.ImportDetail", b =>
                 {
                     b.HasOne("API.Models.Import", "Import")
@@ -580,6 +601,8 @@ namespace API.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Contacts");
+
+                    b.Navigation("Imports");
 
                     b.Navigation("Notifications");
 
