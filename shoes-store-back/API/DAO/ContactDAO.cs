@@ -18,6 +18,7 @@ namespace API.DAO
 
         public ResponseMessage AddContact(int accountID, ContactUsDTO contactUsDTO)
         {
+
             var contact = new Contact
             {
                 AccountID = accountID,
@@ -66,7 +67,7 @@ namespace API.DAO
         }
 
         //Trả lời tin nhắn của khách hàng
-        public ResponseMessage AnswerContact(int contactID, string answer)
+        public ResponseMessage AnswerContact(int contactID, string answer, int staffID)
         {
             //Lấy contact by id
             var contact = db.Contact.Include(c => c.Account).FirstOrDefault(c => c.ContactID == contactID);
@@ -82,9 +83,12 @@ namespace API.DAO
                 };
             }
 
+            var staff = db.Account.FirstOrDefault(s => s.AccountID == staffID)!;
+
             //Trả lời nè
             contact.Answer = answer;
             contact.AnswerDate = DateTime.Now;
+            contact.AnsweredStaffName = staff.AccountName;
             db.Contact.Update(contact);
 
             //Thông báo cảm ơn

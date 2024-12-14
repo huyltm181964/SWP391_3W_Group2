@@ -278,19 +278,113 @@ namespace API.DAO
             }
 
             UpdateOrderStatus(orderID, "Ordered");
+
             var staffs = db.Account.Where(a => a.Role == "Staff");
             foreach (var staff in staffs)
             {
                 var notification = new Notification
                 {
                     AccountID = staff.AccountID,
-                    Title = "New order need to be exported",
-                    Description = $"Order #{orderID} has been paid and is waiting to be export."
+                    Title = "New order need to be confirmed",
+                    Description = $"Order #{orderID} has been paid and is waiting to be confirmed."
                 };
 
                 db.Notification.Add(notification);
             }
             db.SaveChanges();
+
+            return new ResponseMessage
+            {
+                Success = true,
+                Data = null,
+                Message = "Verify successfully",
+                StatusCode = 200
+            };
+        }
+
+        public ResponseMessage ConfirmOrder(int orderID)
+        {
+            //lấy order by id
+            var order = db.Order
+                .Include(o => o.OrderDetails)
+                .FirstOrDefault(o => o.OrderID == orderID);
+            if (order == null)
+            {
+                return new ResponseMessage()
+                {
+                    Data = null,
+                    Message = "Order not found",
+                    StatusCode = 404,
+                    Success = false,
+                };
+            }
+
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                var variant = db.ProductVariant.Include(v => v.Product).FirstOrDefault(v => v.VariantID == orderDetail.VariantID);
+                if (variant.VariantQuantity < orderDetail.Quantity)
+                {
+                    //Nếu variant quantity < 1 thì báo cho staff là hết rồi
+                    //Còn variant quantity nhỏ hơn order quantity thì báo cho staff là hông đủ để xuất
+                    return new ResponseMessage()
+                    {
+                        Data = null,
+                        Message = variant.VariantQuantity <= 0
+                        ? $"{variant.Product?.ProductName} ({variant.VariantSize}/{variant.VariantColor}) is out of stock"
+                        : $"{variant.Product?.ProductName} ({variant.VariantSize}/{variant.VariantColor}) only have {variant.VariantQuantity} in stock, can't export",
+                        StatusCode = 400,
+                        Success = false,
+                    };
+                }
+                // confirm rồi thì phảii giảm
+                variant.VariantQuantity -= orderDetail.Quantity;
+                db.ProductVariant.Update(variant);
+
+                if (variant.VariantQuantity <= 5)
+                {
+                    //Nếu variant quantity < 5 thì báo cho staff là xuất gần hết rồi thêm vào đi
+                    var staffs = db.Account.Where(a => a.Role == "Staff");
+                    foreach (var staff in staffs)
+                    {
+                        var notification = new Notification
+                        {
+                            AccountID = staff.AccountID,
+                            Title = $"Variant #{variant.VariantID}'s stock",
+                            Description = $"Variant #{variant.VariantID} is nearly out of stock (Current: {variant.VariantQuantity}). Need to be refilled as soon as possible",
+                        };
+
+                        db.Notification.Add(notification);
+                    }
+                }
+            }
+            db.SaveChanges();
+
+            UpdateOrderStatus(orderID, "Confirmed");
+
+            return new ResponseMessage()
+            {
+                Data = null,
+                Message = $"Confirm order #{orderID} successfully",
+                StatusCode = 200,
+                Success = true,
+            };
+        }
+
+        public ResponseMessage CompleteOrder(int orderID)
+        {
+            var order = db.Order.FirstOrDefault(x => x.OrderID == orderID);
+            if (order == null)
+            {
+                return new ResponseMessage
+                {
+                    StatusCode = 404,
+                    Data = null,
+                    Success = false,
+                    Message = "Order not found"
+                };
+            }
+
+            UpdateOrderStatus(orderID, "Completed");
 
             return new ResponseMessage
             {

@@ -1,5 +1,6 @@
 ﻿using API.DAO;
 using API.DTOs.RequestDTO;
+using API.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,8 @@ namespace API.Controllers.Staff
         [HttpPost("answer")]
         public IActionResult AnswerContact([FromBody] ContactAnswerDTO contactAnswerDTO)
         {
-            var response = contactDAO.AnswerContact(contactAnswerDTO.ContactID, contactAnswerDTO.Answer);
+            var staffID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
+            var response = contactDAO.AnswerContact(contactAnswerDTO.ContactID, contactAnswerDTO.Answer, staffID);
             return StatusCode(response.StatusCode, response);
         }
 

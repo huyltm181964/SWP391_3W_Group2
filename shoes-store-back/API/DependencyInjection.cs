@@ -25,7 +25,6 @@ namespace API
             services.AddScoped<StatisticsDAO>();
             services.AddScoped<VariantDAO>();
             services.AddScoped<ImportDAO>();
-            services.AddScoped<ExportDAO>();
             services.AddDbContext<ShoesDbContext>();
             services.AddScoped<Ultils>();
             services.AddAutoMapper(typeof(Program));
