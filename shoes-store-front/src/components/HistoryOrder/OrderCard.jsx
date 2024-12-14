@@ -93,7 +93,7 @@ const OrderCard = ({ open, setOpen, order, handleCancel, handleConfirm }) => {
 							<div className='grid grid-cols-4 w-full'>
 								<div className='col-span-4 sm:col-span-1'>
 									<img
-										src={GetImage(detail.variant?.variantImg)}
+										src={GetImage(detail.variant?.product.productImg)}
 										alt=''
 										className='max-sm:mx-auto object-cover'
 									/>

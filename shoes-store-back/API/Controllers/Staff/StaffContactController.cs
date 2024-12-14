@@ -21,7 +21,7 @@ namespace API.Controllers.Staff
         [HttpGet]
         public IActionResult GetAllContact()
         {
-            var response = contactDAO.GetUnanswerContact();
+            var response = contactDAO.GetAllContact();
             return StatusCode(response.StatusCode, response);
         }
 
@@ -36,7 +36,8 @@ namespace API.Controllers.Staff
         [HttpDelete("reject/{contactID}")]
         public IActionResult RejectContact(int contactID)
         {
-            var response = contactDAO.RejectContact(contactID);
+            var staffID = JWTHandler.GetUserIdFromHttpContext(HttpContext);
+            var response = contactDAO.RejectContact(contactID, staffID);
             return StatusCode(response.StatusCode, response);
         }
     }

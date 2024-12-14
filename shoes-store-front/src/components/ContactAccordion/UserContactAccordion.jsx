@@ -14,7 +14,7 @@ const UserContactAccordion = ({ open, setOpen, contact }) => {
 						{contact?.isRejected ? 'Rejected' : contact?.answer ? 'Completed' : 'Awaiting'}
 					</Typography>
 					<Typography variant='h6' className='font-bold flex-grow'>
-						{contact?.title}
+						(#{contact?.contactID}) {contact?.title}
 					</Typography>
 					{open ? (
 						<ChevronDownIcon className='w-10 h-10' />
@@ -36,7 +36,7 @@ const UserContactAccordion = ({ open, setOpen, contact }) => {
 					{contact?.answer && (
 						<>
 							<Typography variant='h6' className='flex items-center gap-2'>
-								Answer
+								Answer by <span style={{ color: 'green' }}>{contact?.answeredStaffName}</span>
 								<Typography className='italic'>
 									{formatDateTimeWithLetterMonth(contact?.answerDate)}
 								</Typography>

@@ -70,9 +70,7 @@ const ProductDetailInformation = ({ product }) => {
 		<div className='grid place-items-center grid-cols-1 md:grid-cols-2 gap-5'>
 			{product ? (
 				<img
-					src={
-						selectedVariant ? GetImage(selectedVariant.variantImg) : GetImage(product.productImg)
-					}
+					src={GetImage(product.productImg)}
 					alt='pink blazer'
 					className='min-h-[36rem] object-cover'
 				/>
